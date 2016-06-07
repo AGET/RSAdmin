@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">RSAdmin</string>
+    <string name="action_settings">Settings</string>
+
+
+    <!-- Titulos actividades -->
+    <string name="titulo_actividad_actividad_contactos">Contactos</string>
+    <string name="titulo_actividad_agregar_empresa">Agregar nueva empresa</string>
+    <string name="titulo_actividad_editar_empresa">Editar empresa</string>
+    <string name="titulo_actividad_lista_empresa">Empresas disponibles</string>
+
+    <string name="titulo_actividad_principal">Bienvenido administrador</string>
+
+
+    <!-- Formulario Actividad inserción -->
+    <string name="hint_campo_texto_nombre">Primer nombre</string>
+    <string name="hint_campo_texto_apellido">Primer apellido</string>
+    <string name="hint_campo_texto_telefono">Teléfono</string>
+    <string name="hint_campo_texto_correo">Correo</string>
+
+    <!-- Tooltips acciones toolbar -->
+    <string name="accion_sync">Sincronizar</string>
+    <string name="accion_eliminar">Eliminar</string>
+    <string name="accion_editar">Editar</string>
+    <string name="accion_guardar">Guardar</string>
+    <string name="accion_descartar">Descartar</string>
+
+    <!-- Cuenta Sync Adapter -->
+    <string name="tipo_cuenta">com.aldo.aget.rsadmin.cuenta</string>
+
+    <!-- Autoridad del provider -->
+    <string name="autoridad_provider">com.aldo.aget.rsadmin</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_actividad_lista_test">ActividadListaTest</string>
+
+
+    <!-- Otro-->
+    <string name="str_name">Nombre completo</string>
+    <string name="str_edad">Edad</string>
+    <string name="str_btnGet">Enviar por GET</string>
+    <string name="str_btnPost">Enviar por Post</string>
+    <string name="str_status">Status:</string>
+    <string name="title_activity_obtener">Obtener</string>
+    <string name="title_activity_enviar">Enviar</string>
+    <string name="title_activity_test">Test</string>
+    <string name="title_activity_lista_empresa">ListaEmpresa</string>
+    <string name="title_activity_lista_gps">ListaGps</string>
+    <string name="title_activity_activity_gps">ActivityGps</string>
+    <string name="title_activity_activity_empresa_cliente">ActivityEmpresaCliente</string>
+    <string name="title_activity_activity_empresa">ActivityEmpresa</string>
+    <string name="title_activity_borrar">Borrar</string>
+</resources>
