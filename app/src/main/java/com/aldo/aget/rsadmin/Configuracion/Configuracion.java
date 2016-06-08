@@ -26,6 +26,7 @@ public class Configuracion extends Activity {
     public static final String PETICION_LISTAR_EMPRESAS_POR_NOMBRE = SERVIDOR + "/api.rs.com/v1/empresa_cliente/listarPorNombre";
     public static final String PETICION_LISTAR_EMPRESAS_POR_ID = SERVIDOR + "/api.rs.com/v1/empresa_cliente/listarUno_Id";
     public static final String PETICION_EMPRESAS_REGISTRO = SERVIDOR + "/api.rs.com/v1/empresa_cliente/registro";
+    public static final String PETICION_EMPRESAS_MODIFICAR_ELIMINAR = SERVIDOR + "/api.rs.com/v1/empresa_cliente/";
 
 
 
@@ -48,7 +49,9 @@ public static final String COLUMNA_EMPRESA_ID = "empresa_id";
     public static final String COLUMNA_EMPRESA_STATUS = "status";
 
     //Broadcast
-    public static String IntentListaEmpresa = "com.aldo.aget.rsadmin.Vistas.ListaEmpresa";
-    public static String IntentListaGPS = "com.aldo.aget.rsadmin.Vistas.ListaGps";
-    public static String IntentEmpresaCliente = "com.aldo.aget.rsadmin.Vistas.ActivityEmpresaCliente";
+    public static final String INTENT_LISTA_EMPRESA = "com.aldo.aget.rsadmin.Vistas.ListaEmpresa";
+    public static final String INTENT_LISTA_GPS = "com.aldo.aget.rsadmin.Vistas.ListaGps";
+    public static final String INTENT_EMPRESA_CLIENTE = "com.aldo.aget.rsadmin.Vistas.ActivityEmpresaCliente";
+
+    public static Boolean cambio = false;
 }

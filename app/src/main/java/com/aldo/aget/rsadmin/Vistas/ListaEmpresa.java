@@ -89,8 +89,15 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
     protected void onResume() {
         super.onResume();
         // Registrar receptor
-        IntentFilter filtroSync = new IntentFilter(Configuracion.IntentListaEmpresa);
+        IntentFilter filtroSync = new IntentFilter(Configuracion.INTENT_LISTA_EMPRESA);
         LocalBroadcastManager.getInstance(this).registerReceiver(receptorMensaje, filtroSync);
+
+        if(Configuracion.cambio) {
+            mostrarProgreso(true);
+            Configuracion.cambio = false;
+            new ObtenerAsincrono(ListaEmpresa.this, tabla, columnas)
+                    .execute(peticionlistarEmpresaCliente);
+        }
     }
 
     @Override

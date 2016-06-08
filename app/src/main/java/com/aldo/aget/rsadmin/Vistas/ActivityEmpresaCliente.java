@@ -33,7 +33,7 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
     EditText edtNombre,edtTelefono,edtCorreo;
 
     String  nombre;
-
+    String ID = "";
     AppCompatSpinner spinner;
     //Spinner spinner;
     String[] datosSpinner = {
@@ -51,6 +51,8 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
     ArrayList data;
 
     String tabla =Configuracion.TABLA_EMPRESA_CLIENTE;
+
+    String tipoPeticion = "post";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +93,6 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
                         estado = "1" ;
                     else
                         estado = "0";
-
                 }
             }
 
@@ -119,7 +120,7 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
         if (nombre != null) {
             mostrarProgreso(true);
             resultado = new ObtencionDeResultadoBcst(this, columnasFiltro, valorFiltro, tabla,columnasArecuperar);
-            resultado.execute(Configuracion.PETICION_LISTAR_EMPRESAS_POR_ID);
+            resultado.execute(Configuracion.PETICION_LISTAR_EMPRESAS_POR_ID,tipoPeticion);
         }else{
             setTitle(R.string.titulo_actividad_agregar_empresa);
         }
@@ -137,19 +138,39 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
                 Boolean restado = intent.getBooleanExtra(Utilidades.EXTRA_RESULTADO, false);
                 if(restado){
                     cargarViews(intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST));
-                }else if(mensaje.equalsIgnoreCase("Registro exitoso!")){
-                    Snackbar.make(findViewById(R.id.xmlactivity_empresa_cliente),
-                            mensaje, Snackbar.LENGTH_SHORT).show();
-                    menuOk.setEnabled(false);
-                    mostrarProgreso(false);
+                //}else if(mensaje.equalsIgnoreCase("Registro exitoso!")){
+                }else if(mensaje.equalsIgnoreCase("Registro con exito!")){
+                    //menuOk.setEnabled(false);
+                    menuOk.setVisible(false);
+                    menuEditar.setVisible(true);
+                    menuEliminar.setVisible(true);
+                    habilitarComponentes(false);
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
                             finish();
                         }
                     }, 2000);
+                    Configuracion.cambio = true;
+                }else if(mensaje.equalsIgnoreCase("Registro actualizado correctamente")) {
+                    menuOk.setVisible(false);
+                    menuEditar.setVisible(true);
+                    menuEliminar.setVisible(true);
+                    habilitarComponentes(false);
+                    Configuracion.cambio = true;
+                }else if(mensaje.equalsIgnoreCase("Url mal formada")){
+                        mensaje = "error en dato, probablemente con ID";
+                }else if(mensaje.equalsIgnoreCase("La empresa a la que intentas acceder no existe")){
+                    mensaje = "Revise los datos, puede no haber modificacion";
+                }else if(mensaje.equalsIgnoreCase("Registro eliminado correctamente")){
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            finish();
+                        }
+                    }, 2000);
+                    Configuracion.cambio = true;
                 }
-
                 Snackbar.make(findViewById(R.id.xmlactivity_empresa_cliente),
                         mensaje, Snackbar.LENGTH_SHORT).show();
                 mostrarProgreso(false);
@@ -161,7 +182,7 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // Registrar receptor
-        IntentFilter filtro = new IntentFilter(Configuracion.IntentEmpresaCliente);
+        IntentFilter filtro = new IntentFilter(Configuracion.INTENT_EMPRESA_CLIENTE);
         LocalBroadcastManager.getInstance(this).registerReceiver(receptorMensaje, filtro);
     }
 
@@ -203,12 +224,15 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
                 insertar();
                 break;
             case R.id.accion_eliminar:
+                tipoPeticion = "delete";
                 eliminar();
                 break;
             case R.id.accion_editar:
+                tipoPeticion = "put";
                 menuOk.setVisible(true);
                 setTitle("Editar");
-                editar();
+                habilitarComponentes(true);
+                //insertar();
                 break;
             case android.R.id.home:
                 if(edtNombre.isEnabled()){
@@ -222,57 +246,36 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
     }
 
     private void insertar() {
-
         // Extraer datos de UI
         String nombre = edtNombre.getText().toString();
         String telefono = edtTelefono.getText().toString();
         String correo = edtCorreo.getText().toString();
-
         // Validaciones
         if (!esNombreValido(nombre)) {
             TextInputLayout mascaraCampoNombre = (TextInputLayout) findViewById(R.id.mcr_edt_nombre_empresa);
             mascaraCampoNombre.setError("Este campo no puede quedar vacío");
         } else {
-//.........
-
-            String[] columnasFiltro = {Configuracion.COLUMNA_EMPRESA_NOMBRE,Configuracion.COLUMNA_EMPRESA_TELEFONO
-                    ,Configuracion.COLUMNA_EMPRESA_CORREO,Configuracion.COLUMNA_EMPRESA_STATUS};
-            String[] valorFiltro = {nombre,telefono,correo,estado};
-
             mostrarProgreso(true);
+            String[] columnasFiltro = {Configuracion.COLUMNA_EMPRESA_NOMBRE, Configuracion.COLUMNA_EMPRESA_TELEFONO
+                    , Configuracion.COLUMNA_EMPRESA_CORREO, Configuracion.COLUMNA_EMPRESA_STATUS};
+            String[] valorFiltro = {nombre, telefono, correo, estado};
             resultado = new ObtencionDeResultadoBcst(this, columnasFiltro, valorFiltro, tabla, null);
-            resultado.execute(Configuracion.PETICION_EMPRESAS_REGISTRO);
-            //finish();
+            if(ID.isEmpty()) {
+                resultado.execute(Configuracion.PETICION_EMPRESAS_REGISTRO,tipoPeticion);
+            } else {
+                resultado.execute(Configuracion.PETICION_EMPRESAS_MODIFICAR_ELIMINAR+ID,tipoPeticion);
+            }
         }
     }
 
-    private void editar() {
-
-        // Extraer datos de UI
-        edtNombre.setEnabled(true);
-        edtTelefono.setEnabled(true);
-        edtCorreo.setEnabled(true);
-        //edtStatus.setEnabled(true);
-        spinner.setEnabled(true);
-
-        // Validaciones y pruebas de cordura
-        if (!esNombreValido(nombre)) {
-            TextInputLayout mascaraCampoNombre = (TextInputLayout) findViewById(R.id.mcr_edt_nombre_empresa);
-            mascaraCampoNombre.setError("Este campo no puede quedar vacío");
-        } else {
-//.........
-            //finish();
-        }
-    }
     private boolean esNombreValido(String nombre) {
         return !TextUtils.isEmpty(nombre);
     }
 
     private void eliminar() {
         if (nombre != null) {
-            // Iniciar eliminación
-            //new TareaEliminarContacto(getContentResolver()).execute(uriContacto);
-            finish();
+            resultado = new ObtencionDeResultadoBcst(this, null, null, tabla, null);
+            resultado.execute(Configuracion.PETICION_EMPRESAS_MODIFICAR_ELIMINAR+ID,tipoPeticion);
         }
     }
 
@@ -281,7 +284,6 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
         if (data.size() < 0) {
             return;
         }
-
         // Asignar valores a UI
         edtNombre.setText(String.valueOf(data.get(0)));
         edtTelefono.setText(String.valueOf(data.get(1)));
@@ -291,12 +293,17 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
         else
         spinner.setSelection(0);
 
-        edtNombre.setEnabled(false);
-        edtTelefono.setEnabled(false);
-        edtCorreo.setEnabled(false);
-        spinner.setEnabled(false);
+        ID = String.valueOf(data.get(data.size()-1));
+
+        habilitarComponentes(false);
 
         setTitle(String.valueOf(data.get(0)));
+    }
+    void habilitarComponentes(Boolean habilitado){
+        edtNombre.setEnabled(habilitado);
+        edtTelefono.setEnabled(habilitado);
+        edtCorreo.setEnabled(habilitado);
+        spinner.setEnabled(habilitado);
     }
 
     void lanzarEmpresa(){
@@ -310,18 +317,15 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
 
     void regresar(){
         if(nombre != null){
-        edtNombre.setText(String.valueOf(data.get(0)));
+            edtNombre.setText(String.valueOf(data.get(0)));
         edtTelefono.setText(String.valueOf(data.get(1)));
-        edtCorreo.setText(String.valueOf(data.get(2)));
+            edtCorreo.setText(String.valueOf(data.get(2)));
         if(String.valueOf(data.get(3)).equalsIgnoreCase("0"))
             spinner.setSelection(1);
         else
             spinner.setSelection(0);
 
-        edtNombre.setEnabled(false);
-        edtTelefono.setEnabled(false);
-        edtCorreo.setEnabled(false);
-        spinner.setEnabled(false);
+        habilitarComponentes(false);
 
         setTitle(String.valueOf(data.get(0)));
         menuOk.setVisible(false);

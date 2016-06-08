@@ -86,7 +86,7 @@ public class ListaGps extends AppCompatActivity implements OnItemClickListener{
     protected void onResume() {
         super.onResume();
         // Registrar receptor
-        IntentFilter filtroSync = new IntentFilter(Configuracion.IntentListaGPS);
+        IntentFilter filtroSync = new IntentFilter(Configuracion.INTENT_LISTA_GPS);
         LocalBroadcastManager.getInstance(this).registerReceiver(receptorMensaje, filtroSync);
     }
 

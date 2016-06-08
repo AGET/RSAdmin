@@ -16,7 +16,9 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
@@ -36,7 +38,7 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
     private ProgressDialog progressDialog;
     private Context context;
     String peticion;
-    String[] columnasFiltro,valorFiltro,columnas_a_recuperar;
+    String[] columnasFiltro, valorFiltro, columnas_a_recuperar;
     ArrayList datos;
     JSONObject objetoJSON;
 
@@ -51,26 +53,26 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
         this.context = context;
         this.columnasFiltro = nombresColumnas;
         this.valorFiltro = datosColumnas;
-        this.tabla=tabla;
-        if(columnas_a_recuperar != null) {
+        this.tabla = tabla;
+        if (columnas_a_recuperar != null) {
             this.columnas_a_recuperar = columnas_a_recuperar;
             obtener = true;
-        } else{
+        } else {
             obtener = false;
         }
 
         datos = new ArrayList();
 
-        if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.IntentEmpresaCliente)) {
-            intent = Configuracion.IntentEmpresaCliente;
+        if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.INTENT_EMPRESA_CLIENTE)) {
+            intent = Configuracion.INTENT_EMPRESA_CLIENTE;
         }
     }
 
     @Override
     protected JSONObject doInBackground(String... params) {
-
+        Log.v("AGET-URL", params[0] + " tipo: " + params[1]);
         try {
-            return addEventPost(params[0]);
+            return addEventPost(params[0], params[1]);
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -105,53 +107,72 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
         }
     }
 
-    public JSONObject addEventPost(String peticion) throws ClientProtocolException, IOException, JSONException {
+    public JSONObject addEventPost(String peticion, String tipoPeticion) throws ClientProtocolException, IOException, JSONException {
         httpclient = new DefaultHttpClient();
-        String uuid = UUID.randomUUID().toString();
-        //url y tipo de contenido
-        HttpPost httppost = new HttpPost(peticion);
-        httppost.addHeader("Content-Type", "application/json");
-        //forma el JSON y tipo de contenido
         JSONObject jsonObject = new JSONObject();
-
-        for(int i = 0 ; i < columnasFiltro.length; i++){
-            jsonObject.put(columnasFiltro[i], valorFiltro[i]);
+        StringEntity stringEntity;
+        HttpResponse response = null;
+        //url y tipo de contenido
+        if (tipoPeticion.equalsIgnoreCase("post")) {
+            HttpPost httppost = new HttpPost(peticion);
+            httppost.addHeader("Content-Type", "application/json");
+            //forma el JSON y tipo de contenido
+            for (int i = 0; i < columnasFiltro.length; i++) {
+                jsonObject.put(columnasFiltro[i], valorFiltro[i]);
+            }
+            stringEntity = new StringEntity(jsonObject.toString());
+            stringEntity.setContentType((Header) new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            httppost.setEntity(stringEntity);
+            //ejecuta
+            response = httpclient.execute(httppost);
         }
-        StringEntity stringEntity = new StringEntity(jsonObject.toString());
-        stringEntity.setContentType((Header) new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-        httppost.setEntity(stringEntity);
-        //ejecuta
-        HttpResponse response = httpclient.execute(httppost);
+        if (tipoPeticion.equalsIgnoreCase("put")) {
+            Log.v("AGET-URL", peticion);
+            HttpPut httpput = new HttpPut(peticion);
+            httpput.addHeader("Content-Type", "application/json");
+            //forma el JSON y tipo de contenido
+            for (int i = 0; i < columnasFiltro.length; i++) {
+                jsonObject.put(columnasFiltro[i], valorFiltro[i]);
+            }
+            stringEntity = new StringEntity(jsonObject.toString());
+            stringEntity.setContentType((Header) new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            httpput.setEntity(stringEntity);
+            response = httpclient.execute(httpput);
+        }
+        if (tipoPeticion.equalsIgnoreCase("delete")) {
+            Log.v("AGET-URL", peticion);
+            HttpDelete httpdlete = new HttpDelete(peticion);
+            response = httpclient.execute(httpdlete);
+        }
+
+
         //obtiene la respuesta y transorma a objeto JSON
         String jsonResult = new Convertidor().inputStreamToString(response.getEntity().getContent()).toString();
         JSONObject object = new JSONObject(jsonResult);
-        Log.i("jsonResult", jsonResult);
+        Log.i("AGET-JSONResult", jsonResult);
         return object;
     }
 
-    public void parserJson( JSONObject result) throws JSONException {
+    public void parserJson(JSONObject result) throws JSONException {
 //        {
 //            "estado": 1
 //            "mensaje": "Registro con exito!"
 //        }
 
-        if(result != null) {
-            Log.v("AGET-JSON-NoNulo",result.getString("mensaje").toString());
-            if(obtener) {
+        if (result != null) {
+            if (obtener) {
                 for (int i = 0; i < result.getJSONObject(tabla).length(); i++) {
                     datos.add(result.getJSONObject(tabla).getString(columnas_a_recuperar[i]));
                 }
                 enviarBroadcast(true, "Cargado", datos);
-            }else{
-                if(result.getString("mensaje").toString().equalsIgnoreCase("Registro con exito!")){
-                    enviarBroadcast(false, "Registro exitoso!", datos);
-
-                }
+            } else {
+                enviarBroadcast(false, result.getString("mensaje").toString(), datos);
             }
-        }else{
+        } else {
             enviarBroadcast(false, "Ha ocurrido un error, con los datos", datos);
         }
     }
+
     private void enviarBroadcast(boolean estado, String mensaje, ArrayList datos) {
         Intent intentLocal = new Intent(intent);
         intentLocal.putExtra(Utilidades.EXTRA_RESULTADO, estado);

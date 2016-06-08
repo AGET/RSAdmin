@@ -67,12 +67,12 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
         Log.v("AGET-CONTEXTO-paquete", String.valueOf(context.getPackageName()));
         Log.v("AGET-CONTEXTO-Nombre", String.valueOf(context.getClass().getName()));
 
-        if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.IntentListaEmpresa)) {
+        if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.INTENT_LISTA_EMPRESA)) {
             Log.v("AGET-COMPRARADA", "Intent de lista enempresa");
-            intent = Configuracion.IntentListaEmpresa;
-        } else if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.IntentListaGPS)) {
+            intent = Configuracion.INTENT_LISTA_EMPRESA;
+        } else if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.INTENT_LISTA_GPS)) {
             Log.v("AGET-COMPRARADA", "Intent de lista gps");
-            intent = Configuracion.IntentListaGPS;
+            intent = Configuracion.INTENT_LISTA_GPS;
         }
     }
 
@@ -85,14 +85,6 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
         //progressBar.setVisibility(View.VISIBLE);
         //progressDialog = ProgressDialog.show(context, "Por favor espere", "Procesando...");
     }
-
-    /**
-     * Realiza la tarea en segundo plano
-     *
-     * @param params[0] Comando GET/POST
-     * @param params[1] Nombre
-     * @param params[2] Edad
-     */
 
     protected String doInBackground(String... urls) {
         return POST(urls[0]);
