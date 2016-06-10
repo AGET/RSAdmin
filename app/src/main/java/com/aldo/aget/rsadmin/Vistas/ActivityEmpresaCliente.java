@@ -31,6 +31,7 @@ import android.support.v7.widget.AppCompatSpinner;
 public class ActivityEmpresaCliente extends AppCompatActivity {
 
     EditText edtNombre,edtTelefono,edtCorreo;
+    FloatingActionButton fab_usuarios,fab_gps;
 
     String  nombre;
     String ID = "";
@@ -57,20 +58,32 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_activity_empresa_cliente);
+        setContentView(R.layout.activity_empresa_cliente);
         agregarToolbar();
         Bundle bundle = getIntent().getExtras();
         nombre = bundle.getString(Configuracion.COLUMNA_EMPRESA_NOMBRE);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab_usuarios = (FloatingActionButton) findViewById(R.id.fab_usuarios);
+        fab_usuarios.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                lanzarEmpresa();
+                //lanzarEmpresa();
             }
         });
+        fab_gps = (FloatingActionButton) findViewById(R.id.fab_dispositivos_gps);
+        fab_gps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                //lanzarEmpresa();
+            }
+        });
+        fab_usuarios.setVisibility(View.GONE);
+        fab_gps.setVisibility(View.GONE);
+
         edtNombre = (EditText) findViewById(R.id.edt_nombre_empresa);
         edtTelefono = (EditText) findViewById(R.id.edt_telefono_empresa);
         edtCorreo = (EditText) findViewById(R.id.edt_correo_empresa);
@@ -88,7 +101,6 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
                 if(spinner.getSelectedItem() == "Estado de la empresa"){
 
                 }else{
-                    Snackbar.make(view,spinner.getSelectedItem().toString(),Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                     if (spinner.getSelectedItem().toString().equalsIgnoreCase("Habilitada"))
                         estado = "1" ;
                     else
@@ -170,7 +182,7 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
                         }
                     }, 2000);
                     Configuracion.cambio = true;
-                }
+                }if(mensaje.equalsIgnoreCase("cargado")){return;}
                 Snackbar.make(findViewById(R.id.xmlactivity_empresa_cliente),
                         mensaje, Snackbar.LENGTH_SHORT).show();
                 mostrarProgreso(false);
@@ -288,12 +300,18 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
         edtNombre.setText(String.valueOf(data.get(0)));
         edtTelefono.setText(String.valueOf(data.get(1)));
         edtCorreo.setText(String.valueOf(data.get(2)));
-        if(String.valueOf(data.get(3)).equalsIgnoreCase("0"))
+        if(String.valueOf(data.get(3)).equalsIgnoreCase("0")) {
             spinner.setSelection(1);
-        else
-        spinner.setSelection(0);
-
+            fab_usuarios.setVisibility(View.GONE);
+            fab_gps.setVisibility(View.GONE);
+        }
+        else {
+            spinner.setSelection(0);
+            fab_usuarios.setVisibility(View.VISIBLE);
+            fab_gps.setVisibility(View.VISIBLE);
+        }
         ID = String.valueOf(data.get(data.size()-1));
+
 
         habilitarComponentes(false);
 
@@ -304,11 +322,6 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
         edtTelefono.setEnabled(habilitado);
         edtCorreo.setEnabled(habilitado);
         spinner.setEnabled(habilitado);
-    }
-
-    void lanzarEmpresa(){
-        Intent empresa = new Intent(this, ActivityEmpresa.class);
-        startActivity(empresa);
     }
 
     private void mostrarProgreso(boolean mostrar) {
@@ -332,5 +345,13 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
         }else{
             finish();
         }
+    }
+    void lanzarGpss(){
+        Intent inten = new Intent(this,ActivityGPSEmpresa.class);
+        startActivity(inten);
+    }
+    void lanzarUsuarios(){
+     Intent inten = new Intent(this,ActivityGPSEmpresa.class);
+        startActivity(inten);
     }
 }

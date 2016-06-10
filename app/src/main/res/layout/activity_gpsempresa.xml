@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/xmlactivity_empresa_cliente"
     android:fitsSystemWindows="true"
-    tools:context=".Vistas.ActivityEmpresaCliente">
+    tools:context="com.aldo.aget.rsadmin.Vistas.ActivityGPSEmpresa">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,15 +21,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ProgressBar
-        android:id="@+id/barra"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginTop="50dp"
-        android:indeterminate="true" />
-    <include layout="@layout/content_activity_empresa_cliente" />
+    <include layout="@layout/content_activity_gpsempresa" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

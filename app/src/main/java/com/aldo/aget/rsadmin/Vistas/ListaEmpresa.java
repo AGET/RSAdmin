@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -23,8 +24,9 @@ import com.aldo.aget.rsadmin.R;
 import com.aldo.aget.rsadmin.ServicioWeb.ObtenerAsincrono;
 import android.widget.ProgressBar;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import static android.support.v4.view.ViewCompat.animate;
 
 public class ListaEmpresa extends AppCompatActivity implements OnItemClickListener {
 
@@ -32,6 +34,7 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
     ArrayAdapter adaptador;
     private ProgressBar progressBar;
     ArrayList datos;
+    final long DURACION = 1300;
 
     final static String peticionlistarEmpresaCliente = Configuracion.PETICION_LISTAR_EMPRESAS_HABILITADAS;
     final static String tabla = "empresa_cliente";
@@ -39,6 +42,7 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
 
     private BroadcastReceiver receptorMensaje;
 
+    FloatingActionButton fab_nueva_empresa;
 
 
     @Override
@@ -48,8 +52,8 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
         agregarToolbar();
         setTitle(R.string.titulo_actividad_lista_empresa);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab_nueva_empresa = (FloatingActionButton) findViewById(R.id.nueva_empresa);
+        fab_nueva_empresa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -64,6 +68,40 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
         mostrarProgreso(true);
         new ObtenerAsincrono(ListaEmpresa.this,tabla,columnas)
                 .execute(peticionlistarEmpresaCliente);
+
+        ManejadorScroll.Action desplazamiento = new ManejadorScroll.Action() {
+
+
+            private boolean ocultar = true;
+
+            @Override
+            public void up() {
+                if (ocultar) {
+                    ocultar = false;
+                    animate(fab_nueva_empresa)
+                            .translationY(fab_nueva_empresa.getHeight() +
+                                    getResources().getDimension(R.dimen.fab_margin))
+                            .setInterpolator(new LinearInterpolator())
+                            .setDuration(DURACION);
+                    Log.v("AGET-POSICION","UP");
+                }
+            }
+
+            @Override
+            public void down() {
+                if (!ocultar) {
+                    ocultar = true;
+                    animate(fab_nueva_empresa)
+                            .translationY(0)
+                            .setInterpolator(new LinearInterpolator())
+                            .setDuration(DURACION);
+                    Log.v("AGET-POSICION", "DOWN");
+                }
+            }
+
+        };
+
+        lista.setOnScrollListener(new ManejadorScroll(lista, 8, desplazamiento));
 
         lista.setOnItemClickListener(this);
 
@@ -83,6 +121,7 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
                         mensaje, Snackbar.LENGTH_SHORT).show();
             }
         };
+
     }
 
     @Override
@@ -92,7 +131,7 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
         IntentFilter filtroSync = new IntentFilter(Configuracion.INTENT_LISTA_EMPRESA);
         LocalBroadcastManager.getInstance(this).registerReceiver(receptorMensaje, filtroSync);
 
-        if(Configuracion.cambio) {
+        if (Configuracion.cambio) {
             mostrarProgreso(true);
             Configuracion.cambio = false;
             new ObtenerAsincrono(ListaEmpresa.this, tabla, columnas)
@@ -158,4 +197,6 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
+
+
 }

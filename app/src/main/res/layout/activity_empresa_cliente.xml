@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/xmlactivity_empresa_cliente"
     android:fitsSystemWindows="true"
-    tools:context="com.aldo.aget.rsadmin.Vistas.ActivityEmpresa">
+    tools:context=".Vistas.ActivityEmpresaCliente">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,24 +22,32 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_activity_empresa" />
+    <ProgressBar
+        android:id="@+id/barra"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="50dp"
+        android:indeterminate="true" />
+    <include layout="@layout/content_activity_empresa_cliente" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/usuarios"
+        android:id="@+id/fab_dispositivos_gps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|start"
-        android:layout_marginTop="300dp"
-        android:layout_marginLeft="20dp"
-        android:src="@android:drawable/ic_menu_upload_you_tube" />
+        android:layout_gravity="bottom|start"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/icono_gps" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/GPS"
+        android:id="@+id/fab_usuarios"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|end"
-        android:layout_marginTop="300dp"
-        android:layout_marginRight="20dp"
-        android:src="@android:drawable/ic_dialog_map" />
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/icono_usuarios" />
+
+
 
 </android.support.design.widget.CoordinatorLayout>

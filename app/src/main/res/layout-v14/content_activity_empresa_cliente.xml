@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Vistas.ActivityEmpresaCliente"
-    tools:showIn="@layout/activity_activity_empresa_cliente">
+    tools:showIn="@layout/activity_empresa_cliente">
 
 
     <!--<TextView-->
@@ -28,7 +28,7 @@
         android:id="@+id/icono_nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icono_cuenta"
+        android:src="@drawable/icono_empresa"
         android:layout_alignBottom="@+id/mcr_edt_nombre_empresa"
         android:layout_marginBottom="10dp"
         />

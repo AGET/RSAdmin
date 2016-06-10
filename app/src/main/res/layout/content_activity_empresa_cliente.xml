@@ -10,14 +10,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Vistas.ActivityEmpresaCliente"
-    tools:showIn="@layout/activity_activity_empresa_cliente">
+    tools:showIn="@layout/activity_empresa_cliente">
 
 
     <ImageView
         android:id="@+id/icono_nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icono_cuenta"
+        android:src="@drawable/icono_empresa"
         android:layout_alignBottom="@+id/mcr_edt_nombre_empresa"
         android:layout_marginBottom="10dp"
         />
@@ -27,7 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="43dp"
         app:hintTextAppearance="@style/Hint"
-        android:layout_below="@+id/txtIdEmpresa"
         android:layout_marginLeft="60dp">
         <EditText
             android:id="@+id/edt_nombre_empresa"
@@ -37,7 +36,6 @@
             android:ems="12"
             android:hint="Nombre de la empresa"
             android:inputType="textPersonName"
-            android:layout_above="@+id/mcr_edt_telefono_empresa"
             android:layout_centerHorizontal="true" />
     </android.support.design.widget.TextInputLayout>
 
