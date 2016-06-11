@@ -25,15 +25,17 @@ import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.Configuracion.Utilidades;
 import com.aldo.aget.rsadmin.R;
 import com.aldo.aget.rsadmin.ServicioWeb.ObtencionDeResultadoBcst;
+
 import java.util.ArrayList;
+
 import android.support.v7.widget.AppCompatSpinner;
 
-public class ActivityEmpresaCliente extends AppCompatActivity {
+public class EmpresaCliente extends AppCompatActivity {
 
-    EditText edtNombre,edtTelefono,edtCorreo;
-    FloatingActionButton fab_usuarios,fab_gps;
+    EditText edtNombre, edtTelefono, edtCorreo;
+    FloatingActionButton fab_usuarios, fab_gps;
 
-    String  nombre;
+    String idEmpresa;
     String ID = "";
     AppCompatSpinner spinner;
     //Spinner spinner;
@@ -48,10 +50,10 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
     BroadcastReceiver receptorMensaje;
 
     private ProgressBar progressBar;
-    MenuItem menuOk,menuEditar,menuEliminar;
+    MenuItem menuOk, menuEditar, menuEliminar;
     ArrayList data;
 
-    String tabla =Configuracion.TABLA_EMPRESA_CLIENTE;
+    String tabla = Configuracion.TABLA_EMPRESA_CLIENTE;
 
     String tipoPeticion = "post";
 
@@ -61,7 +63,7 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
         setContentView(R.layout.activity_empresa_cliente);
         agregarToolbar();
         Bundle bundle = getIntent().getExtras();
-        nombre = bundle.getString(Configuracion.COLUMNA_EMPRESA_NOMBRE);
+        idEmpresa = bundle.getString(Configuracion.COLUMNA_EMPRESA_ID);
 
         fab_usuarios = (FloatingActionButton) findViewById(R.id.fab_usuarios);
         fab_usuarios.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +71,7 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                //lanzarEmpresa();
+                lanzarGpss();
             }
         });
         fab_gps = (FloatingActionButton) findViewById(R.id.fab_dispositivos_gps);
@@ -78,7 +80,7 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                //lanzarEmpresa();
+                lanzarGpss();
             }
         });
         fab_usuarios.setVisibility(View.GONE);
@@ -98,11 +100,11 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(spinner.getSelectedItem() == "Estado de la empresa"){
+                if (spinner.getSelectedItem() == "Estado de la empresa") {
 
-                }else{
+                } else {
                     if (spinner.getSelectedItem().toString().equalsIgnoreCase("Habilitada"))
-                        estado = "1" ;
+                        estado = "1";
                     else
                         estado = "0";
                 }
@@ -119,7 +121,7 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
 
         //Datos de busqueda
         String[] columnasFiltro = {Configuracion.COLUMNA_EMPRESA_ID};
-        String[] valorFiltro = {nombre};
+        String[] valorFiltro = {idEmpresa};
 
         //Datos a mostrar
         String[] columnasArecuperar = {
@@ -129,11 +131,11 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
                 Configuracion.COLUMNA_EMPRESA_STATUS,
                 Configuracion.COLUMNA_EMPRESA_ID};
 
-        if (nombre != null) {
+        if (idEmpresa != null) {
             mostrarProgreso(true);
-            resultado = new ObtencionDeResultadoBcst(this, columnasFiltro, valorFiltro, tabla,columnasArecuperar);
-            resultado.execute(Configuracion.PETICION_LISTAR_EMPRESAS_POR_ID,tipoPeticion);
-        }else{
+            resultado = new ObtencionDeResultadoBcst(this, columnasFiltro, valorFiltro, tabla, columnasArecuperar);
+            resultado.execute(Configuracion.PETICION_LISTAR_EMPRESAS_POR_ID, tipoPeticion);
+        } else {
             setTitle(R.string.titulo_actividad_agregar_empresa);
         }
 
@@ -148,10 +150,10 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
                 mostrarProgreso(false);
                 String mensaje = intent.getStringExtra(Utilidades.EXTRA_MENSAJE);
                 Boolean restado = intent.getBooleanExtra(Utilidades.EXTRA_RESULTADO, false);
-                if(restado){
+                if (restado) {
                     cargarViews(intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST));
-                //}else if(mensaje.equalsIgnoreCase("Registro exitoso!")){
-                }else if(mensaje.equalsIgnoreCase("Registro con exito!")){
+                    //}else if(mensaje.equalsIgnoreCase("Registro exitoso!")){
+                } else if (mensaje.equalsIgnoreCase("Registro con exito!")) {
                     //menuOk.setEnabled(false);
                     menuOk.setVisible(false);
                     menuEditar.setVisible(true);
@@ -164,17 +166,17 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
                         }
                     }, 2000);
                     Configuracion.cambio = true;
-                }else if(mensaje.equalsIgnoreCase("Registro actualizado correctamente")) {
+                } else if (mensaje.equalsIgnoreCase("Registro actualizado correctamente")) {
                     menuOk.setVisible(false);
                     menuEditar.setVisible(true);
                     menuEliminar.setVisible(true);
                     habilitarComponentes(false);
                     Configuracion.cambio = true;
-                }else if(mensaje.equalsIgnoreCase("Url mal formada")){
-                        mensaje = "error en dato, probablemente con ID";
-                }else if(mensaje.equalsIgnoreCase("La empresa a la que intentas acceder no existe")){
+                } else if (mensaje.equalsIgnoreCase("Url mal formada")) {
+                    mensaje = "error en dato, probablemente con ID";
+                } else if (mensaje.equalsIgnoreCase("La empresa a la que intentas acceder no existe")) {
                     mensaje = "Revise los datos, puede no haber modificacion";
-                }else if(mensaje.equalsIgnoreCase("Registro eliminado correctamente")){
+                } else if (mensaje.equalsIgnoreCase("Registro eliminado correctamente")) {
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
@@ -182,7 +184,10 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
                         }
                     }, 2000);
                     Configuracion.cambio = true;
-                }if(mensaje.equalsIgnoreCase("cargado")){return;}
+                }
+                if (mensaje.equalsIgnoreCase("cargado")) {
+                    return;
+                }
                 Snackbar.make(findViewById(R.id.xmlactivity_empresa_cliente),
                         mensaje, Snackbar.LENGTH_SHORT).show();
                 mostrarProgreso(false);
@@ -220,7 +225,7 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
         this.menuEditar = menu.findItem(R.id.accion_editar);
         this.menuOk = menu.findItem(R.id.accion_confirmar);
         // Verificación de visibilidad acción eliminar
-        if (nombre != null) {
+        if (idEmpresa != null) {
             menuEditar.setVisible(true);
             menuEliminar.setVisible(true);
             menuOk.setVisible(false);
@@ -247,9 +252,9 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
                 //insertar();
                 break;
             case android.R.id.home:
-                if(edtNombre.isEnabled()){
+                if (edtNombre.isEnabled()) {
                     regresar();
-                }else {
+                } else {
                     finish();
                 }
                 break;
@@ -272,10 +277,10 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
                     , Configuracion.COLUMNA_EMPRESA_CORREO, Configuracion.COLUMNA_EMPRESA_STATUS};
             String[] valorFiltro = {nombre, telefono, correo, estado};
             resultado = new ObtencionDeResultadoBcst(this, columnasFiltro, valorFiltro, tabla, null);
-            if(ID.isEmpty()) {
-                resultado.execute(Configuracion.PETICION_EMPRESAS_REGISTRO,tipoPeticion);
+            if (ID.isEmpty()) {
+                resultado.execute(Configuracion.PETICION_EMPRESAS_REGISTRO, tipoPeticion);
             } else {
-                resultado.execute(Configuracion.PETICION_EMPRESAS_MODIFICAR_ELIMINAR+ID,tipoPeticion);
+                resultado.execute(Configuracion.PETICION_EMPRESAS_MODIFICAR_ELIMINAR + ID, tipoPeticion);
             }
         }
     }
@@ -285,9 +290,9 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
     }
 
     private void eliminar() {
-        if (nombre != null) {
+        if (idEmpresa != null) {
             resultado = new ObtencionDeResultadoBcst(this, null, null, tabla, null);
-            resultado.execute(Configuracion.PETICION_EMPRESAS_MODIFICAR_ELIMINAR+ID,tipoPeticion);
+            resultado.execute(Configuracion.PETICION_EMPRESAS_MODIFICAR_ELIMINAR + ID, tipoPeticion);
         }
     }
 
@@ -300,24 +305,24 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
         edtNombre.setText(String.valueOf(data.get(0)));
         edtTelefono.setText(String.valueOf(data.get(1)));
         edtCorreo.setText(String.valueOf(data.get(2)));
-        if(String.valueOf(data.get(3)).equalsIgnoreCase("0")) {
+        if (String.valueOf(data.get(3)).equalsIgnoreCase("0")) {
             spinner.setSelection(1);
             fab_usuarios.setVisibility(View.GONE);
             fab_gps.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             spinner.setSelection(0);
             fab_usuarios.setVisibility(View.VISIBLE);
             fab_gps.setVisibility(View.VISIBLE);
         }
-        ID = String.valueOf(data.get(data.size()-1));
+        ID = String.valueOf(data.get(data.size() - 1));
 
 
         habilitarComponentes(false);
 
         setTitle(String.valueOf(data.get(0)));
     }
-    void habilitarComponentes(Boolean habilitado){
+
+    void habilitarComponentes(Boolean habilitado) {
         edtNombre.setEnabled(habilitado);
         edtTelefono.setEnabled(habilitado);
         edtCorreo.setEnabled(habilitado);
@@ -328,30 +333,34 @@ public class ActivityEmpresaCliente extends AppCompatActivity {
         progressBar.setVisibility(mostrar ? View.VISIBLE : View.GONE);
     }
 
-    void regresar(){
-        if(nombre != null){
+    void regresar() {
+        if (idEmpresa != null) {
             edtNombre.setText(String.valueOf(data.get(0)));
-        edtTelefono.setText(String.valueOf(data.get(1)));
+            edtTelefono.setText(String.valueOf(data.get(1)));
             edtCorreo.setText(String.valueOf(data.get(2)));
-        if(String.valueOf(data.get(3)).equalsIgnoreCase("0"))
-            spinner.setSelection(1);
-        else
-            spinner.setSelection(0);
+            if (String.valueOf(data.get(3)).equalsIgnoreCase("0"))
+                spinner.setSelection(1);
+            else
+                spinner.setSelection(0);
 
-        habilitarComponentes(false);
+            habilitarComponentes(false);
 
-        setTitle(String.valueOf(data.get(0)));
-        menuOk.setVisible(false);
-        }else{
+            setTitle(String.valueOf(data.get(0)));
+            menuOk.setVisible(false);
+
+        } else {
             finish();
         }
     }
-    void lanzarGpss(){
-        Intent inten = new Intent(this,ActivityGPSEmpresa.class);
+
+    void lanzarGpss() {
+        Intent inten = new Intent(this, GpsEmpresa.class);
+        inten.putExtra(Configuracion.COLUMNA_EMPRESA_ID,idEmpresa);
         startActivity(inten);
     }
-    void lanzarUsuarios(){
-     Intent inten = new Intent(this,ActivityGPSEmpresa.class);
+
+    void lanzarUsuarios() {
+        Intent inten = new Intent(this, GpsEmpresa.class);
         startActivity(inten);
     }
 }

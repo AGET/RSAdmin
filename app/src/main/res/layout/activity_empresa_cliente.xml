@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/xmlactivity_empresa_cliente"
     android:fitsSystemWindows="true"
-    tools:context=".Vistas.ActivityEmpresaCliente">
+    tools:context=".Vistas.EmpresaCliente">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         android:visibility="gone"
         android:layout_marginTop="50dp"
         android:indeterminate="true" />
-    <include layout="@layout/content_activity_empresa_cliente" />
+    <include layout="@layout/content_empresa_cliente" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_dispositivos_gps"

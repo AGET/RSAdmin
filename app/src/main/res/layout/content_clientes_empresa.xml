@@ -9,8 +9,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.aldo.aget.rsadmin.Vistas.ActivityGPSEmpresa"
-    tools:showIn="@layout/activity_gpsempresa">
+    tools:context="com.aldo.aget.rsadmin.Vistas.ClientesEmpresa"
+    tools:showIn="@layout/activity_clientes_empresa">
 
 
 
@@ -26,7 +26,7 @@
         android:id="@+id/mcr_edt_nombre_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="13dp"
         app:hintTextAppearance="@style/Hint"
         android:layout_marginLeft="60dp">
         <EditText
@@ -40,28 +40,30 @@
             android:layout_centerHorizontal="true" />
     </android.support.design.widget.TextInputLayout>
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/icono_apellido_paterno"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/icono_cuenta"
         android:layout_alignBottom="@+id/mcr_edt_apellido_paterno"
         android:layout_marginBottom="10dp"
-        />
+        />-->
     <android.support.design.widget.TextInputLayout
         android:id="@+id/mcr_edt_apellido_paterno"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="5dp"
         android:layout_below="@+id/mcr_edt_nombre_usuario"
         app:hintTextAppearance="@style/Hint"
-        android:layout_marginLeft="60dp">
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/mcr_edt_apellido_materno">
         <EditText
             android:id="@+id/edt_apellido_paterno"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="12"
+            android:ems="8"
             android:hint="Apellido paterno"
             android:inputType="textPersonName"
             android:layout_centerHorizontal="true" />
@@ -71,28 +73,28 @@
 
 
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/icono_apellido_materno"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/icono_cuenta"
         android:layout_alignBottom="@+id/mcr_edt_apellido_materno"
         android:layout_marginBottom="10dp"
-        />
+        />-->
     <android.support.design.widget.TextInputLayout
         android:id="@+id/mcr_edt_apellido_materno"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_below="@+id/mcr_edt_apellido_paterno"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/mcr_edt_nombre_usuario"
         app:hintTextAppearance="@style/Hint"
-        android:layout_marginLeft="60dp">
+        android:layout_alignParentRight="true">
         <EditText
             android:id="@+id/edt_apellido_materno"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="12"
+            android:ems="8"
             android:hint="Apellido materno"
             android:inputType="textPersonName"
             android:layout_centerHorizontal="true" />
@@ -111,7 +113,7 @@
         android:id="@+id/mcr_edt_telefono_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_below="@+id/mcr_edt_apellido_materno"
         app:hintTextAppearance="@style/Hint"
         android:layout_marginLeft="60dp">
@@ -138,7 +140,7 @@
         android:id="@+id/mcr_edt_correo_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/mcr_edt_telefono_usuario"
         app:hintTextAppearance="@style/Hint"
@@ -159,7 +161,7 @@
         android:id="@+id/icono_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icono_correo"
+        android:src="@drawable/icono_cuenta"
         android:layout_alignBottom="@+id/mcr_edt_usuario"
         android:layout_marginBottom="10dp"
         />
@@ -167,7 +169,7 @@
         android:id="@+id/mcr_edt_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/mcr_edt_correo_usuario"
         app:hintTextAppearance="@style/Hint"
@@ -188,7 +190,7 @@
         android:id="@+id/icono_pass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icono_correo"
+        android:src="@android:drawable/ic_secure"
         android:layout_alignBottom="@+id/mcr_edt_pass_usuario"
         android:layout_marginBottom="10dp"
         />
@@ -196,7 +198,7 @@
         android:id="@+id/mcr_edt_pass_usuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/mcr_edt_usuario"
         app:hintTextAppearance="@style/Hint"
@@ -211,6 +213,5 @@
             android:inputType="textPassword"
             />
     </android.support.design.widget.TextInputLayout>
-
 
 </RelativeLayout>

@@ -48,16 +48,20 @@
             android:label="@string/title_activity_lista_gps"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".Vistas.ActivityGps"
+            android:name=".Vistas.Gps"
             android:label="@string/title_activity_activity_gps"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".Vistas.ActivityEmpresaCliente"
+            android:name=".Vistas.EmpresaCliente"
             android:label="@string/title_activity_activity_empresa_cliente"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".Vistas.ActivityGPSEmpresa"
+            android:name=".Vistas.GpsEmpresa"
             android:label="@string/title_activity_activity_gpsempresa"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Vistas.ClientesEmpresa"
+            android:label="@string/title_activity_clientes_empresa"
             android:theme="@style/AppTheme"></activity>
     </application>
 

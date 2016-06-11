@@ -50,4 +50,5 @@
     <string name="title_activity_activity_empresa">ActivityEmpresa</string>
     <string name="title_activity_borrar">Borrar</string>
     <string name="title_activity_activity_gpsempresa">ActivityGPSEmpresa</string>
+    <string name="title_activity_clientes_empresa">ClientesEmpresa</string>
 </resources>

@@ -157,9 +157,9 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
         actividadEmpresa(marcado);
     }
 
-    void actividadEmpresa(String nombre){
-        Intent actividad = new Intent(this, ActivityEmpresaCliente.class);
-        actividad.putExtra(Configuracion.COLUMNA_EMPRESA_NOMBRE, nombre);
+    void actividadEmpresa(String id){
+        Intent actividad = new Intent(this, EmpresaCliente.class);
+        actividad.putExtra(Configuracion.COLUMNA_EMPRESA_ID, id);
         startActivity(actividad);
     }
 

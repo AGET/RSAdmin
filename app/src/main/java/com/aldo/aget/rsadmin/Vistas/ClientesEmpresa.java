@@ -9,12 +9,12 @@ import android.view.View;
 
 import com.aldo.aget.rsadmin.R;
 
-public class ActivityGPSEmpresa extends AppCompatActivity {
+public class ClientesEmpresa extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gpsempresa);
+        setContentView(R.layout.activity_clientes_empresa);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

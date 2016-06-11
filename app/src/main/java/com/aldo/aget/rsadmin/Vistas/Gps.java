@@ -15,7 +15,7 @@ import com.aldo.aget.rsadmin.R;
 import com.aldo.aget.rsadmin.ServicioWeb.ObtencionDeResultado;
 
 
-public class ActivityGps extends AppCompatActivity {
+public class Gps extends AppCompatActivity {
 
     EditText edtImei,edtEnlace,edtNumero;
 
@@ -28,7 +28,7 @@ public class ActivityGps extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_activity_gps);
+        setContentView(R.layout.activity_gps);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

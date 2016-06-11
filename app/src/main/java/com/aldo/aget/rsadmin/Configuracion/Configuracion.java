@@ -51,7 +51,8 @@ public static final String COLUMNA_EMPRESA_ID = "empresa_id";
     //Broadcast
     public static final String INTENT_LISTA_EMPRESA = "com.aldo.aget.rsadmin.Vistas.ListaEmpresa";
     public static final String INTENT_LISTA_GPS = "com.aldo.aget.rsadmin.Vistas.ListaGps";
-    public static final String INTENT_EMPRESA_CLIENTE = "com.aldo.aget.rsadmin.Vistas.ActivityEmpresaCliente";
+    public static final String INTENT_EMPRESA_CLIENTE = "com.aldo.aget.rsadmin.Vistas.EmpresaCliente";
+    public static final String INTENT_GPS_EMPRESA = "com.aldo.aget.rsadmin.Vistas.GpsEmpresa";
 
     public static Boolean cambio = false;
 }
