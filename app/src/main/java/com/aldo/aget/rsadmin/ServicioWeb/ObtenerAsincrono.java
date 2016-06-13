@@ -48,20 +48,12 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
 
     ArrayList datos;
 
-    //ManipulacionDatos datosLista;
-
     String intent = "";
 
-
-    /**
-     * Constructor de clase
-     */
-    //public ObtenerAsincrono(Context context, ListView listView, ProgressBar progressBar, View view, String tabla, String columna) {
     public ObtenerAsincrono(Context context, String tabla, String[] columna) {
         this.context = context;
         this.tabla = tabla;
         this.columna = columna;
-        //datosLista = new ManipulacionDatos();
 
         Log.v("AGET-CONTEXTO-class", String.valueOf(context.getClass()));
         Log.v("AGET-CONTEXTO-paquete", String.valueOf(context.getPackageName()));
@@ -79,29 +71,17 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
         }
     }
 
-    /**
-     * Antes de comenzar la tarea muestra el progressDialog
-     */
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        //progressBar.setVisibility(View.VISIBLE);
-        //progressDialog = ProgressDialog.show(context, "Por favor espere", "Procesando...");
     }
 
     protected String doInBackground(String... urls) {
         return POST(urls[0]);
     }
 
-    /**
-     * Cuando se termina de ejecutar, cierra el progressDialog y retorna el resultado a la interfaz
-     **/
     @Override
     protected void onPostExecute(String result) {
-        //progressDialog.dismiss();
-//        progressBar.setVisibility(View.GONE);
-
-        //Toast.makeText(Configuracion.context, "Received!", Toast.LENGTH_LONG).show();
         if (result.contentEquals("error en el servidor")) {
             enviarBroadcast(false, "hay un error en el servidor",datos);
         } else {
@@ -113,19 +93,14 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
                 String str = "";
                 JSONArray obj = json.getJSONArray(tabla);
 
-
-               // ArrayList matrix = new ArrayList();
                 datos.add(new ArrayList());
 
                 for (int i = 0; i < json.getJSONArray(tabla).length(); i++) {
                     for(int j = 0 ; j < columna.length; j++)
-                     //  datos.add(obj.getJSONObject(i).getString(columna));
                         ((ArrayList)datos.get(i)).add(obj.getJSONObject(i).getString(columna[j]));
                     datos.add(new ArrayList());
                 }
 
-
-                // display contents of matrix
                 for(int i = 0; i < datos.size();i++){
                     for(int j = 0; j < ((ArrayList)datos.get(i)).size(); j++){
                         Log.v("AGET-listas",(String)((ArrayList)datos.get(i)).get(j) +"  ");
@@ -133,11 +108,9 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
                     System.out.println();
                 }
 
-                //datosLista.setDatosJson(datos);
                 Log.v("AGET-PARSEADO", str);
-                //enviarBroadcast(true, "Parseado",datos);
+
                 enviarBroadcast(true, "Parseado",datos);
-                //actualizar();
             } catch (JSONException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -147,33 +120,28 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
         }
     }
 
-    protected void actualizar() {
-        //Relacionando la lista con el adaptador
-        lista.setAdapter(adaptador);
-
-        //adaptador.insert(grupo, 0);
-        adaptador.notifyDataSetChanged();
-    }
-
     public String POST(String url) {
         InputStream inputStream = null;
         String result = "";
         try {
 
-            // create HttpClient
             HttpClient httpclient = new DefaultHttpClient();
 
-            // make GET request to the given URL
             HttpResponse httpResponse = httpclient.execute(new HttpPost(url));
 
-            // receive response as inputStream
             inputStream = httpResponse.getEntity().getContent();
 
-            // convert inputstream to string
+
+
+
+
+
+
+
             if (inputStream != null)
                 result = new Convertidor().convertInputStreamToString(inputStream);
             else
-                result = "Did not work!";
+                result = "no se encontraron datos";
 
         } catch (Exception e) {
             enviarBroadcast(false, "error en el servidor", datos);
@@ -184,18 +152,11 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
     }
 
     private void enviarBroadcast(boolean estado, String mensaje, ArrayList datos) {
-        //Intent intentLocal = new Intent(Intent.ACTION_SYNC);
         Intent intentLocal = new Intent(intent);
         intentLocal.putExtra(Utilidades.EXTRA_RESULTADO, estado);
         intentLocal.putExtra(Utilidades.EXTRA_MENSAJE, mensaje);
         intentLocal.putExtra(Utilidades.EXTRA_DATOS_ALIST, datos);
         LocalBroadcastManager.getInstance(Configuracion.context).sendBroadcast(intentLocal);
-
-//        Intent broadcastIntent = new Intent();
-//        //broadcastIntent.setAction("NOMBRE_DE_NUESTRA_ACTION");
-//        broadcastIntent.putExtra(Utilidades.EXTRA_RESULTADO, estado);
-//        broadcastIntent.putExtra(Utilidades.EXTRA_MENSAJE, mensaje);
-//        context.sendBroadcast(broadcastIntent);
 
         Log.v("AGET", "BROAD ENVIADO");
     }

@@ -133,7 +133,7 @@ public class EmpresaCliente extends AppCompatActivity {
 
         if (idEmpresa != null) {
             mostrarProgreso(true);
-            resultado = new ObtencionDeResultadoBcst(this, columnasFiltro, valorFiltro, tabla, columnasArecuperar);
+            resultado = new ObtencionDeResultadoBcst(this, columnasFiltro, valorFiltro, tabla, columnasArecuperar,false);
             resultado.execute(Configuracion.PETICION_LISTAR_EMPRESAS_POR_ID, tipoPeticion);
         } else {
             setTitle(R.string.titulo_actividad_agregar_empresa);
@@ -276,7 +276,7 @@ public class EmpresaCliente extends AppCompatActivity {
             String[] columnasFiltro = {Configuracion.COLUMNA_EMPRESA_NOMBRE, Configuracion.COLUMNA_EMPRESA_TELEFONO
                     , Configuracion.COLUMNA_EMPRESA_CORREO, Configuracion.COLUMNA_EMPRESA_STATUS};
             String[] valorFiltro = {nombre, telefono, correo, estado};
-            resultado = new ObtencionDeResultadoBcst(this, columnasFiltro, valorFiltro, tabla, null);
+            resultado = new ObtencionDeResultadoBcst(this, columnasFiltro, valorFiltro, tabla, null,false);
             if (ID.isEmpty()) {
                 resultado.execute(Configuracion.PETICION_EMPRESAS_REGISTRO, tipoPeticion);
             } else {
@@ -291,7 +291,7 @@ public class EmpresaCliente extends AppCompatActivity {
 
     private void eliminar() {
         if (idEmpresa != null) {
-            resultado = new ObtencionDeResultadoBcst(this, null, null, tabla, null);
+            resultado = new ObtencionDeResultadoBcst(this, null, null, tabla, null,false);
             resultado.execute(Configuracion.PETICION_EMPRESAS_MODIFICAR_ELIMINAR + ID, tipoPeticion);
         }
     }
@@ -315,7 +315,6 @@ public class EmpresaCliente extends AppCompatActivity {
             fab_gps.setVisibility(View.VISIBLE);
         }
         ID = String.valueOf(data.get(data.size() - 1));
-
 
         habilitarComponentes(false);
 

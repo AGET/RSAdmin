@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -28,21 +29,24 @@ import com.aldo.aget.rsadmin.ServicioWeb.ObtenerAsincrono;
 import java.util.ArrayList;
 
 
-public class GpsEmpresa extends AppCompatActivity {
+public class GpsEmpresa extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
     AppCompatSpinner spinner;
     SpinnerAdapter adaptador;
+    ListView lista;
+    ArrayAdapter adaptadorLista;
 
-    BroadcastReceiver receptorMensaje;
+    BroadcastReceiver receptorMensajeGps,receptorMensajeGpsAgregados;
     private ProgressBar progressBar;
 
-    String idEmpresa;
+    String idEmpresa,tipoPeticion = "post";
 
     ArrayList datos;
 
     final static String peticionListarGpsLibres = Configuracion.PETICION_LISTAR_GPS_LIBRES;
-    final static String tabla = "gps";
-    final static String columnas[] = {"imei","numero"};
+    final static String columnas[] = {Configuracion.COLUMNA_GPS_IMEI,Configuracion.COLUMNA_GPS_NUMERO};
+
+    boolean datosRecibidos = false;
 
 
     @Override
@@ -53,6 +57,8 @@ public class GpsEmpresa extends AppCompatActivity {
 
         spinner = (AppCompatSpinner) findViewById(R.id.spinner_gps);
         progressBar = (ProgressBar) findViewById(R.id.barra);
+        lista = (ListView)findViewById(R.id.lista_gps_de_empresa);
+        lista.setOnItemClickListener(this);
 
         Bundle bundle = getIntent().getExtras();
         idEmpresa = bundle.getString(Configuracion.COLUMNA_EMPRESA_ID);
@@ -83,23 +89,57 @@ public class GpsEmpresa extends AppCompatActivity {
         });
 
         mostrarProgreso(true);
-        new ObtenerAsincrono(GpsEmpresa.this,tabla,columnas)
+        new ObtenerAsincrono(GpsEmpresa.this,Configuracion.TABLA_GPS,columnas)
                 .execute(peticionListarGpsLibres);
 
-        receptorMensaje = new BroadcastReceiver() {
+        //Datos de busqueda
+        String[] columnasFiltro = {Configuracion.COLUMNA_EMPRESA_ID};
+        String[] valorFiltro = {idEmpresa};
+
+        //Datos a mostrar
+        String[] columnasArecuperar = {
+                Configuracion.COLUMNA_GPS_IMEI,
+                Configuracion.COLUMNA_GPS_NUMERO,
+                Configuracion.COLUMNA_GPS_DESCRIPCION,
+                Configuracion.COLUMNA_GPS_EMPRESA};
+
+        new ObtencionDeResultadoBcst(GpsEmpresa.this, columnasFiltro, valorFiltro ,Configuracion.TABLA_GPS, columnasArecuperar,true)
+                .execute(Configuracion.PETICION_LISTAR_GPS_EMPRESA,tipoPeticion);
+
+        receptorMensajeGps = new BroadcastReceiver() {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.v("AGET", "BROAD RECIBIDO empresa");
-                mostrarProgreso(false);
+                Log.v("AGET", "BROAD RECIBIDO GPS LIBRES");
+                if(datosRecibidos) {
+                    mostrarProgreso(false);
+                }else{
+                    datosRecibidos = true;
+                }
                 String mensaje = intent.getStringExtra(Utilidades.EXTRA_MENSAJE);
                 Boolean restado = intent.getBooleanExtra(Utilidades.EXTRA_RESULTADO, false);
                 if(restado){
-                    actualizar(intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST));
+                    actualizarSpinner(intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST));
                 }
             }
         };
 
+        receptorMensajeGpsAgregados = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.v("AGET", "BROAD RECIBIDO GPS AGREADOS");
+                if(datosRecibidos) {
+                    mostrarProgreso(false);
+                }else{
+                    datosRecibidos = true;
+                }
+                String mensaje = intent.getStringExtra(Utilidades.EXTRA_MENSAJE);
+                Boolean restado = intent.getBooleanExtra(Utilidades.EXTRA_RESULTADO, false);
+                if(restado){
+                    actualizarLista(intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST));
+                }
+            }
+        };
     }
 
     @Override
@@ -107,25 +147,21 @@ public class GpsEmpresa extends AppCompatActivity {
         super.onResume();
         // Registrar receptor
         IntentFilter filtroSync = new IntentFilter(Configuracion.INTENT_GPS_EMPRESA);
-        LocalBroadcastManager.getInstance(this).registerReceiver(receptorMensaje, filtroSync);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receptorMensajeGps, filtroSync);
 
-        if (Configuracion.cambio) {
-            mostrarProgreso(true);
-            Configuracion.cambio = false;
-            new ObtenerAsincrono(GpsEmpresa.this, tabla, columnas)
-                    .execute(peticionListarGpsLibres);
-        }
+        IntentFilter filtroSyncGpsAgregados = new IntentFilter(Configuracion.INTENT_GPS_EMPRESA_AGREGADOS);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receptorMensajeGpsAgregados, filtroSyncGpsAgregados);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         // Desregistrar receptor
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorMensaje);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorMensajeGps);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorMensajeGpsAgregados);
     }
 
-
-    protected void actualizar(ArrayList datosMultiples) {
+    protected void actualizarSpinner(ArrayList datosMultiples) {
         this.datos = datosMultiples;
         ArrayList descripciones = new ArrayList();
 
@@ -142,6 +178,22 @@ public class GpsEmpresa extends AppCompatActivity {
         adaptador.notifyDataSetChanged();
     }
 
+    protected void actualizarLista(ArrayList datosMultiples) {
+        this.datos = datosMultiples;
+        Log.v("AGET-LISTA:",""+datos.size());
+        ArrayList nombres = new ArrayList();
+        Log.v("AGET-item:",""+((ArrayList)datos.get(0)).size());
+
+        for(int i = 0 ; i < datos.size()-1; i++){
+            Log.v("AGET-include:","" + i);
+            Log.v("AGET-valor:", "" + (String) ((ArrayList) datos.get(i)).get(0));
+            nombres.add((String) ((ArrayList) datos.get(i)).get(0) + " - " + ((ArrayList) datos.get(i)).get(1));
+        }
+
+        adaptadorLista = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, nombres);
+        lista.setAdapter(adaptadorLista);
+        adaptadorLista.notifyDataSetChanged();
+    }
 
     private void agregarToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -155,6 +207,13 @@ public class GpsEmpresa extends AppCompatActivity {
         progressBar.setVisibility(mostrar ? View.VISIBLE : View.GONE);
     }
 
-
-
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String marcado = (String) lista.getItemAtPosition(position);
+        Snackbar.make(view,  "Ha marcado el item " + position + " " + marcado, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+        marcado = (String) ((ArrayList) datos.get(position)).get(0) + " - " + ((ArrayList) datos.get(position)).get(1);
+        Log.v("AGET-Enviado",marcado);
+        //actividadEmpresa(marcado);
+    }
 }

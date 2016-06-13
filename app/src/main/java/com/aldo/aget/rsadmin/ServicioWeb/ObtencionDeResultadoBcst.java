@@ -36,24 +36,22 @@ import java.util.UUID;
  */
 public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject> {
     private ProgressDialog progressDialog;
-    private Context context;
-    String peticion;
+
     String[] columnasFiltro, valorFiltro, columnas_a_recuperar;
     ArrayList datos;
-    JSONObject objetoJSON;
 
     private HttpClient httpclient;
 
     String tabla;
     String intent = "";
 
-    boolean obtener = true;
+    boolean sonTablas,obtener = true;
 
-    public ObtencionDeResultadoBcst(Context context, String[] nombresColumnas, String[] datosColumnas, String tabla, String[] columnas_a_recuperar) {
-        this.context = context;
-        this.columnasFiltro = nombresColumnas;
-        this.valorFiltro = datosColumnas;
+    public ObtencionDeResultadoBcst(Context context, String[] nombresColumnasFiltro, String[] datosColumnasFiltro, String tabla, String[] columnas_a_recuperar, boolean sonTabla) {
+        this.columnasFiltro = nombresColumnasFiltro;
+        this.valorFiltro = datosColumnasFiltro;
         this.tabla = tabla;
+        this.sonTablas = sonTabla;
         if (columnas_a_recuperar != null) {
             this.columnas_a_recuperar = columnas_a_recuperar;
             obtener = true;
@@ -63,8 +61,13 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
 
         datos = new ArrayList();
 
-        if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.INTENT_EMPRESA_CLIENTE)) {
-            intent = Configuracion.INTENT_EMPRESA_CLIENTE;
+        switch (String.valueOf(context.getClass().getName())){
+            case Configuracion.INTENT_EMPRESA_CLIENTE:
+                intent = Configuracion.INTENT_EMPRESA_CLIENTE;
+                break;
+            case Configuracion.INTENT_GPS_EMPRESA:
+                intent = Configuracion.INTENT_GPS_EMPRESA_AGREGADOS;
+                break;
         }
     }
 
@@ -72,7 +75,7 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
     protected JSONObject doInBackground(String... params) {
         Log.v("AGET-URL", params[0] + " tipo: " + params[1]);
         try {
-            return addEventPost(params[0], params[1]);
+            return procesarPeticion(params[0], params[1]);
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -83,23 +86,14 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
         return null;
     }
 
-    /**
-     * Antes de comenzar la tarea muestra el progressDialog
-     */
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        //progressDialog = ProgressDialog.show(context, "Por favor espere", "Procesando...");
     }
 
-    /**
-     * Cuando se termina de ejecutar, cierra el progressDialog y retorna el resultado a la interfaz
-     **/
     @Override
     protected void onPostExecute(JSONObject resul) {
-//        progressDialog.dismiss();
-
-        //setJSON(resul);
         try {
             parserJson(resul);
         } catch (JSONException e) {
@@ -107,13 +101,14 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
         }
     }
 
-    public JSONObject addEventPost(String peticion, String tipoPeticion) throws ClientProtocolException, IOException, JSONException {
+    public JSONObject procesarPeticion(String peticion, String tipoPeticion) throws ClientProtocolException, IOException, JSONException {
         httpclient = new DefaultHttpClient();
         JSONObject jsonObject = new JSONObject();
         StringEntity stringEntity;
         HttpResponse response = null;
         //url y tipo de contenido
         if (tipoPeticion.equalsIgnoreCase("post")) {
+
             HttpPost httppost = new HttpPost(peticion);
             httppost.addHeader("Content-Type", "application/json");
             //forma el JSON y tipo de contenido
@@ -145,7 +140,6 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
             response = httpclient.execute(httpdlete);
         }
 
-
         //obtiene la respuesta y transorma a objeto JSON
         String jsonResult = new Convertidor().inputStreamToString(response.getEntity().getContent()).toString();
         JSONObject object = new JSONObject(jsonResult);
@@ -161,15 +155,30 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
 
         if (result != null) {
             if (obtener) {
-                for (int i = 0; i < result.getJSONObject(tabla).length(); i++) {
-                    datos.add(result.getJSONObject(tabla).getString(columnas_a_recuperar[i]));
+                if(!sonTablas) {
+                    for (int i = 0; i < result.getJSONObject(tabla).length(); i++) {
+                        datos.add(result.getJSONObject(tabla).getString(columnas_a_recuperar[i]));
+                    }
+                    enviarBroadcast(true, "Cargado", datos);
+                    Log.v("AGET-ENVIADOS", "true");
+                }else{
+                    datos.add(new ArrayList());
+                    JSONArray obj = result.getJSONArray(tabla);
+                    for (int i = 0; i < result.getJSONArray(tabla).length(); i++) {
+                        for(int j = 0 ; j < columnas_a_recuperar.length; j++)
+                            ((ArrayList)datos.get(i)).add(obj.getJSONObject(i).getString(columnas_a_recuperar[j]));
+                        datos.add(new ArrayList());
+                    }
+                    enviarBroadcast(true, "Cargado", datos);
+                    Log.v("AGET-ENVIADOS", "true para lista de gps de empresa");
                 }
-                enviarBroadcast(true, "Cargado", datos);
             } else {
+                Log.v("AGET-ENVIADOS","false mensaje");
                 enviarBroadcast(false, result.getString("mensaje").toString(), datos);
             }
         } else {
             enviarBroadcast(false, "Ha ocurrido un error, con los datos", datos);
+            Log.v("AGET-ENVIADOS","false poer error");
         }
     }
 

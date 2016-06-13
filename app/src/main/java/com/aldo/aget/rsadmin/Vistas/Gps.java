@@ -56,7 +56,7 @@ public class Gps extends AppCompatActivity {
         EditText[] editores = {edtImei,edtEnlace,edtNumero};
         String[] columnasArecuperar = {
                 Configuracion.COLUMNA_GPS_IMEI,
-                Configuracion.COLUMNA_GPS_ENLACE,
+                Configuracion.COLUMNA_GPS_EMPRESA,
                 Configuracion.COLUMNA_GPS_NUMERO};
 
         resultado = new ObtencionDeResultado(this,findViewById(R.id.actividadgps),columnas,datos,tabla, editores,columnasArecuperar);
