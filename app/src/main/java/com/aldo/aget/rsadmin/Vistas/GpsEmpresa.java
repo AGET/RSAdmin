@@ -275,7 +275,10 @@ public class GpsEmpresa extends AppCompatActivity implements AdapterView.OnItemC
         marcado = (String) ((ArrayList) datosLista.get(position)).get(0) + " - " + ((ArrayList) datosLista.get(position)).get(1);
         Log.v("AGET-Enviado", marcado);
         //actividadEmpresa(marcado);
-
-
+        Intent actividad = new Intent(GpsEmpresa.this, GpsEmpresaDetalle.class);
+        actividad.putExtra(Configuracion.COLUMNA_GPS_IMEI, (String) ((ArrayList) datosLista.get(position)).get(0) );
+        actividad.putExtra(Configuracion.COLUMNA_GPS_NUMERO, (String) ((ArrayList) datosLista.get(position)).get(1) );
+        actividad.putExtra(Configuracion.COLUMNA_GPS_DESCRIPCION, (String) ((ArrayList) datosLista.get(position)).get(2) );
+        startActivity(actividad);
     }
 }
