@@ -55,9 +55,9 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
         this.tabla = tabla;
         this.columna = columna;
 
-        Log.v("AGET-CONTEXTO-class", String.valueOf(context.getClass()));
+   /*     Log.v("AGET-CONTEXTO-class", String.valueOf(context.getClass()));
         Log.v("AGET-CONTEXTO-paquete", String.valueOf(context.getPackageName()));
-        Log.v("AGET-CONTEXTO-Nombre", String.valueOf(context.getClass().getName()));
+        Log.v("AGET-CONTEXTO-Nombre", String.valueOf(context.getClass().getName()));*/
 
         if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.INTENT_LISTA_EMPRESA)) {
             Log.v("AGET-COMPRARADA", "Intent de lista enempresa");
@@ -86,7 +86,7 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
             enviarBroadcast(false, "hay un error en el servidor",datos);
         } else {
             try {
-                Log.v("AGET-RESULT-1", result);
+//                Log.v("AGET-RESULT-1", result);
                 JSONObject json = new JSONObject(result);
                 Log.v("AGET-RESULT-2", result);
                 datos = new ArrayList();

@@ -23,6 +23,7 @@ public static final String PETICION_LISTAR_GPS_VARIOS = SERVIDOR + "/api.rs.com/
     public static final String PETICION_LISTAR_GPS_LIBRES = SERVIDOR + "/api.rs.com/v1/gps/listarLibres";
     public static final String PETICION_LISTAR_GPS_UNO = SERVIDOR + "/api.rs.com/v1/gps/listarUno_Id";
     public static final String PETICION_LISTAR_GPS_EMPRESA = SERVIDOR + "/api.rs.com/v1/gps/listarGpsDeEmpresa";
+    public static final String PETICION_GPS_MODIFICAR_ELIMINAR = SERVIDOR + "/api.rs.com/v1/gps/";
 //    empresa_cliente
     public static final String PETICION_LISTAR_EMPRESAS_HABILITADAS = SERVIDOR + "/api.rs.com/v1/empresa_cliente/listarVarios";
     public static final String PETICION_LISTAR_EMPRESAS_POR_NOMBRE = SERVIDOR + "/api.rs.com/v1/empresa_cliente/listarPorNombre";
