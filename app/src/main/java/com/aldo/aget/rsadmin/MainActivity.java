@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void speak() {
         if (tts != null && ttsIsInit) {
-            tts.speak("Bienvenido administrador", TextToSpeech.QUEUE_ADD, null);
+            tts.speak("Bienvenido, administrador", TextToSpeech.QUEUE_ADD, null);
         } else {
             Log.v("AGET-SPEAK", "error");
         }

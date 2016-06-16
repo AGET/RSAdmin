@@ -71,7 +71,7 @@ public class EmpresaCliente extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                lanzarGpss();
+                lanzaUsuarios();
             }
         });
         fab_gps = (FloatingActionButton) findViewById(R.id.fab_dispositivos_gps);
@@ -358,7 +358,7 @@ public class EmpresaCliente extends AppCompatActivity {
         startActivity(inten);
     }
 
-    void lanzarUsuarios() {
+    void lanzaUsuarios() {
         Intent inten = new Intent(this, GpsEmpresa.class);
         startActivity(inten);
     }

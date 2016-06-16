@@ -52,4 +52,5 @@
     <string name="title_activity_activity_gpsempresa">ActivityGPSEmpresa</string>
     <string name="title_activity_clientes_empresa">ClientesEmpresa</string>
     <string name="title_activity_gps_empresa_detalle">GpsEmpresaDetalle</string>
+    <string name="title_activity_usuarios_empresa">UsuariosEmpresa</string>
 </resources>

@@ -14,7 +14,7 @@ public class Configuracion extends Activity {
     //https://materialdesignicons.com/icon/account-plus
 
     public static MainActivity context = null;
-    public static final String SERVIDOR = "http://192.168.0.104/";
+    public static final String SERVIDOR = "http://192.168.0.102/";
     public static String idActual = "";
 
 /*    PETICIONES  */

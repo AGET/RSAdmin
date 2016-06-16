@@ -5,9 +5,13 @@ android {
     buildToolsVersion "23.0.3"
     useLibrary'org.apache.http.legacy'
 
+    dexOptions {
+        //Compilara solo los cambios
+        incremental true
+    }
     defaultConfig {
         applicationId "com.aldo.aget.rsadmin"
-        minSdkVersion 11
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"

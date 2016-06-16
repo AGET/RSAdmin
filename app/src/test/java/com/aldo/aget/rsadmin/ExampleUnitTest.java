@@ -1,6 +1,6 @@
 package com.aldo.aget.rsadmin;
 
-import com.aldo.aget.rsadmin.arecycler.Test;
+//import com.aldo.aget.rsadmin.arecycler.Test;
 
 import org.junit.Test;
 
