@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Configuracion.context = this;
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        agregarToolbar();
+        setTitle("Bienvenido administrador");
 
         FloatingActionButton fabmain = (FloatingActionButton) findViewById(R.id.fabmain);
         fabmain.setOnClickListener(new View.OnClickListener() {
@@ -129,5 +129,13 @@ public class MainActivity extends AppCompatActivity {
     void actividadListaEmpresa() {
         Intent actividad = new Intent(this, ListaEmpresa.class);
         startActivity(actividad);
+    }
+
+    private void agregarToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 }
