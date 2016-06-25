@@ -33,7 +33,7 @@ public class ListaGps extends AppCompatActivity implements OnItemClickListener{
     BroadcastReceiver receptorMensaje;
     ArrayList datos;
 
-    final static String peticionlistarGps = Configuracion.PETICION_LISTAR_GPS_LIBRES;
+    final static String peticionlistarGps = Configuracion.PETICION_GPS_LISTAR_LIBRES;
     final static String tabla = "gps";
     final static String columnas[] = {"imei","numero"};
     //final static String columna = "imei";

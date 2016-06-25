@@ -7,16 +7,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.R;
 
 public class ClientesEmpresa extends AppCompatActivity {
-
+    String idEmpresa, nombreEmpresa;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clientes_empresa);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        agregarToolbar();
+
+
+        Bundle bundle = getIntent().getExtras();
+        idEmpresa = bundle.getString(Configuracion.COLUMNA_EMPRESA_ID);
+        nombreEmpresa = bundle.getString(Configuracion.COLUMNA_EMPRESA_NOMBRE);
+        setTitle("Usuarios de " + nombreEmpresa);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -28,4 +34,11 @@ public class ClientesEmpresa extends AppCompatActivity {
         });
     }
 
+    private void agregarToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
 }

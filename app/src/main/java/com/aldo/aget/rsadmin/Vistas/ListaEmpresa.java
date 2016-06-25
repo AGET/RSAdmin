@@ -36,7 +36,7 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
     ArrayList datos;
     final long DURACION = 1300;
 
-    final static String peticionlistarEmpresaCliente = Configuracion.PETICION_LISTAR_EMPRESAS_HABILITADAS;
+    final static String peticionlistarEmpresaCliente = Configuracion.PETICION_EMPRESA_LISTAR_HABILITADAS;
     final static String tabla = "empresa_cliente";
     final static String columnas[] = {"empresa_id","nombre"};
 

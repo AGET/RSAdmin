@@ -47,7 +47,7 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
 
     boolean sonTablas,obtener = true;
 
-    public ObtencionDeResultadoBcst(Context context, String[] nombresColumnasFiltro, String[] datosColumnasFiltro, String tabla, String[] columnas_a_recuperar, boolean sonTabla) {
+    public ObtencionDeResultadoBcst(Context context, String receptor, String[] nombresColumnasFiltro, String[] datosColumnasFiltro, String tabla, String[] columnas_a_recuperar, boolean sonTabla) {
         this.columnasFiltro = nombresColumnasFiltro;
         this.valorFiltro = datosColumnasFiltro;
         this.tabla = tabla;
@@ -61,14 +61,15 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
 
         datos = new ArrayList();
 
-        switch (String.valueOf(context.getClass().getName())){
+       /* switch (String.valueOf(context.getClass().getName())){
             case Configuracion.INTENT_EMPRESA_CLIENTE:
                 intent = Configuracion.INTENT_EMPRESA_CLIENTE;
                 break;
             case Configuracion.INTENT_GPS_EMPRESA:
                 intent = Configuracion.INTENT_GPS_EMPRESA_AGREGADOS;
                 break;
-        }
+        }*/
+        intent = receptor;
     }
 
     @Override
@@ -164,13 +165,19 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
                 }else{
                     datos.add(new ArrayList());
                     JSONArray obj = result.getJSONArray(tabla);
-                    for (int i = 0; i < result.getJSONArray(tabla).length(); i++) {
-                        for(int j = 0 ; j < columnas_a_recuperar.length; j++)
-                            ((ArrayList)datos.get(i)).add(obj.getJSONObject(i).getString(columnas_a_recuperar[j]));
-                        datos.add(new ArrayList());
+                    if(result.getJSONArray(tabla).length() > 0){
+                        for (int i = 0; i < result.getJSONArray(tabla).length(); i++) {
+                            for(int j = 0 ; j < columnas_a_recuperar.length; j++)
+                                ((ArrayList)datos.get(i)).add(obj.getJSONObject(i).getString(columnas_a_recuperar[j]));
+                            datos.add(new ArrayList());
+                        }
+                        enviarBroadcast(true, "Cargado", datos);
+                        Log.v("AGET-ENVIADOS", "true para lista de gps de empresa");
+                    }else{
+                        enviarBroadcast(false, "Sin datos", datos);
                     }
-                    enviarBroadcast(true, "Cargado", datos);
-                    Log.v("AGET-ENVIADOS", "true para lista de gps de empresa");
+                   // enviarBroadcast(true, "Cargado", datos);
+
                 }
             } else {
                 Log.v("AGET-ENVIADOS","false mensaje");

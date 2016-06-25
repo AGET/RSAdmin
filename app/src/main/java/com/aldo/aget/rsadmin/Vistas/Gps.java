@@ -60,7 +60,7 @@ public class Gps extends AppCompatActivity {
                 Configuracion.COLUMNA_GPS_NUMERO};
 
         resultado = new ObtencionDeResultado(this,findViewById(R.id.actividadgps),columnas,datos,tabla, editores,columnasArecuperar);
-        resultado.execute(Configuracion.PETICION_LISTAR_GPS_UNO);
+        resultado.execute(Configuracion.PETICION_GPS_LISTAR_UNO);
 
         //json = resultado.getJSON();
         //new HttpAsyncTaskGps().execute();

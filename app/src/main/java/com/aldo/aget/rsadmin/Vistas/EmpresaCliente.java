@@ -23,10 +23,12 @@ import android.widget.ProgressBar;
 
 import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.Configuracion.Utilidades;
+import com.aldo.aget.rsadmin.Control.Mensajes;
 import com.aldo.aget.rsadmin.R;
 import com.aldo.aget.rsadmin.ServicioWeb.ObtencionDeResultadoBcst;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.support.v7.widget.AppCompatSpinner;
 
@@ -47,11 +49,14 @@ public class EmpresaCliente extends AppCompatActivity {
 
     ObtencionDeResultadoBcst resultado;
 
-    BroadcastReceiver receptorMensaje;
+    BroadcastReceiver receptorMensaje, receptorTelefonos;
+
+    String[][] telefonos;
+
 
     private ProgressBar progressBar;
     MenuItem menuOk, menuEditar, menuEliminar;
-    ArrayList data;
+    ArrayList data, numeros;
 
     String tabla = Configuracion.TABLA_EMPRESA_CLIENTE;
 
@@ -103,10 +108,13 @@ public class EmpresaCliente extends AppCompatActivity {
                 if (spinner.getSelectedItem() == "Estado de la empresa") {
 
                 } else {
-                    if (spinner.getSelectedItem().toString().equalsIgnoreCase("Habilitada"))
+                    if (spinner.getSelectedItem().toString().equalsIgnoreCase("Habilitada")) {
                         estado = "1";
-                    else
+                        Log.v("AGET-ESTADO", "estado: " + estado);
+                    } else {
                         estado = "0";
+                        Log.v("AGET-ESTADO", "estado: " + estado);
+                    }
                 }
             }
 
@@ -133,8 +141,8 @@ public class EmpresaCliente extends AppCompatActivity {
 
         if (idEmpresa != null) {
             mostrarProgreso(true);
-            resultado = new ObtencionDeResultadoBcst(this, columnasFiltro, valorFiltro, tabla, columnasArecuperar,false);
-            resultado.execute(Configuracion.PETICION_LISTAR_EMPRESAS_POR_ID, tipoPeticion);
+            resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_EMPRESA_CLIENTE, columnasFiltro, valorFiltro, tabla, columnasArecuperar, false);
+            resultado.execute(Configuracion.PETICION_EMPRESA_LISTAR_POR_ID, tipoPeticion);
         } else {
             setTitle(R.string.titulo_actividad_agregar_empresa);
         }
@@ -146,6 +154,7 @@ public class EmpresaCliente extends AppCompatActivity {
 
             @Override
             public void onReceive(Context context, Intent intent) {
+                boolean MostrarMensaje = true;
                 Log.v("AGET", "BROAD RECIBIDO empresa");
                 mostrarProgreso(false);
                 String mensaje = intent.getStringExtra(Utilidades.EXTRA_MENSAJE);
@@ -172,6 +181,13 @@ public class EmpresaCliente extends AppCompatActivity {
                     menuEliminar.setVisible(true);
                     habilitarComponentes(false);
                     Configuracion.cambio = true;
+                    if (estado.equalsIgnoreCase("0")) {
+                        fab_gps.setVisibility(View.INVISIBLE);
+                        fab_usuarios.setVisibility(View.INVISIBLE);
+                    } else {
+                        fab_gps.setVisibility(View.INVISIBLE);
+                        fab_usuarios.setVisibility(View.INVISIBLE);
+                    }
                 } else if (mensaje.equalsIgnoreCase("Url mal formada")) {
                     mensaje = "error en dato, probablemente con ID";
                 } else if (mensaje.equalsIgnoreCase("La empresa a la que intentas acceder no existe")) {
@@ -185,11 +201,48 @@ public class EmpresaCliente extends AppCompatActivity {
                     }, 2000);
                     Configuracion.cambio = true;
                 }
-                if (mensaje.equalsIgnoreCase("cargado")) {
+                if (mensaje.equalsIgnoreCase("Cargado")) {
                     return;
                 }
+
                 Snackbar.make(findViewById(R.id.xmlactivity_empresa_cliente),
                         mensaje, Snackbar.LENGTH_SHORT).show();
+                mostrarProgreso(false);
+            }
+        };
+
+        receptorTelefonos = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.v("AGET-BROAD RECIBIDO", "EmpresaCliente Numeros");
+                mostrarProgreso(false);
+                String mensaje = intent.getStringExtra(Utilidades.EXTRA_MENSAJE);
+                Boolean resultado = intent.getBooleanExtra(Utilidades.EXTRA_RESULTADO, false);
+                if (resultado) {
+                    ArrayList listNumerosEnlazados = intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST);
+
+                    telefonos = new String[listNumerosEnlazados.size()-1][((ArrayList) listNumerosEnlazados).size()-1];
+                    ArrayList nombres = new ArrayList();
+                    String telUsuario = "",telGps = "";
+
+                    Log.v("tam",""+listNumerosEnlazados.size());
+                    Log.v("tam",""+((ArrayList) listNumerosEnlazados).size());
+                    Log.v("tam",""+telefonos.length);
+                    for (int i = 0; i < listNumerosEnlazados.size() - 1; i++) {
+                        for (int j = 0; j < ((ArrayList) listNumerosEnlazados).size()-1; j++){
+                            //nombres.add((String) ((ArrayList) datosLista.get(i)).get(0) + " - " + ((ArrayList) datosLista.get(i)).get(1));
+                            telUsuario = (String) ((ArrayList) listNumerosEnlazados.get(i)).get(j);
+                            if (telUsuario != null)
+                                telefonos[i][j] = (String) ((ArrayList) listNumerosEnlazados.get(i)).get(j);
+                        }
+                    }
+                    for (int i = 0; i < telefonos.length; i++) {
+                            Log.v("AGET-NUMEROUSUARIO", "msj: " + telefonos[i][0]+" num: "+telefonos[i][1]);
+                    }
+                    desvincular(telefonos);
+                }
+                eliminar(true);
                 mostrarProgreso(false);
             }
         };
@@ -201,6 +254,9 @@ public class EmpresaCliente extends AppCompatActivity {
         // Registrar receptor
         IntentFilter filtro = new IntentFilter(Configuracion.INTENT_EMPRESA_CLIENTE);
         LocalBroadcastManager.getInstance(this).registerReceiver(receptorMensaje, filtro);
+
+        IntentFilter filtroTelefonos = new IntentFilter(Configuracion.INTENT_EMPRESA_CLIENTE_ENLACE_TELEFONOS_ENLAZADOS);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receptorTelefonos, filtroTelefonos);
     }
 
     @Override
@@ -208,6 +264,7 @@ public class EmpresaCliente extends AppCompatActivity {
         super.onPause();
         // Desregistrar receptor
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorMensaje);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorTelefonos);
     }
 
     private void agregarToolbar() {
@@ -242,7 +299,7 @@ public class EmpresaCliente extends AppCompatActivity {
                 break;
             case R.id.accion_eliminar:
                 tipoPeticion = "delete";
-                eliminar();
+                prparaEliminacion();
                 break;
             case R.id.accion_editar:
                 tipoPeticion = "put";
@@ -276,11 +333,12 @@ public class EmpresaCliente extends AppCompatActivity {
             String[] columnasFiltro = {Configuracion.COLUMNA_EMPRESA_NOMBRE, Configuracion.COLUMNA_EMPRESA_TELEFONO
                     , Configuracion.COLUMNA_EMPRESA_CORREO, Configuracion.COLUMNA_EMPRESA_STATUS};
             String[] valorFiltro = {nombre, telefono, correo, estado};
-            resultado = new ObtencionDeResultadoBcst(this, columnasFiltro, valorFiltro, tabla, null,false);
+            Log.v("AGET-ESTADO", "ENVIADO: " + estado);
+            resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_EMPRESA_CLIENTE, columnasFiltro, valorFiltro, tabla, null, false);
             if (ID.isEmpty()) {
-                resultado.execute(Configuracion.PETICION_EMPRESAS_REGISTRO, tipoPeticion);
+                resultado.execute(Configuracion.PETICION_EMPRESA_REGISTRO, tipoPeticion);
             } else {
-                resultado.execute(Configuracion.PETICION_EMPRESAS_MODIFICAR_ELIMINAR + ID, tipoPeticion);
+                resultado.execute(Configuracion.PETICION_EMPRESA_MODIFICAR_ELIMINAR + ID, tipoPeticion);
             }
         }
     }
@@ -289,11 +347,44 @@ public class EmpresaCliente extends AppCompatActivity {
         return !TextUtils.isEmpty(nombre);
     }
 
-    private void eliminar() {
+    private void prparaEliminacion() {
         if (idEmpresa != null) {
-            resultado = new ObtencionDeResultadoBcst(this, null, null, tabla, null,false);
-            resultado.execute(Configuracion.PETICION_EMPRESAS_MODIFICAR_ELIMINAR + ID, tipoPeticion);
+
+
+            //Datos de busqueda
+            String[] columnasFiltro = {Configuracion.COLUMNA_EMPRESA_ID};
+            String[] valorFiltro = {idEmpresa};
+
+            //Datos a mostrar
+            String[] columnasArecuperar = {
+                    Configuracion.COLUMNA_USUARIO_TELEFONO,
+                    Configuracion.COLUMNA_GPS_NUMERO
+            };
+
+            mostrarProgreso(true);
+            resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_EMPRESA_CLIENTE_ENLACE_TELEFONOS_ENLAZADOS, columnasFiltro, valorFiltro, Configuracion.TABLA_ENLACE, columnasArecuperar, true);
+            resultado.execute(Configuracion.PETICION_ENLACE_LISTAR_TELEFONOS, "post");
         }
+    }
+
+    private void desvincular(String[][]telefonos){
+        Mensajes sms = new Mensajes(this,telefonos.length);
+
+        for(int i = 0 ; i < telefonos.length ; i++){
+            sms.enviarSMSDesvincularUsuario(telefonos[i][0],telefonos[i][1]);
+        }
+
+    }
+
+    public static void eliminar(boolean snsEnviados){
+        if(snsEnviados)
+        Log.v("AGET-ELIMINADO","SI Eliminado");
+        else
+            Log.v("AGET-ELIMINADO","NO Eliminado");
+
+//NOTA: LAS DOS LINEAS COMENTADAS DEBEN DE EJECUTARCE DEPUES DE MANDAS EL MENSAJE A LOS NUMEROS
+        // resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_EMPRESA_CLIENTE, null, null, tabla, null, false);
+        //resultado.execute(Configuracion.PETICION_EMPRESA_MODIFICAR_ELIMINAR + ID, tipoPeticion);
     }
 
     private void cargarViews(ArrayList data) {
@@ -354,12 +445,14 @@ public class EmpresaCliente extends AppCompatActivity {
 
     void lanzarGpss() {
         Intent inten = new Intent(this, GpsEmpresa.class);
-        inten.putExtra(Configuracion.COLUMNA_EMPRESA_ID,idEmpresa);
+        inten.putExtra(Configuracion.COLUMNA_EMPRESA_ID, idEmpresa);
         startActivity(inten);
     }
 
     void lanzaUsuarios() {
-        Intent inten = new Intent(this, GpsEmpresa.class);
+        Intent inten = new Intent(this, ClientesEmpresa.class);
+        inten.putExtra(Configuracion.COLUMNA_EMPRESA_ID, idEmpresa);
+        inten.putExtra(Configuracion.COLUMNA_EMPRESA_NOMBRE, edtNombre.getText().toString());
         startActivity(inten);
     }
 }
