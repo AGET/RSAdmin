@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.aldo.aget.rsadmin.Configuracion.Configuracion;
+import com.aldo.aget.rsadmin.Control.AdaptadosFragmentos;
 import com.aldo.aget.rsadmin.Vistas.ListaEmpresa;
 import com.aldo.aget.rsadmin.Vistas.ListaGps;
 
@@ -29,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private TextToSpeech tts = null;
     private boolean ttsIsInit = false;
     //FinSintetizador
+int borrar=4;
+
+    private CollapsingToolbarLayout ctlLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,35 +43,49 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Configuracion.context = this;
         agregarToolbar();
-        setTitle("Bienvenido administrador");
+        setTitle("");
 
-        FloatingActionButton fabmain = (FloatingActionButton) findViewById(R.id.fabmain);
-        fabmain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, " OBR", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-//                obtener();
-//                test();
-            }
-        });
+//        FloatingActionButton fabmain = (FloatingActionButton) findViewById(R.id.fabmain);
+//        fabmain.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, " OBR", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+////                obtener();
+////                test();
+//            }
+//        });
 
-        btnDispositivos = (Button) findViewById(R.id.btndispositivos);
-        btnDispositivos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actividadListaGps();
-            }
-        });
-        btnEmpresas = (Button) findViewById(R.id.btnempresas);
-        btnEmpresas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actividadListaEmpresa();
-            }
-        });
-        btnReconocerVoz = (Button) findViewById(R.id.btn_reconocer_voz);
-    initTextToSpeech();
+//        btnDispositivos = (Button) findViewById(R.id.btndispositivos);
+//        btnDispositivos.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                actividadListaGps();
+//            }
+//        });
+//        btnEmpresas = (Button) findViewById(R.id.btnempresas);
+//        btnEmpresas.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                actividadListaEmpresa();
+//            }
+//        });
+//        btnReconocerVoz = (Button) findViewById(R.id.btn_reconocer_voz);
 
+        //Tabs + ViewPager
+
+        //Establecer el PageAdapter del componente ViewPager
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new AdaptadosFragmentos(
+                getSupportFragmentManager()));
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.appbartabs);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.setupWithViewPager(viewPager);
+        initTextToSpeech();
+
+        //CollapsingToolbarLayout
+        //ctlLayout = (CollapsingToolbarLayout)findViewById(R.id.ctlLayout);
+        //ctlLayout.setTitle("Mi Aplicación");
 }
 
     private void initTextToSpeech() {
@@ -104,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void speak() {
         if (tts != null && ttsIsInit) {
-            tts.speak("Bienvenido, administrador", TextToSpeech.QUEUE_ADD, null);
+            tts.speak("Hi, ", TextToSpeech.QUEUE_ADD, null);
         } else {
             Log.v("AGET-SPEAK", "error");
         }
@@ -132,10 +153,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void agregarToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 }

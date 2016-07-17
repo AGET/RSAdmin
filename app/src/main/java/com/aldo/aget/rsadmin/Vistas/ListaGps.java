@@ -58,7 +58,7 @@ public class ListaGps extends AppCompatActivity implements OnItemClickListener{
         progressBar = (ProgressBar) findViewById(R.id.barra);
 
         mostrarProgreso(true);
-        new ObtenerAsincrono(ListaGps.this,tabla,columnas)
+        new ObtenerAsincrono(ListaGps.this,Configuracion.INTENT_LISTA_GPS,tabla,columnas)
                 .execute(peticionlistarGps);
 
         lista.setOnItemClickListener(this);

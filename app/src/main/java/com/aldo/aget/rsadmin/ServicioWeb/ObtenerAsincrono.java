@@ -50,7 +50,7 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
 
     String intent = "";
 
-    public ObtenerAsincrono(Context context, String tabla, String[] columna) {
+    public ObtenerAsincrono(Context context,String receptor, String tabla, String[] columna) {
         this.context = context;
         this.tabla = tabla;
         this.columna = columna;
@@ -68,6 +68,8 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
         }else if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.INTENT_GPS_EMPRESA)) {
             Log.v("AGET-COMPRARADA", "Intent de spinner gps empresa");
             intent = Configuracion.INTENT_GPS_EMPRESA;
+        }else if(Configuracion.INTENT_LISTA_EMPRESA == receptor){
+            intent = Configuracion.INTENT_LISTA_EMPRESA;
         }
     }
 
@@ -158,6 +160,6 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
         intentLocal.putExtra(Utilidades.EXTRA_DATOS_ALIST, datos);
         LocalBroadcastManager.getInstance(Configuracion.context).sendBroadcast(intentLocal);
 
-        Log.v("AGET", "BROAD ENVIADO");
+        Log.v("AGET", "BROAD ENVIADO:"+intent);
     }
 }

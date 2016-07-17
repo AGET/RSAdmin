@@ -118,7 +118,7 @@ public class GpsEmpresa extends AppCompatActivity implements AdapterView.OnItemC
         });
 
         mostrarProgreso(true);
-        new ObtenerAsincrono(GpsEmpresa.this, Configuracion.TABLA_GPS, columnas)
+        new ObtenerAsincrono(GpsEmpresa.this,Configuracion.INTENT_GPS_EMPRESA, Configuracion.TABLA_GPS, columnas)
                 .execute(peticionListarGpsLibres);
 
         //Datos de busqueda
@@ -170,7 +170,7 @@ public class GpsEmpresa extends AppCompatActivity implements AdapterView.OnItemC
 
                     if (mensaje.equalsIgnoreCase("Registro actualizado correctamente")) {
                         mostrarProgreso(true);
-                        new ObtenerAsincrono(GpsEmpresa.this, Configuracion.TABLA_GPS, columnas)
+                        new ObtenerAsincrono(GpsEmpresa.this,Configuracion.INTENT_GPS_EMPRESA, Configuracion.TABLA_GPS, columnas)
                                 .execute(peticionListarGpsLibres);
 
                         String[] columnasFiltro = {Configuracion.COLUMNA_EMPRESA_ID};
