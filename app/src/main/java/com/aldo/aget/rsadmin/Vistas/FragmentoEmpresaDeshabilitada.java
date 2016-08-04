@@ -1,12 +1,10 @@
 package com.aldo.aget.rsadmin.Vistas;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -22,6 +20,7 @@ import android.widget.ProgressBar;
 
 import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.Configuracion.Utilidades;
+import com.aldo.aget.rsadmin.MainActivity;
 import com.aldo.aget.rsadmin.R;
 import com.aldo.aget.rsadmin.ServicioWeb.ObtenerAsincrono;
 
@@ -32,57 +31,49 @@ import static android.support.v4.view.ViewCompat.animate;
 /**
  * Created by Work on 16/07/16.
  */
-public class Fragmento extends Fragment implements AdapterView.OnItemClickListener {
+public class FragmentoEmpresaDeshabilitada extends Fragment implements AdapterView.OnItemClickListener {
     ListView lista;
-    ArrayAdapter adaptador;
-    private ProgressBar progressBar;
+    ArrayAdapter adaptadorED;
+    private static ProgressBar progressBar;
     ArrayList datos;
     final long DURACION = 1300;
-
-    final static String peticionlistarEmpresaCliente = Configuracion.PETICION_EMPRESA_LISTAR_HABILITADAS;
-    final static String tabla = "empresa_cliente";
-    final static String columnas[] = {"empresa_id", "nombre"};
-
+    static String peticionlistar = "";
+    static String tabla = "";
+    static String[] columnas;
+    ArrayList<String> col = new ArrayList<String>();
     private BroadcastReceiver receptorMensaje;
+    public static boolean cargadoED = false;
 
-    FloatingActionButton fab_nueva_empresa;
+    public static FragmentoEmpresaDeshabilitada newInstance() {
 
-
-    public static Fragmento newInstance() {
-        Fragmento fragment = new Fragmento();
+        FragmentoEmpresaDeshabilitada fragment = new FragmentoEmpresaDeshabilitada();
         return fragment;
     }
 
-    public Fragmento() {
-        // Required empty public constructor
-
+    public FragmentoEmpresaDeshabilitada() {
+        peticionlistar = Configuracion.PETICION_EMPRESA_LISTAR_DESHABILITADOS;
+        tabla = "empresa_cliente";
+        columnas = new String[]{"empresa_id", "nombre"};
     }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragmento, container, false);
+        return inflater.inflate(R.layout.fragmento_ed, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
 
-        lista = (ListView) getView().findViewById(R.id.lista);
-        progressBar = (ProgressBar) getView().findViewById(R.id.barra);
-        fab_nueva_empresa = (FloatingActionButton)getView().findViewById(R.id.fabmain);
-
-        mostrarProgreso(true);
-        new ObtenerAsincrono(getContext(), Configuracion.INTENT_LISTA_EMPRESA, tabla, columnas)
-                .execute(peticionlistarEmpresaCliente);
+        lista = (ListView) getView().findViewById(R.id.lista_ed);
+        progressBar = (ProgressBar) getView().findViewById(R.id.barra_ed);
 
         ManejadorScroll.Action desplazamiento = new ManejadorScroll.Action() {
 
@@ -93,11 +84,12 @@ public class Fragmento extends Fragment implements AdapterView.OnItemClickListen
             public void up() {
                 if (ocultar) {
                     ocultar = false;
-                    animate(fab_nueva_empresa)
-                            .translationY(fab_nueva_empresa.getHeight() +
+                    animate(MainActivity.fabmain)
+                            .translationY(MainActivity.fabmain.getHeight() +
                                     getResources().getDimension(R.dimen.fab_margin))
                             .setInterpolator(new LinearInterpolator())
                             .setDuration(DURACION);
+
                     Log.v("AGET-POSICION", "UP");
                 }
             }
@@ -106,7 +98,7 @@ public class Fragmento extends Fragment implements AdapterView.OnItemClickListen
             public void down() {
                 if (!ocultar) {
                     ocultar = true;
-                    animate(fab_nueva_empresa)
+                    animate(MainActivity.fabmain)
                             .translationY(0)
                             .setInterpolator(new LinearInterpolator())
                             .setDuration(DURACION);
@@ -117,12 +109,23 @@ public class Fragmento extends Fragment implements AdapterView.OnItemClickListen
         };
 
         lista.setOnScrollListener(new ManejadorScroll(lista, 8, desplazamiento));
-        lista.setNestedScrollingEnabled (true ) ;
+        lista.setNestedScrollingEnabled(true);
         lista.setOnItemClickListener(this);
 
 
+//        if (adaptadorED != null) {
+//            cargadoED = (adaptadorED.getCount() > 0) ? true : false;
+//        }else
+//            cargadoED = false;
 
     }
+
+    public static void cargar() {
+        mostrarProgreso(true);
+        new ObtenerAsincrono(Configuracion.context, Configuracion.INTENT_LISTA_EMPRESADESHABILITADA, tabla, columnas)
+                .execute(peticionlistar);
+    }
+
 
     @Override
     public void onResume() {
@@ -139,19 +142,19 @@ public class Fragmento extends Fragment implements AdapterView.OnItemClickListen
                 if (restado) {
                     actualizar(intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST));
                 }
-                Snackbar.make(getView().findViewById(R.id.fragmentoxml),
+                Snackbar.make(getView().findViewById(R.id.fragmento_edxml),
                         mensaje, Snackbar.LENGTH_SHORT).show();
             }
         };
         // Registrar receptor
-        IntentFilter filtroSync = new IntentFilter(Configuracion.INTENT_LISTA_EMPRESA);
+        IntentFilter filtroSync = new IntentFilter(Configuracion.INTENT_LISTA_EMPRESADESHABILITADA);
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(receptorMensaje, filtroSync);
 
         if (Configuracion.cambio) {
             mostrarProgreso(true);
             Configuracion.cambio = false;
-            new ObtenerAsincrono(getContext(),Configuracion.INTENT_LISTA_EMPRESA, tabla, columnas)
-                    .execute(peticionlistarEmpresaCliente);
+            new ObtenerAsincrono(getContext(), Configuracion.INTENT_LISTA_EMPRESADESHABILITADA, tabla, columnas)
+                    .execute(peticionlistar);
         }
     }
 
@@ -173,10 +176,10 @@ public class Fragmento extends Fragment implements AdapterView.OnItemClickListen
         actividadEmpresa(marcado);
     }
 
-    void actividadEmpresa(String id) {
-        Intent actividad = new Intent(getContext(), EmpresaCliente.class);
+    public static void actividadEmpresa(String id) {
+        Intent actividad = new Intent(Configuracion.context, GestionArrendatarioCliente.class);
         actividad.putExtra(Configuracion.COLUMNA_EMPRESA_ID, id);
-        startActivity(actividad);
+        Configuracion.context.startActivity(actividad);
     }
 
     protected void actualizar(ArrayList datosMultiples) {
@@ -191,17 +194,17 @@ public class Fragmento extends Fragment implements AdapterView.OnItemClickListen
             nombres.add((String) ((ArrayList) datos.get(i)).get(1));
         }
 
-        adaptador = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, nombres);
+        adaptadorED = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, nombres);
 
         //Relacionando la lista con el adaptador
-        lista.setAdapter(adaptador);
+        lista.setAdapter(adaptadorED);
 
         //adaptador.insert(grupo, 0);
-        adaptador.notifyDataSetChanged();
+        adaptadorED.notifyDataSetChanged();
     }
 
 
-    private void mostrarProgreso(boolean mostrar) {
+    private static void mostrarProgreso(boolean mostrar) {
         progressBar.setVisibility(mostrar ? View.VISIBLE : View.GONE);
     }
 

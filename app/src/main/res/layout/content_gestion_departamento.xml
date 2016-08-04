@@ -9,114 +9,146 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Vistas.Gps"
-    tools:showIn="@layout/activity_gps">
-
-    <ImageView
-        android:id="@+id/icono_gps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icono_gps"
-        android:layout_alignBottom="@+id/mcr_edt_gps_imei"
-        android:layout_marginBottom="10dp"
-        />
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/mcr_edt_gps_imei"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
-        app:hintTextAppearance="@style/Hint"
-        android:layout_marginLeft="60dp">
-        <EditText
-            android:id="@+id/edt_gps_imei"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="12"
-            android:hint="IMEI"
-            android:inputType="textPersonName"
-            android:layout_centerHorizontal="true" />
-    </android.support.design.widget.TextInputLayout>
-
-    <ImageView
-        android:id="@+id/icono_numero"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icono_telefono"
-        android:layout_alignBottom="@+id/mcr_edt_gps_numero"
-        android:layout_marginBottom="10dp"
-        />
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/mcr_edt_gps_numero"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
-        android:layout_below="@+id/mcr_edt_gps_imei"
-        app:hintTextAppearance="@style/Hint"
-        android:layout_marginLeft="60dp">
-        <EditText
-            android:id="@+id/edt_gps_numero"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="12"
-            android:hint="Numero"
-            android:inputType="phone"
-            android:layout_centerHorizontal="true" />
-    </android.support.design.widget.TextInputLayout>
+    tools:context=".Vistas.GestionArrendatarioCliente"
+    tools:showIn="@layout/activity_gestion_departamento">
 
 
     <ImageView
-        android:id="@+id/icono_descripcion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icono_correo"
-        android:layout_alignBottom="@+id/mcr_edt_gps_descripcion"
-        android:layout_marginBottom="10dp"
-        />
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/mcr_edt_gps_descripcion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
-        android:layout_below="@+id/mcr_edt_gps_numero"
-        app:hintTextAppearance="@style/Hint"
-        android:layout_marginLeft="60dp">
-        <EditText
-            android:id="@+id/edt_gps_descripcion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="12"
-            android:hint="Descripcion"
-            android:inputType="textPersonName"
-            android:layout_centerHorizontal="true" />
-    </android.support.design.widget.TextInputLayout>
-
-    <ImageView
-        android:id="@+id/icono_empresa"
+        android:id="@+id/icono_nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/icono_empresa"
-        android:layout_alignBottom="@+id/mcr_edt_gps_empresa"
+        android:layout_alignBottom="@+id/mcr_edt_nombre_departamento"
         android:layout_marginBottom="10dp"
         />
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/mcr_edt_gps_empresa"
+        android:id="@+id/mcr_edt_nombre_departamento"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="43dp"
-        android:layout_below="@+id/mcr_edt_gps_descripcion"
         app:hintTextAppearance="@style/Hint"
         android:layout_marginLeft="60dp">
         <EditText
-            android:id="@+id/edt_gps_empresa"
+            android:id="@+id/edt_nombre_departamento"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="12"
-            android:hint="Empresa perteneciente"
+            android:hint="Nombre del departamanto"
             android:inputType="textPersonName"
             android:layout_centerHorizontal="true" />
     </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/icono_telefono"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icono_telefono"
+        android:layout_alignBottom="@+id/mcr_edt_telefono_departamento"
+        android:layout_marginBottom="10dp"
+        />
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/mcr_edt_telefono_departamento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/mcr_edt_nombre_departamento"
+        app:hintTextAppearance="@style/Hint"
+        android:layout_marginLeft="60dp">
+        <EditText
+            android:id="@+id/edt_telefono_departamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="12"
+            android:hint="Telefono del departamento"
+            android:inputType="phone"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/icono_correo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icono_correo"
+        android:layout_alignBottom="@+id/mcr_edt_correo_departamento"
+        android:layout_marginBottom="10dp"
+        />
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/mcr_edt_correo_departamento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/mcr_edt_telefono_departamento"
+        app:hintTextAppearance="@style/Hint"
+        android:layout_marginLeft="60dp">
+        <EditText
+            android:id="@+id/edt_correo_departamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="12"
+            android:hint="Correo del departamento"
+            android:inputType="textEmailAddress"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/icono_direccion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icono_correo"
+        android:layout_alignBottom="@+id/mcr_edt_direccion_departamento"
+        android:layout_marginBottom="10dp"
+        />
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/mcr_edt_direccion_departamento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/mcr_edt_correo_departamento"
+        app:hintTextAppearance="@style/Hint"
+        android:layout_marginLeft="60dp">
+        <EditText
+            android:id="@+id/edt_direccion_departamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="12"
+            android:hint="Direccion del departamento"
+            android:inputType="textEmailAddress"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/icono_estado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icono_status"
+        android:layout_alignBottom="@+id/mcr_edt_estado_departamento"
+        android:layout_marginBottom="5dp"
+        />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/mcr_edt_estado_departamento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/mcr_edt_direccion_departamento"
+        app:hintTextAppearance="@style/Hint"
+        android:layout_marginLeft="60dp">
+        <TextView
+            android:id="@+id/edt_estado_departamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="12"
+            android:hint="Es estado de la empresa es:"
+            android:inputType="textEmailAddress"
+            />
+    </android.support.design.widget.TextInputLayout>
 </RelativeLayout>
+

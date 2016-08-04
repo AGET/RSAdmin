@@ -28,14 +28,19 @@ public class Configuracion extends Activity {
     public static final String PETICION_GPS_LISTAR_DISPONOBLES_EMPRESA = SERVIDOR + "/api.rs.com/v1/gps/listarGpsDeEmpresaDisponibles";
     public static final String PETICION_GPS_LISTAR_ENLACES_USUARIO = SERVIDOR + "/api.rs.com/v1/gps/listarGpsUsuarioEnlazados";
     public static final String PETICION_GPS_SUSTITUIR = SERVIDOR + "/api.rs.com/v1/gps/sustituirGps";
+    public static final String PETICION_GPS_REGISTRO = SERVIDOR + "/api.rs.com/v1/gps/registro";
     public static final String PETICION_GPS_MODIFICAR_ELIMINAR = SERVIDOR + "/api.rs.com/v1/gps/";
 
+
     //PETICION EMPRESA_CLIENTE
-    public static final String PETICION_EMPRESA_LISTAR_HABILITADAS = SERVIDOR + "/api.rs.com/v1/empresa_cliente/listarVarios";
+    public static final String PETICION_EMPRESA_LISTAR_VARIOS = SERVIDOR + "/api.rs.com/v1/empresa_cliente/listarVarios";
+    public static final String PETICION_EMPRESA_LISTAR_HABILITADOS = SERVIDOR + "/api.rs.com/v1/empresa_cliente/listarHabilitado";
+    public static final String PETICION_EMPRESA_LISTAR_DESHABILITADOS = SERVIDOR + "/api.rs.com/v1/empresa_cliente/listarDeshabilitado";
     public static final String PETICION_EMPRESA_LISTAR_POR_NOMBRE = SERVIDOR + "/api.rs.com/v1/empresa_cliente/listarPorNombre";
     public static final String PETICION_EMPRESA_LISTAR_POR_ID = SERVIDOR + "/api.rs.com/v1/empresa_cliente/listarUno_Id";
     public static final String PETICION_EMPRESA_REGISTRO = SERVIDOR + "/api.rs.com/v1/empresa_cliente/registro";
     public static final String PETICION_EMPRESA_MODIFICAR_ELIMINAR = SERVIDOR + "/api.rs.com/v1/empresa_cliente/";
+
 
     //PETICION USUARIOS
     public static final String PETICION_USUARIO_REGISTRO = SERVIDOR + "/api.rs.com/v1/usuarios/registro";
@@ -63,6 +68,7 @@ public class Configuracion extends Activity {
 
     //    Columnas
 //GPS
+    public static final String COLUMNA_GPS_ID = "gps_id";
     public static final String COLUMNA_GPS_IMEI = "imei";
     public static final String COLUMNA_GPS_NUMERO = "numero";
     public static final String COLUMNA_GPS_DESCRIPCION = "descripcion";
@@ -95,13 +101,16 @@ public class Configuracion extends Activity {
 
     //Broadcast
     public static final String INTENT_LISTA_EMPRESA = "com.aldo.aget.rsadmin.Vistas.ListaEmpresa";
+    public static final String INTENT_LISTA_EMPRESAHABILITADA = "com.aldo.aget.rsadmin.Vistas.ListaEmpresaHabilitada";
+    public static final String INTENT_LISTA_EMPRESADESHABILITADA = "com.aldo.aget.rsadmin.Vistas.ListaEmpresaDeshabilitada";
     public static final String INTENT_LISTA_GPS = "com.aldo.aget.rsadmin.Vistas.ListaGps";
 
     //RECEPTORES EN EMPRESA_CLIENTE
-    public static final String INTENT_EMPRESA_CLIENTE = "com.aldo.aget.rsadmin.Vistas.EmpresaCliente";
-    public static final String INTENT_EMPRESA_CLIENTE_ENLACE_TELEFONOS_ENLAZADOS = "com.aldo.aget.rsadmin.Vistas.EmpresaCliente.TelefonosEnlazados";
+    public static final String INTENT_EMPRESA_CLIENTE = "com.aldo.aget.rsadmin.Vistas.GestionArrendatarioCliente";
+    public static final String INTENT_EMPRESA_CLIENTE_ENLACE_TELEFONOS_ENLAZADOS = "com.aldo.aget.rsadmin.Vistas.GestionArrendatarioCliente.TelefonosEnlazados";
 
-
+    //RECEPTORES GPS
+    public static final String INTENT_GPS= "com.aldo.aget.rsadmin.Vistas.Gps";
 
 
 

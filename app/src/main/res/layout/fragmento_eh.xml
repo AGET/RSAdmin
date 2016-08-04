@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fragmentoxml"
+    android:id="@+id/fragmento_ehxml"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
     <ProgressBar
-        android:id="@+id/barra"
+        android:id="@+id/barra_eh"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
         android:indeterminate="true" />
 
     <ListView
-        android:id="@+id/lista"
+        android:id="@+id/lista_eh"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginTop="10dp"
@@ -23,18 +23,4 @@
         >
 
     </ListView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabmain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:src="@android:drawable/ic_dialog_map"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginBottom="26dp"
-        android:layout_marginEnd="16dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
-
 </RelativeLayout>

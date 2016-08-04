@@ -36,7 +36,7 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
     ArrayList datos;
     final long DURACION = 1300;
 
-    final static String peticionlistarEmpresaCliente = Configuracion.PETICION_EMPRESA_LISTAR_HABILITADAS;
+    final static String peticionlistarEmpresaCliente = Configuracion.PETICION_EMPRESA_LISTAR_HABILITADOS;
     final static String tabla = "empresa_cliente";
     final static String columnas[] = {"empresa_id","nombre"};
 
@@ -112,8 +112,8 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
                 Log.v("AGET", "BROAD RECIBIDO empresa");
                 mostrarProgreso(false);
                 String mensaje = intent.getStringExtra(Utilidades.EXTRA_MENSAJE);
-                Boolean restado = intent.getBooleanExtra(Utilidades.EXTRA_RESULTADO, false);
-                if(restado){
+                Boolean reultado = intent.getBooleanExtra(Utilidades.EXTRA_RESULTADO, false);
+                if(reultado){
                     actualizar(intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST));
                 }
 
@@ -146,7 +146,6 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorMensaje);
     }
 
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String marcado = (String) lista.getItemAtPosition(position);
@@ -158,7 +157,7 @@ public class ListaEmpresa extends AppCompatActivity implements OnItemClickListen
     }
 
     void actividadEmpresa(String id){
-        Intent actividad = new Intent(this, EmpresaCliente.class);
+        Intent actividad = new Intent(this, GestionArrendatarioCliente.class);
         actividad.putExtra(Configuracion.COLUMNA_EMPRESA_ID, id);
         startActivity(actividad);
     }

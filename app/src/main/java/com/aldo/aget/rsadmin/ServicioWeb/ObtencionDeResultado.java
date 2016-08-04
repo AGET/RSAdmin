@@ -92,8 +92,7 @@ public class ObtencionDeResultado extends AsyncTask<String, Void, JSONObject> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = ProgressDialog.show(
-                context, "Por favor espere", "Procesando...");
+        progressDialog = ProgressDialog.show(context, "Por favor espere", "Procesando...");
     }
 
     /**
@@ -109,12 +108,10 @@ public class ObtencionDeResultado extends AsyncTask<String, Void, JSONObject> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     public void setJSON(JSONObject result){
         this.objetoJSON = result;
-
     }
     public JSONObject getJSON(){
         return this.objetoJSON;
@@ -149,10 +146,6 @@ public class ObtencionDeResultado extends AsyncTask<String, Void, JSONObject> {
 //        return "Petición POST: Fracaso";
         return object;
     }
-
-
-
-
 
     public void parserJson( JSONObject result) throws JSONException {
         //String temporal="";

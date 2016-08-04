@@ -9,8 +9,6 @@
     tools:context="com.aldo.aget.rsadmin.MainActivity">
 
 
-
-
     <!--appbarlayout-->
     <!--ctlLayout-->
     <!--imgToolbar-->
@@ -32,10 +30,10 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             app:collapsedTitleGravity="top"
+            app:contentScrim="?attr/colorPrimary"
             app:expandedTitleMarginBottom="@dimen/height"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
 
-            app:contentScrim="?attr/colorPrimary">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
                 android:id="@+id/imgToolbar"
@@ -57,17 +55,17 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/appbar"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="top"
                 android:layout_marginBottom="14dp"
                 android:layout_marginTop="-14dp"
                 android:paddingTop="12dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:layout_collapseMode="pin"
-
                 app:layout_scrollFlags="scroll|enterAlways"
+
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
 
                 />
 
@@ -83,8 +81,7 @@
                 android:layout_height="@dimen/height"
                 android:layout_gravity="bottom"
                 app:tabGravity="fill"
-                app:tabMode="scrollable"
-                />
+                app:tabMode="scrollable" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -112,5 +109,18 @@
         app:borderWidth="0dp"
         app:layout_anchor="@id/appbarlayout"
         app:layout_anchorGravity="bottom|right|end" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabmain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="26dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:src="@android:drawable/ic_dialog_map" />
 
 </android.support.design.widget.CoordinatorLayout>

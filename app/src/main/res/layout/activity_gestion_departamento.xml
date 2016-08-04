@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/xmlactivity_empresa_cliente"
     android:fitsSystemWindows="true"
-    tools:context=".Vistas.GestionArrendatarioCliente">
+    tools:context="com.aldo.aget.rsadmin.Vistas.GestionDepartamento">
+
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -31,24 +31,24 @@
         android:layout_marginTop="50dp"
         android:indeterminate="true" />
 
-    <include layout="@layout/content_empresa_cliente" />
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab_dispositivos_gps"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|start"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--android:src="@drawable/icono_gps" />-->
+    <include layout="@layout/content_gestion_departamento" />
+
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_departamentos"
+        android:id="@+id/fab_dispositivos_gps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/icono_gps" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_usuarios"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/icono_usuarios" />
-
-
 
 </android.support.design.widget.CoordinatorLayout>

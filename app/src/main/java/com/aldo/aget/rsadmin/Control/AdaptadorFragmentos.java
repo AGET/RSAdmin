@@ -8,14 +8,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.aldo.aget.rsadmin.Vistas.Fragmento;
+import com.aldo.aget.rsadmin.Vistas.FragmentoEmpresaDeshabilitada;
+import com.aldo.aget.rsadmin.Vistas.FragmentoEmpresaHabilitada;
+import com.aldo.aget.rsadmin.Vistas.FragmentoGpsLibres;
 
-public class AdaptadosFragmentos extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 6;
+public class AdaptadorFragmentos extends FragmentPagerAdapter {
+    final int PAGE_COUNT = 3;
     private String tabTitles[] =
-            new String[]{"Empresas Habilitadas", "Tab Dos", "Tab Tres", "Tab Cuatro", "Tab Cinco", "Tab Seis"};
+            new String[]{"Empresas Habilitadas","Empresas Deshabilitadas", "Gps"};
 
-    public AdaptadosFragmentos(FragmentManager fm) {
+
+    public AdaptadorFragmentos(FragmentManager fm) {
         super(fm);
     }
 
@@ -31,16 +34,13 @@ public class AdaptadosFragmentos extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-            case 2:
-                f = Fragmento.newInstance();
-                break;
-            case 3:
-            case 5:
-                f = Fragmento.newInstance();
+                f = FragmentoEmpresaHabilitada.newInstance();
                 break;
             case 1:
-            case 4:
-                f = Fragmento.newInstance();
+                f = FragmentoEmpresaDeshabilitada.newInstance();
+                break;
+            case 2:
+                f = FragmentoGpsLibres.newInstance();
                 break;
         }
 

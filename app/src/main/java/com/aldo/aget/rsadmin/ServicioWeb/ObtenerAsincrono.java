@@ -50,7 +50,7 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
 
     String intent = "";
 
-    public ObtenerAsincrono(Context context,String receptor, String tabla, String[] columna) {
+    public ObtenerAsincrono(Context context, String receptor, String tabla, String[] columna) {
         this.context = context;
         this.tabla = tabla;
         this.columna = columna;
@@ -65,11 +65,15 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
         } else if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.INTENT_LISTA_GPS)) {
             Log.v("AGET-COMPRARADA", "Intent de lista gps");
             intent = Configuracion.INTENT_LISTA_GPS;
-        }else if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.INTENT_GPS_EMPRESA)) {
+        } else if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.INTENT_GPS_EMPRESA)) {
             Log.v("AGET-COMPRARADA", "Intent de spinner gps empresa");
             intent = Configuracion.INTENT_GPS_EMPRESA;
-        }else if(Configuracion.INTENT_LISTA_EMPRESA == receptor){
+        } else if (Configuracion.INTENT_LISTA_EMPRESA == receptor) {
             intent = Configuracion.INTENT_LISTA_EMPRESA;
+        } else if (Configuracion.INTENT_LISTA_GPS == receptor) {
+            intent = Configuracion.INTENT_LISTA_GPS;
+        }else{
+            intent=receptor;
         }
     }
 
@@ -85,7 +89,7 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         if (result.contentEquals("error en el servidor")) {
-            enviarBroadcast(false, "hay un error en el servidor",datos);
+            enviarBroadcast(false, "hay un error en el servidor", datos);
         } else {
             try {
 //                Log.v("AGET-RESULT-1", result);
@@ -98,26 +102,26 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
                 datos.add(new ArrayList());
 
                 for (int i = 0; i < json.getJSONArray(tabla).length(); i++) {
-                    for(int j = 0 ; j < columna.length; j++)
-                        ((ArrayList)datos.get(i)).add(obj.getJSONObject(i).getString(columna[j]));
+                    for (int j = 0; j < columna.length; j++)
+                        ((ArrayList) datos.get(i)).add(obj.getJSONObject(i).getString(columna[j]));
                     datos.add(new ArrayList());
                 }
 
-                for(int i = 0; i < datos.size();i++){
-                    for(int j = 0; j < ((ArrayList)datos.get(i)).size(); j++){
-                        Log.v("AGET-listas",(String)((ArrayList)datos.get(i)).get(j) +"  ");
+                for (int i = 0; i < datos.size(); i++) {
+                    for (int j = 0; j < ((ArrayList) datos.get(i)).size(); j++) {
+                        Log.v("AGET-listas", (String) ((ArrayList) datos.get(i)).get(j) + "  ");
                     }
                     System.out.println();
                 }
 
                 Log.v("AGET-PARSEADO", str);
 
-                enviarBroadcast(true, "Parseado",datos);
+                enviarBroadcast(true, "Parseado", datos);
             } catch (JSONException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
                 Log.v("AGET-DATOS", "Error en datos");
-                enviarBroadcast(false, "No se encontraron datos, podria deberse a la BD",datos);
+                enviarBroadcast(false, "No se encontraron datos, podria deberse a la BD", datos);
             }
         }
     }
@@ -132,12 +136,6 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
             HttpResponse httpResponse = httpclient.execute(new HttpPost(url));
 
             inputStream = httpResponse.getEntity().getContent();
-
-
-
-
-
-
 
 
             if (inputStream != null)
@@ -160,6 +158,6 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
         intentLocal.putExtra(Utilidades.EXTRA_DATOS_ALIST, datos);
         LocalBroadcastManager.getInstance(Configuracion.context).sendBroadcast(intentLocal);
 
-        Log.v("AGET", "BROAD ENVIADO:"+intent);
+        Log.v("AGET", "BROAD ENVIADO:" + intent);
     }
 }

@@ -32,10 +32,10 @@ import java.util.Collections;
 
 import android.support.v7.widget.AppCompatSpinner;
 
-public class EmpresaCliente extends AppCompatActivity {
+public class GestionArrendatarioCliente extends AppCompatActivity {
 
     EditText edtNombre, edtTelefono, edtCorreo;
-    FloatingActionButton fab_usuarios, fab_gps;
+    FloatingActionButton fab_departamentos;
 
     String idEmpresa;
     String ID = "";
@@ -46,6 +46,8 @@ public class EmpresaCliente extends AppCompatActivity {
             "Inhabilitada"
     };
     String estado = "0";
+
+    String tipoPeticion = "post";
 
     ObtencionDeResultadoBcst resultado;
 
@@ -60,8 +62,6 @@ public class EmpresaCliente extends AppCompatActivity {
 
     String tabla = Configuracion.TABLA_EMPRESA_CLIENTE;
 
-    String tipoPeticion = "post";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +70,8 @@ public class EmpresaCliente extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         idEmpresa = bundle.getString(Configuracion.COLUMNA_EMPRESA_ID);
 
-        fab_usuarios = (FloatingActionButton) findViewById(R.id.fab_usuarios);
-        fab_usuarios.setOnClickListener(new View.OnClickListener() {
+        fab_departamentos = (FloatingActionButton) findViewById(R.id.fab_departamentos);
+        fab_departamentos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -79,17 +79,17 @@ public class EmpresaCliente extends AppCompatActivity {
                 lanzaUsuarios();
             }
         });
-        fab_gps = (FloatingActionButton) findViewById(R.id.fab_dispositivos_gps);
-        fab_gps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                lanzarGpss();
-            }
-        });
-        fab_usuarios.setVisibility(View.GONE);
-        fab_gps.setVisibility(View.GONE);
+//        fab_gps = (FloatingActionButton) findViewById(R.id.fab_dispositivos_gps);
+//        fab_gps.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//                lanzarGpss();
+//            }
+//        });
+//        fab_usuarios.setVisibility(View.GONE);
+//        fab_gps.setVisibility(View.GONE);
 
         edtNombre = (EditText) findViewById(R.id.edt_nombre_empresa);
         edtTelefono = (EditText) findViewById(R.id.edt_telefono_empresa);
@@ -181,13 +181,13 @@ public class EmpresaCliente extends AppCompatActivity {
                     menuEliminar.setVisible(true);
                     habilitarComponentes(false);
                     Configuracion.cambio = true;
-                    if (estado.equalsIgnoreCase("0")) {
-                        fab_gps.setVisibility(View.INVISIBLE);
-                        fab_usuarios.setVisibility(View.INVISIBLE);
-                    } else {
-                        fab_gps.setVisibility(View.INVISIBLE);
-                        fab_usuarios.setVisibility(View.INVISIBLE);
-                    }
+//                    if (estado.equalsIgnoreCase("0")) {
+//                        fab_gps.setVisibility(View.INVISIBLE);
+//                        fab_usuarios.setVisibility(View.INVISIBLE);
+//                    } else {
+//                        fab_gps.setVisibility(View.INVISIBLE);
+//                        fab_usuarios.setVisibility(View.INVISIBLE);
+//                    }
                 } else if (mensaje.equalsIgnoreCase("Url mal formada")) {
                     mensaje = "error en dato, probablemente con ID";
                 } else if (mensaje.equalsIgnoreCase("La empresa a la que intentas acceder no existe")) {
@@ -215,7 +215,7 @@ public class EmpresaCliente extends AppCompatActivity {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.v("AGET-BROAD RECIBIDO", "EmpresaCliente Numeros");
+                Log.v("AGET-BROAD RECIBIDO", "GestionArrendatarioCliente Numeros");
                 mostrarProgreso(false);
                 String mensaje = intent.getStringExtra(Utilidades.EXTRA_MENSAJE);
                 Boolean resultado = intent.getBooleanExtra(Utilidades.EXTRA_RESULTADO, false);
@@ -376,8 +376,8 @@ public class EmpresaCliente extends AppCompatActivity {
 
     }
 
-    public static void eliminar(boolean snsEnviados){
-        if(snsEnviados)
+    public static void eliminar(boolean smsEnviados){
+        if(smsEnviados)
         Log.v("AGET-ELIMINADO","SI Eliminado");
         else
             Log.v("AGET-ELIMINADO","NO Eliminado");
@@ -396,15 +396,15 @@ public class EmpresaCliente extends AppCompatActivity {
         edtNombre.setText(String.valueOf(data.get(0)));
         edtTelefono.setText(String.valueOf(data.get(1)));
         edtCorreo.setText(String.valueOf(data.get(2)));
-        if (String.valueOf(data.get(3)).equalsIgnoreCase("0")) {
-            spinner.setSelection(1);
-            fab_usuarios.setVisibility(View.GONE);
-            fab_gps.setVisibility(View.GONE);
-        } else {
-            spinner.setSelection(0);
-            fab_usuarios.setVisibility(View.VISIBLE);
-            fab_gps.setVisibility(View.VISIBLE);
-        }
+//        if (String.valueOf(data.get(3)).equalsIgnoreCase("0")) {
+//            spinner.setSelection(1);
+//            fab_usuarios.setVisibility(View.GONE);
+//            fab_gps.setVisibility(View.GONE);
+//        } else {
+//            spinner.setSelection(0);
+//            fab_usuarios.setVisibility(View.VISIBLE);
+//            fab_gps.setVisibility(View.VISIBLE);
+//        }
         ID = String.valueOf(data.get(data.size() - 1));
 
         habilitarComponentes(false);

@@ -10,8 +10,7 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.aldo.aget.rsadmin.Configuracion.Configuracion;
-import com.aldo.aget.rsadmin.Vistas.EmpresaCliente;
+import com.aldo.aget.rsadmin.Vistas.GestionArrendatarioCliente;
 
 /**
  * Created by Genexus on 21/06/2016.
@@ -83,7 +82,7 @@ public class Mensajes  {
                         totalEnviados++;
                         if(enviado) {
                             if (totalEnviados == totalAEnviar) {
-                                EmpresaCliente.eliminar(true);
+                                GestionArrendatarioCliente.eliminar(true);
                             }
                         }
                         Log.v("AGET-SMS","Cantidad A Enviar: "+totalAEnviar+" Enviados: " +totalEnviados);
@@ -93,7 +92,7 @@ public class Mensajes  {
                         Toast.makeText(contexto, "SMS no entregado",
                                 Toast.LENGTH_SHORT).show();
                         enviado = false;
-                        EmpresaCliente.eliminar(false);
+                        GestionArrendatarioCliente.eliminar(false);
                         break;
 
                 }

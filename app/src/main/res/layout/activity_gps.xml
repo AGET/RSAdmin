@@ -21,7 +21,14 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-
+    <ProgressBar
+        android:id="@+id/barra"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="50dp"
+        android:indeterminate="true" />
     <include layout="@layout/content_gps" />
 
     <android.support.design.widget.FloatingActionButton

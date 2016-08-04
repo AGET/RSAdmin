@@ -15,14 +15,19 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.aldo.aget.rsadmin.Configuracion.Configuracion;
-import com.aldo.aget.rsadmin.Control.AdaptadosFragmentos;
+import com.aldo.aget.rsadmin.Control.AdaptadorFragmentos;
+import com.aldo.aget.rsadmin.Vistas.FragmentoEmpresaDeshabilitada;
+import com.aldo.aget.rsadmin.Vistas.FragmentoEmpresaHabilitada;
+import com.aldo.aget.rsadmin.Vistas.FragmentoGpsLibres;
 import com.aldo.aget.rsadmin.Vistas.ListaEmpresa;
 import com.aldo.aget.rsadmin.Vistas.ListaGps;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,9 +38,15 @@ public class MainActivity extends AppCompatActivity {
     private TextToSpeech tts = null;
     private boolean ttsIsInit = false;
     //FinSintetizador
-int borrar=4;
+
+    ViewPager viewPager;
+    AdaptadorFragmentos adaptadorViewPager = new AdaptadorFragmentos(
+            getSupportFragmentManager());
 
     private CollapsingToolbarLayout ctlLayout;
+
+    public static FloatingActionButton fabmain;
+    ImageView imgBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +56,28 @@ int borrar=4;
         agregarToolbar();
         setTitle("");
 
-//        FloatingActionButton fabmain = (FloatingActionButton) findViewById(R.id.fabmain);
-//        fabmain.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, " OBR", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-////                obtener();
-////                test();
-//            }
-//        });
+        imgBar = (ImageView) findViewById(R.id.imgToolbar);
+        fabmain = (FloatingActionButton) findViewById(R.id.fabmain);
+        fabmain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, " OBR", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+//                obtener();
+//                test();
+                switch ((String) adaptadorViewPager.getPageTitle(viewPager.getCurrentItem())) {
+                    case "Empresas Habilitadas":
+                        FragmentoEmpresaHabilitada.actividadEmpresa(null);
+                        break;
+                    case "Gps Disponibles":
+                        Toast.makeText(MainActivity.this, "tres", Toast.LENGTH_SHORT).show();
+                        FragmentoGpsLibres.actividadGps(null);
+                        break;
+                    case "Tab Cuatro":
+                        Toast.makeText(MainActivity.this, "Cuatro", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
 
 //        btnDispositivos = (Button) findViewById(R.id.btndispositivos);
 //        btnDispositivos.setOnClickListener(new View.OnClickListener() {
@@ -74,23 +98,56 @@ int borrar=4;
         //Tabs + ViewPager
 
         //Establecer el PageAdapter del componente ViewPager
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new AdaptadosFragmentos(
-                getSupportFragmentManager()));
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(adaptadorViewPager);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.appbartabs);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
+
+
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                if (position % 2 == 0)
+                    imgBar.setImageResource(R.drawable.img_gps);
+                else
+                    imgBar.setImageResource(R.drawable.img_mapa);
+
+                switch ( (String) adaptadorViewPager.getPageTitle(position)){
+
+                    case "Empresas Habilitadas":
+                        Log.v("AGET-CargadoEmpHab",""+FragmentoEmpresaHabilitada.cargadoHab);
+                        if(!FragmentoEmpresaHabilitada.cargadoHab)
+                            //FragmentoEmpresaHabilitada.cargar();
+
+                        break;
+                    case "Empresas Deshabilitadas":
+                        Log.v("AGET-CargadoEmpDes",""+ FragmentoEmpresaDeshabilitada.cargadoED);
+                        if(!FragmentoEmpresaDeshabilitada.cargadoED)
+                            FragmentoEmpresaDeshabilitada.cargar();
+                        break;
+                    case "Gps":
+                        Log.v("AGET-CargadoGps",""+FragmentoGpsLibres.cargadoGPS);
+                        if(!FragmentoGpsLibres.cargadoGPS)
+                            FragmentoGpsLibres.cargar();
+                        break;
+                }
+
+            }
+        });
+
         initTextToSpeech();
 
         //CollapsingToolbarLayout
         //ctlLayout = (CollapsingToolbarLayout)findViewById(R.id.ctlLayout);
         //ctlLayout.setTitle("Mi Aplicación");
-}
+    }
 
     private void initTextToSpeech() {
         Intent intent = new Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(intent, TTS_DATA_CHECK);
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -116,10 +173,10 @@ int borrar=4;
                 });
             }
         }
-        if(requestCode== Activity.RESULT_OK && data!=null) {
+        if (requestCode == Activity.RESULT_OK && data != null) {
             Log.v("AGET-RECONOCERVOZ", "succefull");
             ArrayList<String> text = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            Toast.makeText(this,text.get(0),Toast.LENGTH_LONG).show();
+            Toast.makeText(this, text.get(0), Toast.LENGTH_LONG).show();
         }
     }
 
