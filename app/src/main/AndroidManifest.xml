@@ -62,7 +62,7 @@
             android:label="@string/title_activity_activity_gpsempresa"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".Vistas.ClientesEmpresa"
+            android:name=".Vistas.GestionUsuarios"
             android:label="@string/title_activity_clientes_empresa"
             android:theme="@style/AppTheme" />
         <activity
@@ -76,6 +76,14 @@
         <activity
             android:name=".Vistas.GestionDepartamento"
             android:label="@string/title_activity_gestion_departamento"
+            android:theme="@style/AppThemeNoBar" />
+        <activity
+            android:name=".Vistas.ListaDepartamento"
+            android:label="@string/title_activity_lista_departamento"
+            android:theme="@style/AppThemeNoBar" />
+        <activity
+            android:name=".Vistas.ListaUsuarios"
+            android:label="@string/title_activity_lista_usuarios"
             android:theme="@style/AppThemeNoBar"></activity>
     </application>
 

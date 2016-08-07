@@ -19,7 +19,7 @@ public class Configuracion extends Activity {
     //http://aldogamaliel.byethost16.com/api.rs.com/v1/gps/listarVarios
     public static String idActual = "";
 
-    /*    PETICIONES  */
+    /*PETICIONES  */
     //PETICIONES GPS
     public static final String PETICION_GPS_LISTAR_VARIOS = SERVIDOR + "/api.rs.com/v1/gps/listarVarios";
     public static final String PETICION_GPS_LISTAR_LIBRES = SERVIDOR + "/api.rs.com/v1/gps/listarLibres";
@@ -41,13 +41,19 @@ public class Configuracion extends Activity {
     public static final String PETICION_EMPRESA_REGISTRO = SERVIDOR + "/api.rs.com/v1/empresa_cliente/registro";
     public static final String PETICION_EMPRESA_MODIFICAR_ELIMINAR = SERVIDOR + "/api.rs.com/v1/empresa_cliente/";
 
+    //PETICION DEPARTAMENTO
+    public static final String PETICION_DEPARTAMENTO_LISTAR_VARIOS = SERVIDOR + "/api.rs.com/v1/departamento/listarVarios";
+    public static final String PETICION_DEPARTAMENTO_LISTAR_POR_ID = SERVIDOR + "/api.rs.com/v1/departamento/listarUno_Id";
+    public static final String PETICION_DEPARTAMENTO_REGISTRO = SERVIDOR + "/api.rs.com/v1/departamento/registro";
+    public static final String PETICION_DEPARTAMENTO_MODIFICAR_ELIMINAR = SERVIDOR + "/api.rs.com/v1/departamento/";
+
 
     //PETICION USUARIOS
     public static final String PETICION_USUARIO_REGISTRO = SERVIDOR + "/api.rs.com/v1/usuarios/registro";
     public static final String PETICION_USUARIO_LISTAR_VARIOS = SERVIDOR + "/api.rs.com/v1/usuarios/listarVarios";
     public static final String PETICION_USUARIO_LISTAR_UNO = SERVIDOR + "/api.rs.com/v1/usuarios/listarUno_Id";
     public static final String PETICION_USUARIO_LISTAR_GPS = SERVIDOR + "/api.rs.com/v1/usuarios/listarGpsDeUsuario";
-    public static final String PETICION_USUARIO_LISTAR_USUARIO_EMPRESA = SERVIDOR + "/api.rs.com/v1/usuarios/listarUsuariosDeEmpresa";
+    public static final String PETICION_USUARIO_LISTAR_USUARIO_DEPARTAMENTO = SERVIDOR + "/api.rs.com/v1/usuarios/listarUsuariosDeDepartamento";
     public static final String PETICION_USUARIO_MODIFICAR_ELIMINAR = SERVIDOR + "/api.rs.com/v1/usuarios/";
 
     //PETICION ENLACE
@@ -64,7 +70,8 @@ public class Configuracion extends Activity {
     public static final String TABLA_GPS = "gps";
     public static final String TABLA_EMPRESA_CLIENTE = "empresa_cliente";
     public static final String TABLA_ENLACE = "enlace";
-
+    public static final String TABLA_DEPARTAMENTO = "departamento";
+    public static final String TABLA_USUARIOS = "usuarios";
 
     //    Columnas
 //GPS
@@ -82,6 +89,14 @@ public class Configuracion extends Activity {
     public static final String COLUMNA_EMPRESA_CORREO = "correo";
     public static final String COLUMNA_EMPRESA_STATUS = "status";
 
+    //DEPARTAMENTOS
+    public static final String COLUMNA_DEPARTAMENTO_ID = "departamento_id";
+    public static final String COLUMNA_DEPARTAMENTO_NOMBRE = "nombre";
+    public static final String COLUMNA_DEPARTAMENTO_TELEFONO = "telefono";
+    public static final String COLUMNA_DEPARTAMENTO_CORREO = "correo";
+    public static final String COLUMNA_DEPARTAMENTO_DIRECCION = "direccion";
+    public static final String COLUMNA_DEPARTAMENTO_EMPRESA_ID = "empresa_id";
+
     //USUARIOS
     public static final String COLUMNA_USUARIO_ID = "usuario_id";
     public static final String COLUMNA_USUARIO_NOMBRE = "nombre";
@@ -91,7 +106,7 @@ public class Configuracion extends Activity {
     public static final String COLUMNA_USUARIO_CORREO = "correo";
     public static final String COLUMNA_USUARIO_USUARIO = "usuario";
     public static final String COLUMNA_USUARIO_CONTRASE_NA = "contrase_na";
-    public static final String COLUMNA_USUARIO_EMPRESA_ID = "empresa_id";
+    public static final String COLUMNA_USUARIO_DEPARTAMENTO_ID = "departamento_id";
 
     //ENLACE
     public static final String COLUMNA_ENLACE_ID = "enlace_id";
@@ -108,6 +123,15 @@ public class Configuracion extends Activity {
     //RECEPTORES EN EMPRESA_CLIENTE
     public static final String INTENT_EMPRESA_CLIENTE = "com.aldo.aget.rsadmin.Vistas.GestionArrendatarioCliente";
     public static final String INTENT_EMPRESA_CLIENTE_ENLACE_TELEFONOS_ENLAZADOS = "com.aldo.aget.rsadmin.Vistas.GestionArrendatarioCliente.TelefonosEnlazados";
+
+    //RECEPTORES DEPARTAMENTO
+    public static final String INTENT_LISTA_DEPARTAMENTO = "com.aldo.aget.rsadmin.Vistas.ListaDepartamento";
+    public static final String INTENT_GESTION_DEPARTAMENTO = "com.aldo.aget.rsadmin.Vistas.ListaDepartamento";
+    public static final String INTENT_DEPARTAMENTO_ENLACE_TELEFONOS_ENLAZADOS = "com.aldo.aget.rsadmin.Vistas.Departamento.TelefonosEnlazados";
+
+    //RECEPTORES
+    public static final String INTENT_LISTA_USUARIOS = "com.aldo.aget.rsadmin.Vistas.ListaUsuarios";
+    public static final String INTENT_GESTION_USUARIO = "com.aldo.aget.rsadmin.Vistas.GestionUsuario";
 
     //RECEPTORES GPS
     public static final String INTENT_GPS= "com.aldo.aget.rsadmin.Vistas.Gps";

@@ -17,28 +17,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.Configuracion.Utilidades;
 import com.aldo.aget.rsadmin.R;
 import com.aldo.aget.rsadmin.ServicioWeb.ObtencionDeResultadoBcst;
 
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.ProgressBar;
-
 import java.util.ArrayList;
 
-public class GestionDepartamento extends AppCompatActivity {
-
-    FloatingActionButton fab_usuarios, fab_gps;
-    String idEmpresa = "", empresaNombre = "",empresaStatus = "",idDepartamento = "",departamentoNombre = "";
-
-    EditText edtNombre;
-    EditText edtTelefono;
-    EditText edtCorreo;
-    EditText edtDireccion;
-    TextView txtEstadoEmpresa;
+public class GestionUsuarios extends AppCompatActivity {
 
     ProgressBar progressBar;
 
@@ -46,7 +36,7 @@ public class GestionDepartamento extends AppCompatActivity {
 
     String tipoPeticion = "post";
 
-    String tabla = Configuracion.TABLA_DEPARTAMENTO;
+    String tabla = Configuracion.TABLA_USUARIOS;
 
     BroadcastReceiver receptorMensaje;
 
@@ -54,63 +44,53 @@ public class GestionDepartamento extends AppCompatActivity {
 
     MenuItem menuOk, menuEditar, menuEliminar;
 
-    String ID = "";
+    EditText edtNombre, edtApPaterno, edtApMaterno, edtTelefono, edtCorreo, edtUsuario, edtClave;
+
+    String idUsuario="", nombreUsuario = "", departamentoId = "", departamentoNombre = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gestion_departamento);
+        setContentView(R.layout.activity_gestion_usuarios);
         agregarToolbar();
+
         Bundle bundle = getIntent().getExtras();
-        idDepartamento = (String) bundle.getString(Configuracion.COLUMNA_DEPARTAMENTO_ID);
-        departamentoNombre  = (String) bundle.getString(Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE);
-        idEmpresa  = (String) bundle.getString(Configuracion.COLUMNA_EMPRESA_ID);
-        empresaNombre  = (String) bundle.getString(Configuracion.COLUMNA_EMPRESA_NOMBRE);
-        empresaStatus  = (String) bundle.getString(Configuracion.COLUMNA_EMPRESA_STATUS);
+        idUsuario = bundle.getString(Configuracion.COLUMNA_USUARIO_ID);
+        nombreUsuario = bundle.getString(Configuracion.COLUMNA_USUARIO_NOMBRE);
+        departamentoId = bundle.getString(Configuracion.COLUMNA_DEPARTAMENTO_ID);
+        departamentoNombre = bundle.getString(Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE);
+        setTitle("Usuarios " + departamentoNombre);
 
-        edtNombre = (EditText) findViewById(R.id.edt_nombre_departamento);
-        edtTelefono = (EditText) findViewById(R.id.edt_telefono_departamento);
-        edtCorreo = (EditText) findViewById(R.id.edt_correo_departamento);
-        edtDireccion = (EditText) findViewById(R.id.edt_direccion_departamento);
-        txtEstadoEmpresa = (TextView) findViewById(R.id.txt_estado_departamento);
-
-        fab_usuarios = (FloatingActionButton) findViewById(R.id.fab_usuarios);
-        fab_usuarios.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                lanzaUsuarios();
-            }
-        });
-        fab_gps = (FloatingActionButton) findViewById(R.id.fab_dispositivos_gps);
-        fab_gps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                lanzarGpss();
-            }
-        });
+        edtNombre = (EditText) findViewById(R.id.edt_nombre_usuario);
+        edtApPaterno = (EditText) findViewById(R.id.edt_apellido_paterno);
+        edtApMaterno = (EditText) findViewById(R.id.edt_apellido_materno);
+        edtTelefono = (EditText) findViewById(R.id.edt_telefono_usuario);
+        edtCorreo = (EditText) findViewById(R.id.edt_correo_usuario);
+        edtUsuario = (EditText) findViewById(R.id.edt_usuario);
+        edtClave = (EditText) findViewById(R.id.edt_pass_usuario);
 
         progressBar = (ProgressBar) findViewById(R.id.barra);
 
         //Datos de busqueda
-        String[] columnasFiltro = {Configuracion.COLUMNA_DEPARTAMENTO_ID};
-        String[] valorFiltro = {idDepartamento};
+        String[] columnasFiltro = {Configuracion.COLUMNA_USUARIO_ID};
+        String[] valorFiltro = {idUsuario};
 
         //Datos a mostrar
         String[] columnasArecuperar = {
-                Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE,
-                Configuracion.COLUMNA_DEPARTAMENTO_TELEFONO,
-                Configuracion.COLUMNA_DEPARTAMENTO_CORREO,
-                Configuracion.COLUMNA_DEPARTAMENTO_DIRECCION,
-                Configuracion.COLUMNA_DEPARTAMENTO_ID};
+                Configuracion.COLUMNA_USUARIO_NOMBRE,
+                Configuracion.COLUMNA_USUARIO_AP_PATERNO,
+                Configuracion.COLUMNA_USUARIO_AP_MATERNO,
+                Configuracion.COLUMNA_USUARIO_TELEFONO,
+                Configuracion.COLUMNA_USUARIO_CORREO,
+                Configuracion.COLUMNA_USUARIO_USUARIO,
+                Configuracion.COLUMNA_USUARIO_CONTRASE_NA,
+                Configuracion.COLUMNA_USUARIO_DEPARTAMENTO_ID,
+                Configuracion.COLUMNA_USUARIO_ID};
 
-        if (idDepartamento!= null) {
+        if (idUsuario != null) {
             mostrarProgreso(true);
-            resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GESTION_DEPARTAMENTO, columnasFiltro, valorFiltro, tabla, columnasArecuperar, false);
-            resultado.execute(Configuracion.PETICION_DEPARTAMENTO_LISTAR_POR_ID, tipoPeticion);
+            resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GESTION_USUARIO, columnasFiltro, valorFiltro, tabla, columnasArecuperar, false);
+            resultado.execute(Configuracion.PETICION_USUARIO_LISTAR_UNO, tipoPeticion);
         } else {
             setTitle(R.string.titulo_actividad_agregar_departamento);
         }
@@ -118,22 +98,17 @@ public class GestionDepartamento extends AppCompatActivity {
         Log.v("AGET", columnasArecuperar[columnasArecuperar.length - 1]);
         Log.v("AGET", Configuracion.idActual);
 
-
-        fab_usuarios.setVisibility(View.GONE);
-        fab_gps.setVisibility(View.GONE);
-
         receptorMensaje = new BroadcastReceiver() {
 
             @Override
             public void onReceive(Context context, Intent intent) {
                 boolean MostrarMensaje = true;
-                Log.v("AGET", "BROAD RECIBIDO empresa");
+                Log.v("AGET", "BROAD RECIBIDO GTN-Usuarios");
                 mostrarProgreso(false);
                 String mensaje = intent.getStringExtra(Utilidades.EXTRA_MENSAJE);
                 Boolean restado = intent.getBooleanExtra(Utilidades.EXTRA_RESULTADO, false);
                 if (restado) {
                     cargarViews(intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST));
-                    //}else if(mensaje.equalsIgnoreCase("Registro exitoso!")){
                 } else if (mensaje.equalsIgnoreCase("Registro con exito!")) {
                     //menuOk.setEnabled(false);
                     menuOk.setVisible(false);
@@ -153,13 +128,6 @@ public class GestionDepartamento extends AppCompatActivity {
                     menuEliminar.setVisible(true);
                     habilitarComponentes(false);
                     Configuracion.cambio = true;
-//                    if (estado.equalsIgnoreCase("0")) {
-//                        fab_gps.setVisibility(View.INVISIBLE);
-//                        fab_usuarios.setVisibility(View.INVISIBLE);
-//                    } else {
-//                        fab_gps.setVisibility(View.INVISIBLE);
-//                        fab_usuarios.setVisibility(View.INVISIBLE);
-//                    }
                 } else if (mensaje.equalsIgnoreCase("Url mal formada")) {
                     mensaje = "error en dato, probablemente con ID";
                 } else if (mensaje.equalsIgnoreCase("La empresa a la que intentas acceder no existe")) {
@@ -177,7 +145,7 @@ public class GestionDepartamento extends AppCompatActivity {
                     return;
                 }
 
-                Snackbar.make(findViewById(R.id.xml_gestion_departamento),
+                Snackbar.make(findViewById(R.id.xml_gestion_usuarios),
                         mensaje, Snackbar.LENGTH_SHORT).show();
                 mostrarProgreso(false);
             }
@@ -190,7 +158,7 @@ public class GestionDepartamento extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // Registrar receptor
-        IntentFilter filtro = new IntentFilter(Configuracion.INTENT_GESTION_DEPARTAMENTO);
+        IntentFilter filtro = new IntentFilter(Configuracion.INTENT_GESTION_USUARIO);
         LocalBroadcastManager.getInstance(this).registerReceiver(receptorMensaje, filtro);
 
         //IntentFilter filtroTelefonos = new IntentFilter(Configuracion.INTENT_EMPRESA_CLIENTE_ENLACE_TELEFONOS_ENLAZADOS);
@@ -205,13 +173,12 @@ public class GestionDepartamento extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_insercion_departamento, menu);
+        getMenuInflater().inflate(R.menu.menu_insercion_usuario, menu);
         this.menuEliminar = menu.findItem(R.id.accion_eliminar);
         this.menuEditar = menu.findItem(R.id.accion_editar);
         this.menuOk = menu.findItem(R.id.accion_confirmar);
         // Verificación de visibilidad acción eliminar
-
-        if (idDepartamento!= null) {
+        if (idUsuario != null) {
             menuEditar.setVisible(true);
             menuEliminar.setVisible(true);
             menuOk.setVisible(false);
@@ -251,23 +218,32 @@ public class GestionDepartamento extends AppCompatActivity {
     private void insertar() {
         // Extraer datos de UI
         String nombre = edtNombre.getText().toString();
+        String apPaterno = edtApPaterno.getText().toString();
+        String apMaterno = edtApMaterno.getText().toString();
         String telefono = edtTelefono.getText().toString();
         String correo = edtCorreo.getText().toString();
-        String direccion= edtDireccion.getText().toString();
+        String usuario = edtUsuario.getText().toString();
+        String clave = edtClave.getText().toString();
+
+
         // Validaciones
         if (!esNombreValido(nombre)) {
             TextInputLayout mascaraCampoNombre = (TextInputLayout) findViewById(R.id.mcr_edt_nombre_departamento);
             mascaraCampoNombre.setError("Este campo no puede quedar vacío");
         } else {
             mostrarProgreso(true);
-            String[] columnasFiltro = {Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE, Configuracion.COLUMNA_DEPARTAMENTO_TELEFONO
-                    , Configuracion.COLUMNA_DEPARTAMENTO_CORREO, Configuracion.COLUMNA_DEPARTAMENTO_DIRECCION};
-            String[] valorFiltro = {nombre, telefono, correo, direccion};
-            resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GESTION_DEPARTAMENTO, columnasFiltro, valorFiltro, tabla, null, false);
-            if (idDepartamento.isEmpty()) {
-                resultado.execute(Configuracion.PETICION_DEPARTAMENTO_REGISTRO, tipoPeticion);
+            String[] columnasFiltro = {Configuracion.COLUMNA_USUARIO_NOMBRE, Configuracion.COLUMNA_USUARIO_AP_PATERNO
+                    , Configuracion.COLUMNA_USUARIO_AP_MATERNO, Configuracion.COLUMNA_USUARIO_TELEFONO,
+                    Configuracion.COLUMNA_USUARIO_CORREO, Configuracion.COLUMNA_USUARIO_USUARIO,Configuracion.COLUMNA_USUARIO_CONTRASE_NA};
+            String[] valorFiltro = {nombre, apPaterno, apMaterno, telefono, correo, usuario,clave};
+
+            resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GESTION_USUARIO, columnasFiltro, valorFiltro, tabla, null, false);
+            Log.v("AGET-ID",idUsuario);
+            if (idUsuario.isEmpty()) {
+                resultado.execute(Configuracion.PETICION_USUARIO_REGISTRO, tipoPeticion);
             } else {
-                resultado.execute(Configuracion.PETICION_DEPARTAMENTO_MODIFICAR_ELIMINAR + ID, tipoPeticion);
+                resultado.execute(Configuracion.PETICION_USUARIO_MODIFICAR_ELIMINAR + idUsuario, tipoPeticion);
+                Log.v("AGET-ID","Editar/eliminar:"+idUsuario);
             }
         }
     }
@@ -282,19 +258,16 @@ public class GestionDepartamento extends AppCompatActivity {
             return;
         }
         // Asignar valores a UI
-        edtNombre.setText(String.valueOf(data.get(0)));
-        edtTelefono.setText(String.valueOf(data.get(1)));
-        edtCorreo.setText(String.valueOf(data.get(2)));
-        edtDireccion.setText(String.valueOf(data.get(3)));
 
-        ID = String.valueOf(data.get(data.size() - 1));
-        if(empresaStatus.equalsIgnoreCase("1")) {
-            txtEstadoEmpresa.setText("Habilitada");
-            fab_usuarios.setVisibility(View.VISIBLE);
-            fab_gps.setVisibility(View.VISIBLE);
-        }else {
-            txtEstadoEmpresa.setText("Deshabilitada");
-        }
+
+        edtNombre.setText(String.valueOf(data.get(0)));
+        edtApPaterno.setText(String.valueOf(data.get(1)));
+        edtApMaterno.setText(String.valueOf(data.get(2)));
+        edtTelefono.setText(String.valueOf(data.get(3)));
+        edtCorreo.setText(String.valueOf(data.get(4)));
+        edtUsuario.setText(String.valueOf(data.get(5)));
+        edtClave.setText(String.valueOf(data.get(6)));
+
         habilitarComponentes(false);
 
         setTitle(String.valueOf(data.get(0)));
@@ -302,17 +275,25 @@ public class GestionDepartamento extends AppCompatActivity {
 
     void habilitarComponentes(Boolean habilitado) {
         edtNombre.setEnabled(habilitado);
+        edtApPaterno.setEnabled(habilitado);
+        edtApMaterno.setEnabled(habilitado);
         edtTelefono.setEnabled(habilitado);
         edtCorreo.setEnabled(habilitado);
-        edtDireccion.setEnabled(habilitado);
+        edtUsuario.setEnabled(habilitado);
+        edtClave.setEnabled(habilitado);
+
+    }
+
+    private void mostrarProgreso(boolean mostrar) {
+        progressBar.setVisibility(mostrar ? View.VISIBLE : View.GONE);
     }
 
     private void preparaEliminacion() {
-        if (idDepartamento != null) {
+        if (idUsuario != null) {
 
             //Datos de busqueda
-            String[] columnasFiltro = {Configuracion.COLUMNA_DEPARTAMENTO_ID};
-            String[] valorFiltro = {idDepartamento};
+            String[] columnasFiltro = {Configuracion.COLUMNA_USUARIO_ID};
+            String[] valorFiltro = {idUsuario};
 
             //Datos a mostrar
             String[] columnasArecuperar = {
@@ -327,11 +308,15 @@ public class GestionDepartamento extends AppCompatActivity {
     }
 
     void regresar() {
-        if (idDepartamento != null) {
+        if (idUsuario != null) {
             edtNombre.setText(String.valueOf(data.get(0)));
-            edtTelefono.setText(String.valueOf(data.get(1)));
-            edtCorreo.setText(String.valueOf(data.get(2)));
-            edtDireccion.setText(String.valueOf(data.get(2)));
+            edtApPaterno.setText(String.valueOf(data.get(1)));
+            edtApMaterno.setText(String.valueOf(data.get(2)));
+            edtTelefono.setText(String.valueOf(data.get(3)));
+            edtCorreo.setText(String.valueOf(data.get(4)));
+            edtUsuario.setText(String.valueOf(data.get(5)));
+            edtClave.setText(String.valueOf(data.get(6)));
+
 
             habilitarComponentes(false);
 
@@ -343,29 +328,6 @@ public class GestionDepartamento extends AppCompatActivity {
         }
     }
 
-    void lanzarGpss() {
-        Intent inten = new Intent(this, GpsEmpresa.class);
-        inten.putExtra(Configuracion.COLUMNA_EMPRESA_ID, idEmpresa);
-        inten.putExtra(Configuracion.COLUMNA_EMPRESA_NOMBRE, empresaNombre);
-        inten.putExtra(Configuracion.COLUMNA_DEPARTAMENTO_ID, idDepartamento);
-        inten.putExtra(Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE, departamentoNombre);
-        startActivity(inten);
-    }
-
-    private void mostrarProgreso(boolean mostrar) {
-        progressBar.setVisibility(mostrar ? View.VISIBLE : View.GONE);
-    }
-
-    void lanzaUsuarios() {
-        Intent inten = new Intent(this, ListaUsuarios.class);
-        inten.putExtra(Configuracion.COLUMNA_EMPRESA_ID, idEmpresa);
-        inten.putExtra(Configuracion.COLUMNA_EMPRESA_NOMBRE, empresaNombre);
-        inten.putExtra(Configuracion.COLUMNA_DEPARTAMENTO_ID, idDepartamento);
-        inten.putExtra(Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE, departamentoNombre);
-        //Departamento
-        // inten.putExtra(Configuracion.COLUMNA_EMPRESA_NOMBRE, empresaNombre);
-        startActivity(inten);
-    }
 
     private void agregarToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

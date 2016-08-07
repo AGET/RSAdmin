@@ -9,6 +9,9 @@
     <string name="titulo_actividad_agregar_gps">Agregar un nuevo GPS</string>
     <string name="titulo_actividad_editar_empresa">Editar empresa</string>
     <string name="titulo_actividad_lista_empresa">Empresas disponibles</string>
+    <string name="titulo_actividad_lista_departamento">Departamentos</string>
+    <string name="titulo_actividad_agregar_departamento">Nuevo Dep</string>
+    <string name="titulo_actividad_lista_usuarios">Usuarios</string>
 
     <string name="titulo_actividad_principal">Bienvenido administrador</string>
 
@@ -55,4 +58,6 @@
     <string name="title_activity_gps_empresa_detalle">GpsEmpresaDetalle</string>
     <string name="title_activity_usuarios_empresa">UsuariosEmpresa</string>
     <string name="title_activity_gestion_departamento">GestionDepartamento</string>
+    <string name="title_activity_lista_departamento">ListaDepartamento</string>
+    <string name="title_activity_lista_usuarios">ListaUsuarios</string>
 </resources>

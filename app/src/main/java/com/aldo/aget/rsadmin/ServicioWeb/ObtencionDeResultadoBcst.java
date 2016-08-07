@@ -119,6 +119,7 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
             stringEntity = new StringEntity(jsonObject.toString());
             stringEntity.setContentType((Header) new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             httppost.setEntity(stringEntity);
+            Log.v("AGET-ver",stringEntity.toString());
             //ejecuta
             response = httpclient.execute(httppost);
         }
@@ -143,6 +144,7 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
 
         //obtiene la respuesta y transorma a objeto JSON
         String jsonResult = new Convertidor().inputStreamToString(response.getEntity().getContent()).toString();
+        Log.v("AGET-CHECAR",jsonResult);
         JSONObject object = new JSONObject(jsonResult);
         Log.i("AGET-JSONResult", jsonResult);
         return object;
@@ -172,12 +174,10 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
                             datos.add(new ArrayList());
                         }
                         enviarBroadcast(true, "Cargado", datos);
-                        Log.v("AGET-ENVIADOS", "true para lista de gps de empresa");
                     }else{
                         enviarBroadcast(false, "Sin datos", datos);
                     }
                    // enviarBroadcast(true, "Cargado", datos);
-
                 }
             } else {
                 Log.v("AGET-ENVIADOS","false mensaje");
@@ -185,7 +185,7 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
             }
         } else {
             enviarBroadcast(false, "Ha ocurrido un error, con los datos", datos);
-            Log.v("AGET-ENVIADOS","false poer error");
+            Log.v("AGET-ENVIADOS","false por error");
         }
     }
 

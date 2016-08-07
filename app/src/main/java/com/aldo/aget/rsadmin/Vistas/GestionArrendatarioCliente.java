@@ -55,7 +55,6 @@ public class GestionArrendatarioCliente extends AppCompatActivity {
 
     String[][] telefonos;
 
-
     private ProgressBar progressBar;
     MenuItem menuOk, menuEditar, menuEliminar;
     ArrayList data, numeros;
@@ -67,6 +66,7 @@ public class GestionArrendatarioCliente extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_empresa_cliente);
         agregarToolbar();
+
         Bundle bundle = getIntent().getExtras();
         idEmpresa = bundle.getString(Configuracion.COLUMNA_EMPRESA_ID);
 
@@ -76,7 +76,7 @@ public class GestionArrendatarioCliente extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                lanzaUsuarios();
+                mostrarListaDepartamentos();
             }
         });
 //        fab_gps = (FloatingActionButton) findViewById(R.id.fab_dispositivos_gps);
@@ -205,7 +205,7 @@ public class GestionArrendatarioCliente extends AppCompatActivity {
                     return;
                 }
 
-                Snackbar.make(findViewById(R.id.xmlactivity_empresa_cliente),
+                Snackbar.make(findViewById(R.id.xml_activity_empresa_cliente),
                         mensaje, Snackbar.LENGTH_SHORT).show();
                 mostrarProgreso(false);
             }
@@ -405,7 +405,17 @@ public class GestionArrendatarioCliente extends AppCompatActivity {
 //            fab_usuarios.setVisibility(View.VISIBLE);
 //            fab_gps.setVisibility(View.VISIBLE);
 //        }
+        if(String.valueOf(data.get(3)).equalsIgnoreCase("0")){
+            estado = "0";
+            spinner.setSelection(1);
+        }else{
+            estado = "1";
+            spinner.setSelection(0);
+        }
         ID = String.valueOf(data.get(data.size() - 1));
+
+        Log.v("AGET:borrar",ID +"+"+idEmpresa);
+
 
         habilitarComponentes(false);
 
@@ -449,10 +459,16 @@ public class GestionArrendatarioCliente extends AppCompatActivity {
         startActivity(inten);
     }
 
-    void lanzaUsuarios() {
-        Intent inten = new Intent(this, ClientesEmpresa.class);
-        inten.putExtra(Configuracion.COLUMNA_EMPRESA_ID, idEmpresa);
-        inten.putExtra(Configuracion.COLUMNA_EMPRESA_NOMBRE, edtNombre.getText().toString());
-        startActivity(inten);
+    void mostrarListaDepartamentos() {
+        if (estado.equalsIgnoreCase("1")) {
+            Intent inten = new Intent(this, ListaDepartamento.class);
+            inten.putExtra(Configuracion.COLUMNA_EMPRESA_ID, idEmpresa);
+            inten.putExtra(Configuracion.COLUMNA_EMPRESA_NOMBRE, edtNombre.getText().toString());
+            inten.putExtra(Configuracion.COLUMNA_EMPRESA_STATUS, estado);
+            startActivity(inten);
+        }else{
+            Snackbar.make(findViewById(R.id.xml_activity_empresa_cliente), "Empresa deshabilita, no es posible ir a departamnetos", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 }

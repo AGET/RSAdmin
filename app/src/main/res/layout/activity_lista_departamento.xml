@@ -2,11 +2,12 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/xml_gestion_departamento"
+    android:id="@+id/xml_lista_departamento"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.aldo.aget.rsadmin.Vistas.GestionDepartamento">
+    tools:context="com.aldo.aget.rsadmin.Vistas.ListaDepartamento">
+
 
 
     <android.support.design.widget.AppBarLayout
@@ -33,23 +34,13 @@
         android:indeterminate="true" />
 
 
-    <include layout="@layout/content_gestion_departamento" />
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_dispositivos_gps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/icono_gps" />
+    <include layout="@layout/content_lista_departamento" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_usuarios"
+        android:id="@+id/nuevo_departamento"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
+        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/icono_usuarios" />
-
+        android:src="@android:drawable/ic_menu_add" />
 </android.support.design.widget.CoordinatorLayout>
