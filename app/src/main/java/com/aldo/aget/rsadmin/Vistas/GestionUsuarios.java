@@ -560,36 +560,12 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         nombre = (String) ((ArrayList) datos.get(position)).get(4);
         Log.v("AGET-Enviado", marcado + "+" + nombre);
         Toast.makeText(GestionUsuarios.this, marcado + "+" + nombre, Toast.LENGTH_SHORT).show();
-//        AlertDialog mostrar = dialogo((String) ((ArrayList) datos.get(position)).get(0));
-  //      mostrar.show();
+
         idGpsSeleccionadoAEliminar = (String) ((ArrayList) datos.get(position)).get(0);
         // En algún lugar de tu actividad
         new DialogoConfirmacion().show(getSupportFragmentManager(), "SimpleDialog");
     }
 
-    public AlertDialog dialogo(final String idGpsADesvincular){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Desea quitar el GPS a el usuario? ")
-                .setMessage("El Mensaje para el usuario")
-                .setPositiveButton("Desvincular GPS",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //listener.onPossitiveButtonClick();
-                                desvincularGps(idGpsADesvincular);
-                            }
-                        })
-                .setNegativeButton("CANCELAR",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //listener.onNegativeButtonClick();
-                            }
-                        });
-
-        return builder.create();
-    }
     public void desvincularGps(String idGpsADesvincular){
         Log.v("AGET_Desvincular", idGpsADesvincular);
     }
