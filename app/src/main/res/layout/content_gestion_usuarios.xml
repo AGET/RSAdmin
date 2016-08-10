@@ -24,11 +24,11 @@
         />
     <android.support.design.widget.TextInputLayout
         android:id="@+id/mcr_edt_nombre_usuario"
-        android:layout_width="wrap_content"
+        android:layout_width="95dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
         app:hintTextAppearance="@style/Hint"
-        android:layout_marginLeft="60dp">
+        android:layout_marginLeft="40dp">
         <EditText
             android:id="@+id/edt_nombre_usuario"
             android:layout_width="wrap_content"
@@ -40,24 +40,15 @@
             android:layout_centerHorizontal="true" />
     </android.support.design.widget.TextInputLayout>
 
-    <!--<ImageView
-        android:id="@+id/icono_apellido_paterno"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icono_cuenta"
-        android:layout_alignBottom="@+id/mcr_edt_apellido_paterno"
-        android:layout_marginBottom="10dp"
-        />-->
     <android.support.design.widget.TextInputLayout
         android:id="@+id/mcr_edt_apellido_paterno"
-        android:layout_width="wrap_content"
+        android:layout_width="95dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/mcr_edt_nombre_usuario"
         app:hintTextAppearance="@style/Hint"
         android:layout_marginLeft="0dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignBottom="@+id/mcr_edt_apellido_materno">
+        android:layout_toRightOf="@+id/mcr_edt_nombre_usuario"
+        android:layout_alignBottom="@+id/mcr_edt_nombre_usuario">
         <EditText
             android:id="@+id/edt_apellido_paterno"
             android:layout_width="wrap_content"
@@ -83,10 +74,11 @@
         />-->
     <android.support.design.widget.TextInputLayout
         android:id="@+id/mcr_edt_apellido_materno"
-        android:layout_width="wrap_content"
+        android:layout_width="95dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/mcr_edt_nombre_usuario"
+        android:layout_toRightOf="@+id/mcr_edt_apellido_paterno"
+        android:layout_alignBottom="@+id/mcr_edt_apellido_paterno"
         app:hintTextAppearance="@style/Hint"
         android:layout_alignParentRight="true">
         <EditText
@@ -116,7 +108,7 @@
         android:layout_marginTop="5dp"
         android:layout_below="@+id/mcr_edt_apellido_materno"
         app:hintTextAppearance="@style/Hint"
-        android:layout_marginLeft="60dp">
+        android:layout_marginLeft="40dp">
         <EditText
             android:id="@+id/edt_telefono_usuario"
             android:layout_width="wrap_content"
@@ -144,7 +136,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/mcr_edt_telefono_usuario"
         app:hintTextAppearance="@style/Hint"
-        android:layout_marginLeft="60dp">
+        android:layout_marginLeft="40dp">
         <EditText
             android:id="@+id/edt_correo_usuario"
             android:layout_width="wrap_content"
@@ -173,7 +165,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/mcr_edt_correo_usuario"
         app:hintTextAppearance="@style/Hint"
-        android:layout_marginLeft="60dp">
+        android:layout_marginLeft="40dp">
         <EditText
             android:id="@+id/edt_usuario"
             android:layout_width="wrap_content"
@@ -202,7 +194,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/mcr_edt_usuario"
         app:hintTextAppearance="@style/Hint"
-        android:layout_marginLeft="60dp">
+        android:layout_marginLeft="40dp">
         <EditText
             android:id="@+id/edt_pass_usuario"
             android:layout_width="wrap_content"
@@ -213,5 +205,13 @@
             android:inputType="textPassword"
             />
     </android.support.design.widget.TextInputLayout>
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner_gps"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/mcr_edt_pass_usuario">
+    </android.support.v7.widget.AppCompatSpinner>
 
 </RelativeLayout>

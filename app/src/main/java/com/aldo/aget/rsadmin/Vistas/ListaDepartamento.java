@@ -83,8 +83,9 @@ public class ListaDepartamento extends AppCompatActivity implements AdapterView.
         mostrarProgreso(true);
 //        new ObtenerAsincrono(ListaDepartamento.this, Configuracion.INTENT_LISTA_DEPARTAMENTO,tabla,columnas)
 //                .execute(peticionlistarEmpresaCliente);
+        Log.v("AGET-VALOR",""+valorFiltro[0]);
         resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_LISTA_DEPARTAMENTO, columnasFiltro, valorFiltro, tabla, columnas, true);
-        resultado.execute(Configuracion.PETICION_DEPARTAMENTO_LISTAR_VARIOS, tipoPeticion);
+        resultado.execute(Configuracion.PETICION_DEPARTAMENTO_LISTAR_DE_EMPRESA, tipoPeticion);
 
         ManejadorScroll.Action desplazamiento = new ManejadorScroll.Action() {
 
@@ -215,7 +216,11 @@ public class ListaDepartamento extends AppCompatActivity implements AdapterView.
 
     void mostrarGestionDepartamento(String id, String nombre) {
         Intent actividad = new Intent(this, GestionDepartamento.class);
-        actividad.putExtra(Configuracion.COLUMNA_DEPARTAMENTO_ID, id);
+        Log.v("AGET-VALOR",idEmpresa);
+        if(id != null) {
+            actividad.putExtra(Configuracion.COLUMNA_DEPARTAMENTO_ID, id);
+            Log.v("AGET-VALOR",id);
+        }
         actividad.putExtra(Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE, nombre);
         actividad.putExtra(Configuracion.COLUMNA_EMPRESA_ID, idEmpresa);
         actividad.putExtra(Configuracion.COLUMNA_EMPRESA_NOMBRE, empresaNombre);

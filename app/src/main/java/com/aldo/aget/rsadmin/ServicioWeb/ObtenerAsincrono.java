@@ -65,9 +65,9 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
         } else if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.INTENT_LISTA_GPS)) {
             Log.v("AGET-COMPRARADA", "Intent de lista gps");
             intent = Configuracion.INTENT_LISTA_GPS;
-        } else if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.INTENT_GPS_EMPRESA)) {
-            Log.v("AGET-COMPRARADA", "Intent de spinner gps empresa");
-            intent = Configuracion.INTENT_GPS_EMPRESA;
+        } else if (String.valueOf(context.getClass().getName()).equalsIgnoreCase(Configuracion.INTENT_GPS_DEPARTAMENTO)) {
+            Log.v("AGET-COMPRARADA", "Intent de spinner gps departamento");
+            intent = Configuracion.INTENT_GPS_DEPARTAMENTO;
         } else if (Configuracion.INTENT_LISTA_EMPRESA == receptor) {
             intent = Configuracion.INTENT_LISTA_EMPRESA;
         } else if (Configuracion.INTENT_LISTA_GPS == receptor) {

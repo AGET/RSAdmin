@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class GestionDepartamento extends AppCompatActivity {
 
     FloatingActionButton fab_usuarios, fab_gps;
-    String idEmpresa = "", empresaNombre = "",empresaStatus = "",idDepartamento = "",departamentoNombre = "";
+    String idEmpresa, empresaNombre,empresaStatus,idDepartamento,departamentoNombre;
 
     EditText edtNombre;
     EditText edtTelefono;
@@ -62,11 +62,11 @@ public class GestionDepartamento extends AppCompatActivity {
         setContentView(R.layout.activity_gestion_departamento);
         agregarToolbar();
         Bundle bundle = getIntent().getExtras();
-        idDepartamento = (String) bundle.getString(Configuracion.COLUMNA_DEPARTAMENTO_ID);
-        departamentoNombre  = (String) bundle.getString(Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE);
+        idDepartamento =  bundle.getString(Configuracion.COLUMNA_DEPARTAMENTO_ID);
+        departamentoNombre  = bundle.getString(Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE);
         idEmpresa  = (String) bundle.getString(Configuracion.COLUMNA_EMPRESA_ID);
-        empresaNombre  = (String) bundle.getString(Configuracion.COLUMNA_EMPRESA_NOMBRE);
-        empresaStatus  = (String) bundle.getString(Configuracion.COLUMNA_EMPRESA_STATUS);
+        empresaNombre  = bundle.getString(Configuracion.COLUMNA_EMPRESA_NOMBRE);
+        empresaStatus  = bundle.getString(Configuracion.COLUMNA_EMPRESA_STATUS);
 
         edtNombre = (EditText) findViewById(R.id.edt_nombre_departamento);
         edtTelefono = (EditText) findViewById(R.id.edt_telefono_departamento);
@@ -261,10 +261,10 @@ public class GestionDepartamento extends AppCompatActivity {
         } else {
             mostrarProgreso(true);
             String[] columnasFiltro = {Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE, Configuracion.COLUMNA_DEPARTAMENTO_TELEFONO
-                    , Configuracion.COLUMNA_DEPARTAMENTO_CORREO, Configuracion.COLUMNA_DEPARTAMENTO_DIRECCION};
-            String[] valorFiltro = {nombre, telefono, correo, direccion};
+                    , Configuracion.COLUMNA_DEPARTAMENTO_CORREO, Configuracion.COLUMNA_DEPARTAMENTO_DIRECCION,Configuracion.COLUMNA_DEPARTAMENTO_EMPRESA_ID};
+            String[] valorFiltro = {nombre, telefono, correo, direccion,idEmpresa};
             resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GESTION_DEPARTAMENTO, columnasFiltro, valorFiltro, tabla, null, false);
-            if (idDepartamento.isEmpty()) {
+            if (idDepartamento == null) {
                 resultado.execute(Configuracion.PETICION_DEPARTAMENTO_REGISTRO, tipoPeticion);
             } else {
                 resultado.execute(Configuracion.PETICION_DEPARTAMENTO_MODIFICAR_ELIMINAR + ID, tipoPeticion);

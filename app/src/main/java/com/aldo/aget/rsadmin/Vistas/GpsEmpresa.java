@@ -100,10 +100,10 @@ public class GpsEmpresa extends AppCompatActivity implements AdapterView.OnItemC
                         Log.v("AGET-DESCRIPCION", descripcion);
 
                         mostrarProgreso(true);
-                        String[] columnasFiltro = {Configuracion.COLUMNA_GPS_NUMERO, Configuracion.COLUMNA_GPS_DESCRIPCION, Configuracion.COLUMNA_GPS_EMPRESA};
+                        String[] columnasFiltro = {Configuracion.COLUMNA_GPS_NUMERO, Configuracion.COLUMNA_GPS_DESCRIPCION, Configuracion.COLUMNA_GPS_DEPARTAMENTO};
                         String[] valorFiltro = {numero, descripcion, idEmpresa};
                         tipoPeticion = "put";
-                        new ObtencionDeResultadoBcst(GpsEmpresa.this,Configuracion.INTENT_GPS_EMPRESA, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, null, false).execute(Configuracion.PETICION_GPS_MODIFICAR_ELIMINAR
+                        new ObtencionDeResultadoBcst(GpsEmpresa.this,Configuracion.INTENT_GPS_DEPARTAMENTO, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, null, false).execute(Configuracion.PETICION_GPS_MODIFICAR_ELIMINAR
                                 + imei, tipoPeticion);
 
                         spinner.setSelection(adaptadorSpinner.getCount());
@@ -118,7 +118,7 @@ public class GpsEmpresa extends AppCompatActivity implements AdapterView.OnItemC
         });
 
         mostrarProgreso(true);
-        new ObtenerAsincrono(GpsEmpresa.this,Configuracion.INTENT_GPS_EMPRESA, Configuracion.TABLA_GPS, columnas)
+        new ObtenerAsincrono(GpsEmpresa.this,Configuracion.INTENT_GPS_DEPARTAMENTO, Configuracion.TABLA_GPS, columnas)
                 .execute(peticionListarGpsLibres);
 
         //Datos de busqueda
@@ -130,10 +130,10 @@ public class GpsEmpresa extends AppCompatActivity implements AdapterView.OnItemC
                 Configuracion.COLUMNA_GPS_IMEI,
                 Configuracion.COLUMNA_GPS_NUMERO,
                 Configuracion.COLUMNA_GPS_DESCRIPCION,
-                Configuracion.COLUMNA_GPS_EMPRESA};
+                Configuracion.COLUMNA_GPS_DEPARTAMENTO};
 
-        new ObtencionDeResultadoBcst(GpsEmpresa.this,Configuracion.INTENT_GPS_EMPRESA, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, columnasArecuperar, true)
-                .execute(Configuracion.PETICION_GPS_LISTAR_EMPRESA, tipoPeticion);
+        new ObtencionDeResultadoBcst(GpsEmpresa.this,Configuracion.INTENT_GPS_DEPARTAMENTO, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, columnasArecuperar, true)
+                .execute(Configuracion.PETICION_GPS_LISTAR_DEPARTAMENTO, tipoPeticion);
 
         receptorMensajeGps = new BroadcastReceiver() {
 
@@ -170,7 +170,7 @@ public class GpsEmpresa extends AppCompatActivity implements AdapterView.OnItemC
 
                     if (mensaje.equalsIgnoreCase("Registro actualizado correctamente")) {
                         mostrarProgreso(true);
-                        new ObtenerAsincrono(GpsEmpresa.this,Configuracion.INTENT_GPS_EMPRESA, Configuracion.TABLA_GPS, columnas)
+                        new ObtenerAsincrono(GpsEmpresa.this,Configuracion.INTENT_GPS_DEPARTAMENTO, Configuracion.TABLA_GPS, columnas)
                                 .execute(peticionListarGpsLibres);
 
                         String[] columnasFiltro = {Configuracion.COLUMNA_EMPRESA_ID};
@@ -180,10 +180,11 @@ public class GpsEmpresa extends AppCompatActivity implements AdapterView.OnItemC
                                 Configuracion.COLUMNA_GPS_IMEI,
                                 Configuracion.COLUMNA_GPS_NUMERO,
                                 Configuracion.COLUMNA_GPS_DESCRIPCION,
-                                Configuracion.COLUMNA_GPS_EMPRESA};
+                                Configuracion.COLUMNA_GPS_DEPARTAMENTO
+                        };
                         tipoPeticion = "post";
-                        new ObtencionDeResultadoBcst(GpsEmpresa.this,Configuracion.INTENT_GPS_EMPRESA, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, columnasArecuperar, true)
-                                .execute(Configuracion.PETICION_GPS_LISTAR_EMPRESA, tipoPeticion);
+                        new ObtencionDeResultadoBcst(GpsEmpresa.this,Configuracion.INTENT_GPS_DEPARTAMENTO, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, columnasArecuperar, true)
+                                .execute(Configuracion.PETICION_GPS_LISTAR_DEPARTAMENTO, tipoPeticion);
 
                         Snackbar.make(findViewById(R.id.xml_activity_gps_empresa),
                                 "Se ha guuardado", Snackbar.LENGTH_SHORT).show();
@@ -197,7 +198,7 @@ public class GpsEmpresa extends AppCompatActivity implements AdapterView.OnItemC
     protected void onResume() {
         super.onResume();
         // Registrar receptor
-        IntentFilter filtroSync = new IntentFilter(Configuracion.INTENT_GPS_EMPRESA);
+        IntentFilter filtroSync = new IntentFilter(Configuracion.INTENT_GPS_DEPARTAMENTO);
         LocalBroadcastManager.getInstance(this).registerReceiver(receptorMensajeGps, filtroSync);
 
         IntentFilter filtroSyncGpsAgregados = new IntentFilter(Configuracion.INTENT_GPS_EMPRESA_AGREGADOS);

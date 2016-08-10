@@ -87,7 +87,7 @@ public class Gps extends AppCompatActivity {
                 Configuracion.COLUMNA_GPS_IMEI,
                 Configuracion.COLUMNA_GPS_NUMERO,
                 Configuracion.COLUMNA_GPS_DESCRIPCION,
-                Configuracion.COLUMNA_GPS_EMPRESA};
+                Configuracion.COLUMNA_GPS_DEPARTAMENTO};
 
         if (idGps != null) {
             mostrarProgreso(true);
@@ -238,7 +238,7 @@ public class Gps extends AppCompatActivity {
         } else {
             mostrarProgreso(true);
             String[] columnasFiltro = {Configuracion.COLUMNA_GPS_IMEI, Configuracion.COLUMNA_GPS_NUMERO
-                    , Configuracion.COLUMNA_GPS_DESCRIPCION, Configuracion.COLUMNA_GPS_EMPRESA};
+                    , Configuracion.COLUMNA_GPS_DESCRIPCION, Configuracion.COLUMNA_GPS_DEPARTAMENTO};
             String[] valorFiltro = {imei, telefono, descripcion, empresaPerteneciente};
             resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GPS, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, null, false);
             if (ID.isEmpty()) {

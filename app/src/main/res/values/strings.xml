@@ -10,7 +10,7 @@
     <string name="titulo_actividad_editar_empresa">Editar empresa</string>
     <string name="titulo_actividad_lista_empresa">Empresas disponibles</string>
     <string name="titulo_actividad_lista_departamento">Departamentos</string>
-    <string name="titulo_actividad_agregar_departamento">Nuevo Dep</string>
+    <string name="titulo_actividad_agregar_departamento">Nuevo Departamento</string>
     <string name="titulo_actividad_lista_usuarios">Usuarios</string>
 
     <string name="titulo_actividad_principal">Bienvenido administrador</string>

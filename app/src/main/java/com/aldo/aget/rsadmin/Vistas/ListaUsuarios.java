@@ -82,8 +82,9 @@ public class ListaUsuarios extends AppCompatActivity implements AdapterView.OnIt
         progressBar = (ProgressBar) findViewById(R.id.barra);
 
         mostrarProgreso(true);
+        Log.v("AGET-VALOR",""+valorFiltro[0]);
         resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_LISTA_USUARIOS, columnasFiltro, valorFiltro, tabla, columnas, true);
-        resultado.execute(Configuracion.PETICION_USUARIO_LISTAR_VARIOS, tipoPeticion);
+        resultado.execute(Configuracion.PETICION_USUARIO_LISTAR_USUARIO_DEPARTAMENTO, tipoPeticion);
 
         ManejadorScroll.Action desplazamiento = new ManejadorScroll.Action() {
 

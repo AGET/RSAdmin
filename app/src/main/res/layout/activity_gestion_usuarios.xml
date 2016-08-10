@@ -31,6 +31,8 @@
         android:indeterminate="true" />
 
     <include layout="@layout/content_gestion_usuarios" />
+    <!-- Bottom Sheet -->
+    <include layout="@layout/buttom_sheet_gps_de_usuario" />
 
     <!--<android.support.design.widget.FloatingActionButton-->
         <!--android:id="@+id/fab"-->

@@ -462,6 +462,7 @@ public class GestionArrendatarioCliente extends AppCompatActivity {
     void mostrarListaDepartamentos() {
         if (estado.equalsIgnoreCase("1")) {
             Intent inten = new Intent(this, ListaDepartamento.class);
+            Log.v("AGET-VALOR",idEmpresa);
             inten.putExtra(Configuracion.COLUMNA_EMPRESA_ID, idEmpresa);
             inten.putExtra(Configuracion.COLUMNA_EMPRESA_NOMBRE, edtNombre.getText().toString());
             inten.putExtra(Configuracion.COLUMNA_EMPRESA_STATUS, estado);
