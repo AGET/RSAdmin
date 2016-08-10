@@ -119,33 +119,6 @@ public class Configuracion extends Activity {
     public static final String COLUMNA_ENLACE_USUARIO = "usuario_id";
     public static final String COLUMNA_ENLACE_GPS = "gps_id";
 
-/*    AGET-0: posicion0
-    adaptadorSpinner1
-    contadordatosSpinner12
-    contadordatosSpinner22
-
-    AGET-0: posicion0
-    adaptadorSpinner1
-    contadordatosSpinner12
-    contadordatosSpinner22
-
-    SPINNER-GPSS: 2
-    AGET-SPINNER-ITEMS: 3
-    AGET-SPINNER-POSICION: 0
-    AGET-SPINNER-ADAPTADOR: 1
-    AGET-NUMERO: 812124402588233
-    AGET-DESCRIPCION: 1-980-983-6980
-
-    -SPINNER-GPSS: 2
-    AGET-SPINNER-ITEMS: 3
-    AGET-SPINNER-POSICION: 0
-    AGET-SPINNER-ADAPTADOR: 1
-    AGET-NUMERO: 812124402588233
-    AGET-DESCRIPCION: 1-980-983-6980
-    */
-
-
-
     //Broadcast
     public static final String INTENT_LISTA_EMPRESA = "com.aldo.aget.rsadmin.Vistas.ListaEmpresa";
     public static final String INTENT_LISTA_EMPRESAHABILITADA = "com.aldo.aget.rsadmin.Vistas.ListaEmpresaHabilitada";
@@ -170,15 +143,8 @@ public class Configuracion extends Activity {
     public static final String INTENT_GESTION_USUARIO_LISTA_GPS_DISPONIBLE = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Lista.Gps.Disponible";
 
 
-
     //RECEPTORES GPS
     public static final String INTENT_GPS= "com.aldo.aget.rsadmin.Vistas.Gps";
-
-
-
-
-
-
 
     public static final String INTENT_GPS_DEPARTAMENTO = "com.aldo.aget.rsadmin.Vistas.GpsDepartamento";
     public static final String INTENT_GPS_EMPRESA_AGREGADOS = "com.aldo.aget.rsadmin.Vistas.GpsEmpresa_Agregados";

@@ -1,19 +1,14 @@
 package com.aldo.aget.rsadmin.Vistas;
 
-import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
@@ -27,18 +22,15 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.Configuracion.Utilidades;
 import com.aldo.aget.rsadmin.R;
 import com.aldo.aget.rsadmin.ServicioWeb.ObtencionDeResultadoBcst;
-import com.aldo.aget.rsadmin.ServicioWeb.ObtenerAsincrono;
 
 import java.util.ArrayList;
 import com.aldo.aget.rsadmin.Vistas.DialogoConfirmacion.*;
-//AppCompatActivity
 public class GestionUsuarios extends AppCompatActivity implements AdapterView.OnItemClickListener,
         OnConfirmacionDialogListener {
 
@@ -125,10 +117,10 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
                         || datosSpinner == null) {
                 } else {
                     Toast.makeText(GestionUsuarios.this, spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-                    Log.v("AGET-SPINNER-GPSS", "" + ((ArrayList) datosSpinner).size());
-                    Log.v("AGET-SPINNER-ITEMS", "" + ((ArrayList) datosSpinner.get(0)).size());
-                    Log.v("AGET-SPINNER-POSICION", "" + position);
-                    Log.v("AGET-SPINNER-ADAPTADOR", "" + adaptadorSpinner.getCount());
+//                    Log.v("AGET-SPINNER-GPSS", "" + ((ArrayList) datosSpinner).size());
+//                    Log.v("AGET-SPINNER-ITEMS", "" + ((ArrayList) datosSpinner.get(0)).size());
+//                    Log.v("AGET-SPINNER-POSICION", "" + position);
+//                    Log.v("AGET-SPINNER-ADAPTADOR", "" + adaptadorSpinner.getCount());
 
                     if (adaptadorSpinner.getCount() == position) {
 
@@ -136,17 +128,11 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
                         idGps = (String) ((ArrayList) datosSpinner.get(position)).get(0);
                         numero = (String) ((ArrayList) datosSpinner.get(position)).get(1);
                         descripcion = (String) ((ArrayList) datosSpinner.get(position)).get(2);
-                        //descripcion = (String) ((ArrayList) datosSpinner.get(position)).get(2);
 
-                        //marcado = (String) ((ArrayList) datosSpinner.get(position)).get(0) + "-" + (String) ((ArrayList) datosSpinner.get(position)).get(1) + "-" + (String) ((ArrayList) datosSpinner.get(position)).get(2);
                         Log.v("AGET-Enviado", marcado);
                         Log.v("AGET-NUMERO", numero);
                         Log.v("AGET-DESCRIPCION", descripcion);
 
-                        Log.v("AGET-0","posicion"+position);
-                        Log.v("AGET-1","adaptadorSpinner"+adaptadorSpinner.getCount());
-                        Log.v("AGET-2","contadordatosSpinner1"+((ArrayList) datosSpinner).size());
-                        Log.v("AGET-3","contadordatosSpinner2"+datosSpinner.size());
                         mostrarProgreso(true);
                         tipoPeticion = "post";
                         if (!vacio) {
@@ -227,8 +213,8 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
                     return;
                 }
 
-//                Snackbar.make(findViewById(R.id.xml_gestion_usuarios),
-//                        mensaje, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.xml_gestion_usuarios),
+                        mensaje, Snackbar.LENGTH_SHORT).show();
                 mostrarProgreso(false);
             }
         };
@@ -244,9 +230,6 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
                 if (reultado) {
                     actualizar(intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST));
                 }
-
-//                Snackbar.make(findViewById(R.id.xml_gestion_usuarios),
-//                        mensaje, Snackbar.LENGTH_SHORT).show();
             }
         };
 
@@ -254,7 +237,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.v("AGET", "BROAD RECIBIDO GPS LIBRES");
+                Log.v("AGET", "BROADRECIBIDO GTN-Usuarios GPS LIBRES");
                 if (datosRecibidos) {
                     mostrarProgreso(false);
                 } else {
@@ -280,7 +263,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.v("AGET", "BROAD RECIBIDO GPS LIBRES");
+                Log.v("AGET", "BROAD RECIBIDO GTN-Usuarios GPS LIBRES");
                 if (datosRecibidos) {
                     mostrarProgreso(false);
                 } else {
@@ -320,14 +303,9 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         IntentFilter filtroSpinnerSeleccionado = new IntentFilter(Configuracion.INTENT_GESTION_USUARIO_REGISTRO_ENLACE);
         LocalBroadcastManager.getInstance(this).registerReceiver(receptorAsignadoDeSpinner, filtroSpinnerSeleccionado);
 
-        //IntentFilter filtroTelefonos = new IntentFilter(Configuracion.INTENT_EMPRESA_CLIENTE_ENLACE_TELEFONOS_ENLAZADOS);
-
-
         if (Configuracion.cambio) {
             mostrarProgreso(true);
             Configuracion.cambio = false;
-//            new ObtenerAsincrono(GestionUsuarios.this, Configuracion.INTENT_GESTION_USUARIO_LISTA, tablaLista, columnasLista)
-//                    .execute(Configuracion.PETICION_USUARIO_LISTAR_GPS);
             peticionLista();
         }
     }
@@ -419,7 +397,6 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         //Lista
         new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GESTION_USUARIO_LISTA, columnasFiltroLista, valorFiltro, tablaLista, columnasLista, true)
                 .execute(Configuracion.PETICION_USUARIO_LISTAR_GPS, tipoPeticion);
-
     }
 
     public void peticionSpinner(){
@@ -480,8 +457,6 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         if (data.size() < 0) {
             return;
         }
-        // Asignar valores a UI
-
 
         edtNombre.setText(String.valueOf(data.get(0)));
         edtApPaterno.setText(String.valueOf(data.get(1)));
