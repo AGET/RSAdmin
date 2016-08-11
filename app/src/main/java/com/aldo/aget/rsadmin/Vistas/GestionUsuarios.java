@@ -55,7 +55,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
     //Datos de lista
     final static String tablaLista = Configuracion.TABLA_USUARIOS;
     final static String columnasLista[] = {Configuracion.COLUMNA_USUARIO_ID, Configuracion.COLUMNA_USUARIO_NOMBRE,
-            Configuracion.COLUMNA_GPS_IMEI, Configuracion.COLUMNA_GPS_NUMERO, Configuracion.COLUMNA_GPS_DESCRIPCION,
+            Configuracion.COLUMNA_GPS_ID, Configuracion.COLUMNA_GPS_IMEI, Configuracion.COLUMNA_GPS_NUMERO, Configuracion.COLUMNA_GPS_DESCRIPCION,
             Configuracion.COLUMNA_GPS_DEPARTAMENTO};
     final static String columnasFiltroLista[] = {Configuracion.COLUMNA_USUARIO_ID};
 
@@ -531,14 +531,14 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         String nombre;
         Snackbar.make(view, "Ha marcado el item " + position + " " + marcado, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
-        marcado = (String) ((ArrayList) datos.get(position)).get(2);
-        nombre = (String) ((ArrayList) datos.get(position)).get(4);
+        marcado = (String) ((ArrayList) datos.get(position)).get(3);
+        nombre = (String) ((ArrayList) datos.get(position)).get(5);
         Log.v("AGET-Enviado", marcado + "+" + nombre);
         Toast.makeText(GestionUsuarios.this, marcado + "+" + nombre, Toast.LENGTH_SHORT).show();
 
-        idGpsSeleccionadoAEliminar = (String) ((ArrayList) datos.get(position)).get(0);
+        idGpsSeleccionadoAEliminar = (String) ((ArrayList) datos.get(position)).get(2);
         // En algún lugar de tu actividad
-        new DialogoConfirmacion().show(getSupportFragmentManager(), "SimpleDialog");
+        new DialogoConfirmacion("Desvincular","Desea quitar este dispositivo a el usuario?","Desvincular","Cancelar").show(getSupportFragmentManager(), "SimpleDialog");
     }
 
     public void desvincularGps(String idGpsADesvincular){
@@ -553,7 +553,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         for (int i = 0; i < datos.size() - 1; i++) {
             Log.v("AGET-include:", "" + i);
             Log.v("AGET-valor:", "" + (String) ((ArrayList) datos.get(i)).get(0));
-            nombres.add((String) "   " + ((ArrayList) datos.get(i)).get(3) + " || " + ((ArrayList) datos.get(i)).get(4));
+            nombres.add((String) "   " + ((ArrayList) datos.get(i)).get(5) + " || " + ((ArrayList) datos.get(i)).get(6));
         }
 
         adaptador = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, nombres);
@@ -564,7 +564,6 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         //adaptador.insert(grupo, 0);
         adaptador.notifyDataSetChanged();
     }
-
     //FinLista
 
     void regresar() {

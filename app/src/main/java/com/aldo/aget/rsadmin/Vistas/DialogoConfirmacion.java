@@ -1,5 +1,6 @@
 package com.aldo.aget.rsadmin.Vistas;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -12,10 +13,15 @@ import android.support.v7.app.AlertDialog;
  * Created by Work on 09/08/16.
  */
 
+@SuppressLint("ValidFragment")
 public class DialogoConfirmacion extends DialogFragment {
-String idAEliminar;
-    public DialogoConfirmacion() {
-
+String titulo, mensaje,aceptar,cancelar;
+    @SuppressLint("ValidFragment")
+    public DialogoConfirmacion(String titulo, String mensaje,String aceptar, String cancelar) {
+        this.titulo = titulo;
+        this.mensaje = mensaje;
+        this.aceptar = aceptar;
+        this.cancelar = cancelar;
     }
 
     public interface OnConfirmacionDialogListener {
@@ -33,22 +39,21 @@ String idAEliminar;
     }
 
     /**
-     * Crea un diálogo de alerta sencillo
      * @return Nuevo diálogo
      */
     public AlertDialog createSimpleDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle("Titulo")
-                .setMessage("El Mensaje para el usuario")
-                .setPositiveButton("OK",
+        builder.setTitle(titulo)
+                .setMessage(mensaje)
+                .setPositiveButton(aceptar,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 listener.onPossitiveButtonClick();
                             }
                         })
-                .setNegativeButton("CANCELAR",
+                .setNegativeButton(cancelar,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
