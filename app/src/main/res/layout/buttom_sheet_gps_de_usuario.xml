@@ -11,12 +11,24 @@
     app:behavior_peekHeight="58dp" >
     <!--app:behavior_hideable="true"-->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-        android:padding="16dp"
-        android:text="GPS enlazados" />
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="54dp">
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/img_btn_arrow"
+            android:background="@drawable/arrow_up" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:padding="10dp"
+            android:text="GPS enlazados" />
+
+    </TableRow>
 
     <ListView
         android:id="@+id/lista_gps_de_usuario"

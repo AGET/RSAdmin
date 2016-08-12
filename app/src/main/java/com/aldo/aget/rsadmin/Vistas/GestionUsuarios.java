@@ -4,13 +4,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,6 +33,8 @@ import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.Configuracion.Utilidades;
 import com.aldo.aget.rsadmin.R;
 import com.aldo.aget.rsadmin.ServicioWeb.ObtencionDeResultadoBcst;
+import android.widget.LinearLayout;
+
 
 import java.util.ArrayList;
 import com.aldo.aget.rsadmin.Vistas.DialogoConfirmacion.*;
@@ -54,7 +61,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
 
     //Datos de lista
     final static String tablaLista = Configuracion.TABLA_USUARIOS;
-    final static String columnasLista[] = {Configuracion.COLUMNA_USUARIO_ID, Configuracion.COLUMNA_USUARIO_NOMBRE,
+    final static String columnasLista[] = {Configuracion.COLUMNA_ENLACE_ID,Configuracion.COLUMNA_USUARIO_ID, Configuracion.COLUMNA_USUARIO_NOMBRE,
             Configuracion.COLUMNA_GPS_ID, Configuracion.COLUMNA_GPS_IMEI, Configuracion.COLUMNA_GPS_NUMERO, Configuracion.COLUMNA_GPS_DESCRIPCION,
             Configuracion.COLUMNA_GPS_DEPARTAMENTO};
     final static String columnasFiltroLista[] = {Configuracion.COLUMNA_USUARIO_ID};
@@ -62,7 +69,10 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
     ListView lista;
     ArrayAdapter adaptador;
     ArrayList datos;
-    BroadcastReceiver receptorLista;
+    BroadcastReceiver receptorLista, receptorListaGpsDesvinculado;
+    AppCompatImageButton arrow;
+    String nuevoEstado = "";
+    BottomSheetBehavior btnsht;
 
     //Spinner
     AppCompatSpinner spinner;
@@ -75,7 +85,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
 
     BroadcastReceiver receptorSpinner, receptorAsignadoDeSpinner;
 
-    String idGpsSeleccionadoAEliminar ="";
+    String[] desvincularDispositivo= new String[2];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +112,64 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
 
         lista = (ListView) findViewById(R.id.lista_gps_de_usuario);
         lista.setOnItemClickListener(this);
+
+        arrow = (AppCompatImageButton) findViewById(R.id.img_btn_arrow);
+        arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(nuevoEstado == "STATE_EXPANDED"){
+                    btnsht.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }else{
+                    btnsht.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+            }
+        });
+
+
+        LinearLayout listaBottomSheet = (LinearLayout) findViewById(R.id.bottomSheet);
+        btnsht = BottomSheetBehavior.from(listaBottomSheet);
+
+        btnsht.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+
+                Drawable remplazo;
+
+                switch(newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        nuevoEstado = "STATE_COLLAPSED";
+                        remplazo = getResources().getDrawable(R.drawable.arrow_up);
+                        arrow.setBackgroundDrawable(remplazo);
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        nuevoEstado = "STATE_EXPANDED";
+                        remplazo = getResources().getDrawable(R.drawable.arrow_down);
+                        arrow.setBackgroundDrawable(remplazo);
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        nuevoEstado = "STATE_HIDDEN";
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        nuevoEstado = "STATE_DRAGGING";
+                        remplazo = getResources().getDrawable(R.drawable.arrow_right);
+                        arrow.setBackgroundDrawable(remplazo);
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        nuevoEstado = "STATE_SETTLING";
+                        remplazo = getResources().getDrawable(R.drawable.arrow_left);
+                        arrow.setBackgroundDrawable(remplazo);
+                        break;
+                }
+                Log.i("BottomSheets", "Nuevo estado: " + nuevoEstado);
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                Log.i("BottomSheets", "Offset: " + slideOffset);
+            }
+        });
+
 
         //Spinner
         spinner = (AppCompatSpinner) findViewById(R.id.spinner_gps);
@@ -233,6 +301,27 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
             }
         };
 
+        receptorListaGpsDesvinculado = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.v("AGET", "BROAD RECIBIDO GTN-Usuarios GPS Desvinculado");
+                if (datosRecibidos) {
+                    mostrarProgreso(false);
+                } else {
+                    datosRecibidos = true;
+                }
+                String mensaje = intent.getStringExtra(Utilidades.EXTRA_MENSAJE);
+                Boolean restado = intent.getBooleanExtra(Utilidades.EXTRA_RESULTADO,false);
+                if(mensaje.equalsIgnoreCase("Registro eliminado correctamente")){
+                    peticionSpinner();
+                    peticionLista();
+                }
+                Snackbar.make(findViewById(R.id.xml_gestion_usuarios),
+                        mensaje, Snackbar.LENGTH_SHORT).show();
+            }
+        };
+
         receptorSpinner = new BroadcastReceiver() {
 
             @Override
@@ -303,6 +392,9 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         IntentFilter filtroSpinnerSeleccionado = new IntentFilter(Configuracion.INTENT_GESTION_USUARIO_REGISTRO_ENLACE);
         LocalBroadcastManager.getInstance(this).registerReceiver(receptorAsignadoDeSpinner, filtroSpinnerSeleccionado);
 
+        //Reseptor lista gps desvinculado
+        IntentFilter filtroListaDesvinculado = new IntentFilter(Configuracion.INTENT_GESTION_USUARIO_DESVINICULAR_UN_GPS);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receptorListaGpsDesvinculado, filtroListaDesvinculado);
         if (Configuracion.cambio) {
             mostrarProgreso(true);
             Configuracion.cambio = false;
@@ -321,6 +413,8 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorSpinner);
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorAsignadoDeSpinner);
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorListaGpsDesvinculado);
     }
 
     @Override
@@ -533,17 +627,16 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
                 .setAction("Action", null).show();
         marcado = (String) ((ArrayList) datos.get(position)).get(3);
         nombre = (String) ((ArrayList) datos.get(position)).get(5);
-        Log.v("AGET-Enviado", marcado + "+" + nombre);
+        //Log.v("AGET-Enviado", marcado + "+" + nombre);
         Toast.makeText(GestionUsuarios.this, marcado + "+" + nombre, Toast.LENGTH_SHORT).show();
 
-        idGpsSeleccionadoAEliminar = (String) ((ArrayList) datos.get(position)).get(2);
+        desvincularDispositivo[0] = (String) ((ArrayList) datos.get(position)).get(0);
+        desvincularDispositivo[1] = (String) ((ArrayList) datos.get(position)).get(5);
+
         // En algún lugar de tu actividad
         new DialogoConfirmacion("Desvincular","Desea quitar este dispositivo a el usuario?","Desvincular","Cancelar").show(getSupportFragmentManager(), "SimpleDialog");
     }
 
-    public void desvincularGps(String idGpsADesvincular){
-        Log.v("AGET_Desvincular", idGpsADesvincular);
-    }
     protected void actualizar(ArrayList datosMultiples) {
         this.datos = datosMultiples;
         Log.v("AGET-LISTA:", "" + datos.size());
@@ -565,6 +658,18 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         adaptador.notifyDataSetChanged();
     }
     //FinLista
+
+    public void peticionDesvincularGps(){
+        Log.v("AGET_Desvincular", desvincularDispositivo[0]);
+
+        mostrarProgreso(true);
+        resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GESTION_USUARIO_DESVINICULAR_UN_GPS, null, null, Configuracion.TABLA_ENLACE, null, false);
+        resultado.execute(Configuracion.PETICION_ENLACE_MODIFICAR_ELIMINAR + desvincularDispositivo[0], "delete");
+    }
+
+    public void smsPreDesvinculacion(){
+        Log.v("AGET_Desvincular", desvincularDispositivo[1]);
+    }
 
     void regresar() {
         if (idUsuario != null) {
@@ -598,7 +703,8 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
     @Override
     public void onPossitiveButtonClick() {
         Log.v("AGET-DIALOGO","ACEPTAR");
-        desvincularGps(idGpsSeleccionadoAEliminar);
+        smsPreDesvinculacion();
+        peticionDesvincularGps();
     }
 
     @Override

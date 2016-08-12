@@ -26,9 +26,10 @@ public class Configuracion extends Activity {
     public static final String PETICION_GPS_LISTAR_LIBRES = SERVIDOR + "/api.rs.com/v1/gps/listarLibres";
     public static final String PETICION_GPS_LISTAR_UNO = SERVIDOR + "/api.rs.com/v1/gps/listarUno_Id";
     public static final String PETICION_GPS_LISTAR_DEPARTAMENTO = SERVIDOR + "/api.rs.com/v1/gps/listarGpsDeDepartamento";
-    public static final String PETICION_GPS_LISTAR_DIASPONIBLES_A_ENLAZAR = SERVIDOR + "/api.rs.com/v1/gps/listarGpsDeDepartamentoAEnlazarUsuario";
+    public static final String PETICION_GPS_LISTAR_DIASPONIBLES_A_ENLAZAR = SERVIDOR + "/api.rs.com/v1/gps/listarGpsDeDepartamentoDisponiblesAEnlace";
 
-    public static final String PETICION_GPS_LISTAR_DISPONOBLES_EMPRESA = SERVIDOR + "/api.rs.com/v1/gps/listarGpsDeEmpresaDisponibles";
+
+    public static final String PETICION_GPS_LISTAR_DISPONOBLES_EMPRESA = SERVIDOR + "/api.rs.com/v1/gps/listarGpsDeDeparamentoDisponiblesParaEnlace";
     public static final String PETICION_GPS_LISTAR_ENLACES_USUARIO = SERVIDOR + "/api.rs.com/v1/gps/listarGpsUsuarioEnlazados";
     public static final String PETICION_GPS_SUSTITUIR = SERVIDOR + "/api.rs.com/v1/gps/sustituirGps";
     public static final String PETICION_GPS_REGISTRO = SERVIDOR + "/api.rs.com/v1/gps/registro";
@@ -65,6 +66,7 @@ public class Configuracion extends Activity {
 
     public static final String PETICION_ENLACE_REGISTRO = SERVIDOR + "/api.rs.com/v1/enlace/registro";
     public static final String PETICION_ENLACE_LISTAR_TELEFONOS = SERVIDOR + "/api.rs.com/v1/enlace/listarTelefonos";
+    public static final String PETICION_ENLACE_MODIFICAR_ELIMINAR = SERVIDOR + "/api.rs.com/v1/enlace/";
 
 
     //PETICION
@@ -141,6 +143,7 @@ public class Configuracion extends Activity {
     public static final String INTENT_GESTION_USUARIO_GPS_EN_DEPARTAMENTO = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Gps.Departamento";
     public static final String INTENT_GESTION_USUARIO_REGISTRO_ENLACE = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Registro.Enlace";
     public static final String INTENT_GESTION_USUARIO_LISTA_GPS_DISPONIBLE = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Lista.Gps.Disponible";
+    public static final String INTENT_GESTION_USUARIO_DESVINICULAR_UN_GPS = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Lista.Gps.Desvincular.Un.Gps";
 
 
     //RECEPTORES GPS

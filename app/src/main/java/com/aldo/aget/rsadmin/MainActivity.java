@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void speak() {
         if (tts != null && ttsIsInit) {
-            tts.speak("Hi, ", TextToSpeech.QUEUE_ADD, null);
+            tts.speak("i, ", TextToSpeech.QUEUE_ADD, null);
         } else {
             Log.v("AGET-SPEAK", "error");
         }
