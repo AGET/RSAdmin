@@ -50,7 +50,7 @@
             android:label="@string/title_activity_lista_gps"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".Vistas.Gps"
+            android:name=".Vistas.GestionGps"
             android:label="@string/title_activity_activity_gps"
             android:theme="@style/AppTheme" />
         <activity

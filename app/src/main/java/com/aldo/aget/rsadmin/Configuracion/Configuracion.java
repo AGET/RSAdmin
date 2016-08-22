@@ -140,14 +140,14 @@ public class Configuracion extends Activity {
     public static final String INTENT_LISTA_USUARIOS = "com.aldo.aget.rsadmin.Vistas.ListaUsuarios";
     public static final String INTENT_GESTION_USUARIO = "com.aldo.aget.rsadmin.Vistas.GestionUsuario";
     public static final String INTENT_GESTION_USUARIO_LISTA = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Lista";
-    public static final String INTENT_GESTION_USUARIO_GPS_EN_DEPARTAMENTO = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Gps.Departamento";
+    public static final String INTENT_GESTION_USUARIO_GPS_EN_DEPARTAMENTO = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.GestionGps.Departamento";
     public static final String INTENT_GESTION_USUARIO_REGISTRO_ENLACE = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Registro.Enlace";
-    public static final String INTENT_GESTION_USUARIO_LISTA_GPS_DISPONIBLE = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Lista.Gps.Disponible";
-    public static final String INTENT_GESTION_USUARIO_DESVINICULAR_UN_GPS = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Lista.Gps.Desvincular.Un.Gps";
+    public static final String INTENT_GESTION_USUARIO_LISTA_GPS_DISPONIBLE = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Lista.GestionGps.Disponible";
+    public static final String INTENT_GESTION_USUARIO_DESVINICULAR_UN_GPS = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Lista.GestionGps.Desvincular.Un.Gps";
 
 
     //RECEPTORES GPS
-    public static final String INTENT_GPS= "com.aldo.aget.rsadmin.Vistas.Gps";
+    public static final String INTENT_GPS= "com.aldo.aget.rsadmin.Vistas.GestionGps";
 
     public static final String INTENT_GPS_DEPARTAMENTO = "com.aldo.aget.rsadmin.Vistas.GpsDepartamento";
     public static final String INTENT_GPS_EMPRESA_AGREGADOS = "com.aldo.aget.rsadmin.Vistas.GpsEmpresa_Agregados";

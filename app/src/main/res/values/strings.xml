@@ -60,4 +60,9 @@
     <string name="title_activity_gestion_departamento">GestionDepartamento</string>
     <string name="title_activity_lista_departamento">ListaDepartamento</string>
     <string name="title_activity_lista_usuarios">ListaUsuarios</string>
+
+    <!--gps-->
+    <string name="txt_title_rastreo">Rastreo Automatico</string>
+    <string name="txt_rango_time">Rango de tiempo</string>
+    <string name="txt_cantida_msn">Cantidad de mensajes</string>
 </resources>

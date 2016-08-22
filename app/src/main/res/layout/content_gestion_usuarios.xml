@@ -149,34 +149,6 @@
     </android.support.design.widget.TextInputLayout>
 
 
-    <ImageView
-        android:id="@+id/icono_usuario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icono_cuenta"
-        android:layout_alignBottom="@+id/mcr_edt_usuario"
-        android:layout_marginBottom="10dp"
-        />
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/mcr_edt_usuario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/mcr_edt_correo_usuario"
-        app:hintTextAppearance="@style/Hint"
-        android:layout_marginLeft="40dp">
-        <EditText
-            android:id="@+id/edt_usuario"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="12"
-            android:hint="Usuario"
-            android:inputType="textEmailAddress"
-            />
-    </android.support.design.widget.TextInputLayout>
-
 
     <ImageView
         android:id="@+id/icono_pass"
@@ -192,7 +164,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/mcr_edt_usuario"
+        android:layout_below="@+id/mcr_edt_correo_usuario"
         app:hintTextAppearance="@style/Hint"
         android:layout_marginLeft="40dp">
         <EditText

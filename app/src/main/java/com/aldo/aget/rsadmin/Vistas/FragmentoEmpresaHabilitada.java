@@ -180,7 +180,7 @@ public class FragmentoEmpresaHabilitada extends Fragment implements AdapterView.
 
     public static void actividadEmpresa(String id) {
         Intent actividad = new Intent(Configuracion.context, GestionArrendatarioCliente.class);
-        Log.v("AGET-VALOR",id);
+//        Log.v("AGET-VALOR",id);
         actividad.putExtra(Configuracion.COLUMNA_EMPRESA_ID, id);
         Configuracion.context.startActivity(actividad);
     }

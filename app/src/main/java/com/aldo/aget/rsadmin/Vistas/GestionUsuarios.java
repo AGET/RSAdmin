@@ -55,7 +55,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
 
     MenuItem menuOk, menuEditar, menuEliminar;
 
-    EditText edtNombre, edtApPaterno, edtApMaterno, edtTelefono, edtCorreo, edtUsuario, edtClave;
+    EditText edtNombre, edtApPaterno, edtApMaterno, edtTelefono, edtCorreo, edtClave;
 
     String idUsuario, nombreUsuario, departamentoId, departamentoNombre;
 
@@ -98,14 +98,13 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         nombreUsuario = bundle.getString(Configuracion.COLUMNA_USUARIO_NOMBRE);
         departamentoId = bundle.getString(Configuracion.COLUMNA_DEPARTAMENTO_ID);
         departamentoNombre = bundle.getString(Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE);
-        setTitle("Usuarios " + departamentoNombre);
+        setTitle(nombreUsuario);
 
         edtNombre = (EditText) findViewById(R.id.edt_nombre_usuario);
         edtApPaterno = (EditText) findViewById(R.id.edt_apellido_paterno);
         edtApMaterno = (EditText) findViewById(R.id.edt_apellido_materno);
         edtTelefono = (EditText) findViewById(R.id.edt_telefono_usuario);
         edtCorreo = (EditText) findViewById(R.id.edt_correo_usuario);
-        edtUsuario = (EditText) findViewById(R.id.edt_usuario);
         edtClave = (EditText) findViewById(R.id.edt_pass_usuario);
 
         progressBar = (ProgressBar) findViewById(R.id.barra);
@@ -170,7 +169,6 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
             }
         });
 
-
         //Spinner
         spinner = (AppCompatSpinner) findViewById(R.id.spinner_gps);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -185,10 +183,6 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
                         || datosSpinner == null) {
                 } else {
                     Toast.makeText(GestionUsuarios.this, spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-//                    Log.v("AGET-SPINNER-GPSS", "" + ((ArrayList) datosSpinner).size());
-//                    Log.v("AGET-SPINNER-ITEMS", "" + ((ArrayList) datosSpinner.get(0)).size());
-//                    Log.v("AGET-SPINNER-POSICION", "" + position);
-//                    Log.v("AGET-SPINNER-ADAPTADOR", "" + adaptadorSpinner.getCount());
 
                     if (adaptadorSpinner.getCount() == position) {
 
@@ -473,7 +467,6 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
                 Configuracion.COLUMNA_USUARIO_AP_MATERNO,
                 Configuracion.COLUMNA_USUARIO_TELEFONO,
                 Configuracion.COLUMNA_USUARIO_CORREO,
-                Configuracion.COLUMNA_USUARIO_USUARIO,
                 Configuracion.COLUMNA_USUARIO_CONTRASE_NA,
                 Configuracion.COLUMNA_USUARIO_DEPARTAMENTO_ID,
                 Configuracion.COLUMNA_USUARIO_ID};
@@ -497,7 +490,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         //Spinner
         String[] valorFiltroSpinner = {departamentoId,idUsuario};
         String[] columnasFiltroSpinner = {Configuracion.COLUMNA_DEPARTAMENTO_ID,Configuracion.COLUMNA_USUARIO_ID};
-        String[] columnasArecuperarSpinner = {Configuracion.COLUMNA_GPS_ID,Configuracion.COLUMNA_GPS_IMEI,Configuracion.COLUMNA_GPS_NUMERO};
+        String[] columnasArecuperarSpinner = {Configuracion.COLUMNA_GPS_ID,Configuracion.COLUMNA_GPS_IMEI,Configuracion.COLUMNA_GPS_NUMERO,Configuracion.COLUMNA_GPS_DESCRIPCION};
         new ObtencionDeResultadoBcst(GestionUsuarios.this,Configuracion.INTENT_GESTION_USUARIO_LISTA_GPS_DISPONIBLE, columnasFiltroSpinner, valorFiltroSpinner, Configuracion.TABLA_GPS, columnasArecuperarSpinner, true)
                 .execute(Configuracion.PETICION_GPS_LISTAR_DIASPONIBLES_A_ENLAZAR, tipoPeticion);
     }
@@ -516,7 +509,6 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         String apMaterno = edtApMaterno.getText().toString();
         String telefono = edtTelefono.getText().toString();
         String correo = edtCorreo.getText().toString();
-        String usuario = edtUsuario.getText().toString();
         String clave = edtClave.getText().toString();
 
 
@@ -528,8 +520,8 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
             mostrarProgreso(true);
             String[] columnasFiltro = {Configuracion.COLUMNA_USUARIO_NOMBRE, Configuracion.COLUMNA_USUARIO_AP_PATERNO
                     , Configuracion.COLUMNA_USUARIO_AP_MATERNO, Configuracion.COLUMNA_USUARIO_TELEFONO,
-                    Configuracion.COLUMNA_USUARIO_CORREO, Configuracion.COLUMNA_USUARIO_USUARIO, Configuracion.COLUMNA_USUARIO_CONTRASE_NA, Configuracion.COLUMNA_USUARIO_DEPARTAMENTO_ID};
-            String[] valorFiltro = {nombre, apPaterno, apMaterno, telefono, correo, usuario, clave, departamentoId};
+                    Configuracion.COLUMNA_USUARIO_CORREO, Configuracion.COLUMNA_USUARIO_CONTRASE_NA, Configuracion.COLUMNA_USUARIO_DEPARTAMENTO_ID};
+            String[] valorFiltro = {nombre, apPaterno, apMaterno, telefono, correo, clave, departamentoId};
 
             resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GESTION_USUARIO, columnasFiltro, valorFiltro, tabla, null, false);
 
@@ -557,8 +549,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         edtApMaterno.setText(String.valueOf(data.get(2)));
         edtTelefono.setText(String.valueOf(data.get(3)));
         edtCorreo.setText(String.valueOf(data.get(4)));
-        edtUsuario.setText(String.valueOf(data.get(5)));
-        edtClave.setText(String.valueOf(data.get(6)));
+        edtClave.setText(String.valueOf(data.get(5)));
 
         habilitarComponentes(false);
 
@@ -571,7 +562,6 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         edtApMaterno.setEnabled(habilitado);
         edtTelefono.setEnabled(habilitado);
         edtCorreo.setEnabled(habilitado);
-        edtUsuario.setEnabled(habilitado);
         edtClave.setEnabled(habilitado);
 
     }
@@ -606,7 +596,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
 
         for (int i = 0; i < datosSpinner.size() - 1; i++) {
             Log.v("AGET-valor:", "" + (String) ((ArrayList) datosSpinner.get(i)).get(0));
-            descripciones.add((String) ((ArrayList) datosSpinner.get(i)).get(1)+"  "+((ArrayList) datosSpinner.get(i)).get(2));
+            descripciones.add((String) ((ArrayList) datosSpinner.get(i)).get(2)+"  "+((ArrayList) datosSpinner.get(i)).get(3));
         }
 
         adaptadorSpinner = new SpinnerAdapter(GestionUsuarios.this, android.R.layout.simple_list_item_1);
@@ -623,8 +613,6 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String marcado = (String) lista.getItemAtPosition(position);
         String nombre;
-        Snackbar.make(view, "Ha marcado el item " + position + " " + marcado, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
         marcado = (String) ((ArrayList) datos.get(position)).get(3);
         nombre = (String) ((ArrayList) datos.get(position)).get(5);
         //Log.v("AGET-Enviado", marcado + "+" + nombre);
@@ -678,8 +666,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
             edtApMaterno.setText(String.valueOf(data.get(2)));
             edtTelefono.setText(String.valueOf(data.get(3)));
             edtCorreo.setText(String.valueOf(data.get(4)));
-            edtUsuario.setText(String.valueOf(data.get(5)));
-            edtClave.setText(String.valueOf(data.get(6)));
+            edtClave.setText(String.valueOf(data.get(5)));
 
 
             habilitarComponentes(false);

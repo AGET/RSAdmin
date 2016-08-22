@@ -76,7 +76,6 @@ String titulo, mensaje,aceptar,cancelar;
             throw new ClassCastException(
                     activity.toString() +
                             " no implementó OnSimpleDialogListener");
-
         }
     }
 

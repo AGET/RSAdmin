@@ -17,22 +17,26 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
 import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.Configuracion.Utilidades;
-import com.aldo.aget.rsadmin.Control.Mensajes;
+import com.aldo.aget.rsadmin.Control.ControlGps;
 import com.aldo.aget.rsadmin.R;
-import com.aldo.aget.rsadmin.ServicioWeb.ObtencionDeResultado;
 import com.aldo.aget.rsadmin.ServicioWeb.ObtencionDeResultadoBcst;
 
 import java.util.ArrayList;
+import android.widget.CheckBox;
 
-
-public class Gps extends AppCompatActivity {
+public class GestionGps extends AppCompatActivity {
 
     EditText edtImei, edtNumero, edtDescripcion, edtEmpresaPerteneciente;
 
@@ -53,13 +57,129 @@ public class Gps extends AppCompatActivity {
     String ID = "";
 
     ArrayList data;
+
+    //Autotrack
+    CheckBox cbx_Deshabilitado;
+    Spinner spinnerTiempo;
+    SeekBar seekBarTiempo;
+    TextView textResultadoSeekBarTiempo;
+    SeekBar seekBarCantidad;
+    TextView textResultadoSeekBarCantidad;
+    SpinnerAdapter adaptadorSpinner;
+    int tiempoMaximo = 0;
+    String tipoTiempo = "";
+    String autorrastreoBD = "";
+    String rastreoAnulado = "nofix";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gps);
+        setContentView(R.layout.activity_gestion_gps);
         agregarToolbar();
         Bundle bundle = getIntent().getExtras();
         idGps = bundle.getString(Configuracion.COLUMNA_GPS_ID);
+
+        cbx_Deshabilitado = (CheckBox) findViewById(R.id.cbx_rastreo_auto);
+        spinnerTiempo = (Spinner) findViewById(R.id.spinnerTiempo);
+        seekBarTiempo = (SeekBar) findViewById(R.id.seekBarTiempo);
+        textResultadoSeekBarTiempo = (TextView) findViewById(R.id.textResultadoSeekBarTiempo);
+
+        seekBarCantidad = (SeekBar) findViewById(R.id.seekBarCantidad);
+        textResultadoSeekBarCantidad = (TextView) findViewById(R.id.textResultadoSeekBarCantidad);
+
+        final String[] seleccionado = {""};
+        final String[] tiempo = new String[1];
+        final String[] cantidad = new String[1];
+        final String[] datos = {"Segundos", "Minutos", "Horas"};
+
+
+        spinnerTiempo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (spinnerTiempo.getSelectedItem() == "Elija") {
+                } else {
+                    Toast.makeText(GestionGps.this, spinnerTiempo.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                    if (adaptadorSpinner.getCount() == position) {
+                    } else {
+                        //realizar
+                        seleccionado[0] = "" + parent.getItemAtPosition(position).toString();
+                        Log.v("AGET-deleccionado", seleccionado[0]);
+                        establecer(parent.getItemAtPosition(position).toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+            public void establecer(String s) {
+                if (s.equalsIgnoreCase("Segundos") || s.equalsIgnoreCase("s")) {
+                    tiempoMaximo = 39;
+                    seekBarTiempo.setMax(tiempoMaximo);
+                    tipoTiempo = "s";
+                    Log.v("AGET", "TIEMPO: s");
+                }
+                if (s.equalsIgnoreCase("Minutos") || s.equalsIgnoreCase("M")) {
+                    tiempoMaximo = 59;
+                    seekBarTiempo.setMax(tiempoMaximo);
+                    tipoTiempo = "m";
+                    Log.v("AGET", "TIEMPO: m");
+                }
+
+                if (s.equalsIgnoreCase("Horas") || s.equalsIgnoreCase("H")) {
+                    tiempoMaximo = 23;
+                    seekBarTiempo.setMax(tiempoMaximo);
+                    tipoTiempo = "h";
+                    Log.v("AGET", "TIEMPO: h");
+                }
+            }
+        });
+
+        adaptadorSpinner = new SpinnerAdapter(GestionGps.this, android.R.layout.simple_list_item_1);
+        adaptadorSpinner.addAll(datos);
+        adaptadorSpinner.add("Elija");
+        spinnerTiempo.setAdapter(adaptadorSpinner);
+        spinnerTiempo.setSelection(adaptadorSpinner.getCount());
+
+        seekBarTiempo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (seleccionado[0].equalsIgnoreCase(datos[0])) {
+                    textResultadoSeekBarTiempo.setText(progress + 20 + "");
+                } else {
+                    textResultadoSeekBarTiempo.setText(progress + "");
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        seekBarCantidad.setMax(300);
+        seekBarCantidad.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                textResultadoSeekBarCantidad.setText(progress + "");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        //Fin autotrack
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -83,11 +203,12 @@ public class Gps extends AppCompatActivity {
 
         //Datos a mostrar
         String[] columnasArecuperar = {
-                Configuracion.COLUMNA_GPS_ID,
                 Configuracion.COLUMNA_GPS_IMEI,
                 Configuracion.COLUMNA_GPS_NUMERO,
                 Configuracion.COLUMNA_GPS_DESCRIPCION,
-                Configuracion.COLUMNA_GPS_DEPARTAMENTO};
+                Configuracion.COLUMNA_GPS_AUTORASTREO,
+                Configuracion.COLUMNA_GPS_DEPARTAMENTO,
+                Configuracion.COLUMNA_GPS_ID};
 
         if (idGps != null) {
             mostrarProgreso(true);
@@ -96,6 +217,10 @@ public class Gps extends AppCompatActivity {
         } else {
             setTitle(R.string.titulo_actividad_agregar_gps);
             edtEmpresaPerteneciente.setEnabled(false);
+            seekBarCantidad.setEnabled(false);
+            seekBarTiempo.setEnabled(false);
+            spinnerTiempo.setEnabled(false);
+            cbx_Deshabilitado.setEnabled(false);
         }
 
         Log.v("AGET", columnasArecuperar[columnasArecuperar.length - 1]);
@@ -231,6 +356,12 @@ public class Gps extends AppCompatActivity {
         String telefono = edtNumero.getText().toString();
         String descripcion = edtDescripcion.getText().toString();
         String empresaPerteneciente = edtEmpresaPerteneciente.getText().toString();
+        String autorrastreo;
+        if (cbx_Deshabilitado.isChecked())
+            autorrastreo = "nofix";
+        else
+            autorrastreo = "calcule";
+
         // Validaciones
         if (!esNombreValido(telefono)) {
             TextInputLayout mascaraCampoNombre = (TextInputLayout) findViewById(R.id.mcr_edt_gps_numero);
@@ -238,8 +369,8 @@ public class Gps extends AppCompatActivity {
         } else {
             mostrarProgreso(true);
             String[] columnasFiltro = {Configuracion.COLUMNA_GPS_IMEI, Configuracion.COLUMNA_GPS_NUMERO
-                    , Configuracion.COLUMNA_GPS_DESCRIPCION, Configuracion.COLUMNA_GPS_DEPARTAMENTO};
-            String[] valorFiltro = {imei, telefono, descripcion, empresaPerteneciente};
+                    , Configuracion.COLUMNA_GPS_DESCRIPCION, Configuracion.COLUMNA_GPS_AUTORASTREO, Configuracion.COLUMNA_GPS_DEPARTAMENTO};
+            String[] valorFiltro = {imei, telefono, descripcion,autorrastreo, empresaPerteneciente};
             resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GPS, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, null, false);
             if (ID.isEmpty()) {
                 resultado.execute(Configuracion.PETICION_GPS_REGISTRO, tipoPeticion);
@@ -274,11 +405,11 @@ public class Gps extends AppCompatActivity {
     }
 
 
-    public void eliminar(boolean smsEnviados){
-        if(smsEnviados)
-            Log.v("AGET-ELIMINADO","SI Eliminado");
+    public void eliminar(boolean smsEnviados) {
+        if (smsEnviados)
+            Log.v("AGET-ELIMINADO", "SI Eliminado");
         else
-            Log.v("AGET-ELIMINADO","NO Eliminado");
+            Log.v("AGET-ELIMINADO", "NO Eliminado");
 
 //NOTA: LAS DOS LINEAS COMENTADAS DEBEN DE EJECUTARCE DEPUES DE MANDAS EL MENSAJE A LOS NUMEROS
         resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GPS, null, null, Configuracion.TABLA_GPS, null, false);
@@ -298,10 +429,15 @@ public class Gps extends AppCompatActivity {
 
     void regresar() {
         if (idGps != null) {
-            edtImei.setText(String.valueOf(data.get(1)));
-            edtNumero.setText(String.valueOf(data.get(2)));
-            edtDescripcion.setText(String.valueOf(data.get(3)));
-            edtEmpresaPerteneciente.setText(String.valueOf(data.get(4)));
+            if(data != null) {
+                edtImei.setText(String.valueOf(data.get(0)));
+                edtNumero.setText(String.valueOf(data.get(1)));
+                edtDescripcion.setText(String.valueOf(data.get(2)));
+                autorrastreoBD = String.valueOf(data.get(3));
+                edtEmpresaPerteneciente.setText(String.valueOf(data.get(4)));
+            }
+
+
 
             habilitarComponentes(false);
 
@@ -317,11 +453,15 @@ public class Gps extends AppCompatActivity {
         if (data.size() < 0) {
             return;
         }
+        String[] datos = ControlGps.desmantarAutotrack(String.valueOf(data.get(3)));
+
         // Asignar valores a UI
-        edtImei.setText(String.valueOf(data.get(1)));
-        edtNumero.setText(String.valueOf(data.get(2)));
-        edtDescripcion.setText(String.valueOf(data.get(3)));
-        edtEmpresaPerteneciente.setText(String.valueOf(data.get(4)));
+        edtImei.setText(String.valueOf(data.get(0)));
+        edtNumero.setText(String.valueOf(data.get(1)));
+        edtDescripcion.setText(String.valueOf(data.get(2)));
+        autorrastreoBD = String.valueOf(data.get(3));
+        if (String.valueOf(data.get(4)).equalsIgnoreCase("null"))
+            edtEmpresaPerteneciente.setText("No ha sido asignado");
 //        if (String.valueOf(data.get(3)).equalsIgnoreCase("0")) {
 //            spinner.setSelection(1);
 //            fab_usuarios.setVisibility(View.GONE);
@@ -342,7 +482,16 @@ public class Gps extends AppCompatActivity {
         edtImei.setEnabled(habilitado);
         edtNumero.setEnabled(habilitado);
         edtDescripcion.setEnabled(habilitado);
+
+        cbx_Deshabilitado.setEnabled(false);
         edtEmpresaPerteneciente.setEnabled(false);
+
+        if (autorrastreoBD.equalsIgnoreCase(rastreoAnulado)){
+            cbx_Deshabilitado.setChecked(true);
+            spinnerTiempo.setEnabled(false);
+            seekBarCantidad.setEnabled(false);
+            seekBarTiempo.setEnabled(false);
+        }
     }
 
 
@@ -351,3 +500,26 @@ public class Gps extends AppCompatActivity {
     }
 
 }
+
+/*
+                tiempo[0] = textResultadoSeekBarTiempo.getText().toString();
+                cantidad[0] = textResultadoSeekBarCantidad.getText().toString();
+                String aux = "";
+                if (tiempo[0].length() == 1) {
+                    aux = tiempo[0];
+                    tiempo[0] = "00" + aux;
+                } else if (tiempo[0].length() == 2) {
+                    aux = tiempo[0];
+                    tiempo[0] = "0" + aux;
+                }
+
+                if (cantidad[0].length() == 1) {
+                    aux = cantidad[0];
+                    cantidad[0] = "00" + aux;
+                } else if (cantidad[0].length() == 2) {
+                    aux = cantidad[0];
+                    cantidad[0] = "0" + aux;
+                }
+                cmdGeoPosicionIntervalosAutoTrack = "t" + tiempo[0] + tipoTiempo + cantidad[0] + "n" + password;
+
+*/

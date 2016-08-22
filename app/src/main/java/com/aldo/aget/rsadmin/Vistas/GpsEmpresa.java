@@ -38,7 +38,7 @@ public class GpsEmpresa extends AppCompatActivity implements AdapterView.OnItemC
     BroadcastReceiver receptorMensajeGps, receptorMensajeGpsAgregados;
     private ProgressBar progressBar;
 
-    String idEmpresa, tipoPeticion = "post";
+    String idEmpresa, departamentoNombre, tipoPeticion = "post";
 
     ArrayList datosLista, datosSpinner;
 
@@ -60,6 +60,9 @@ public class GpsEmpresa extends AppCompatActivity implements AdapterView.OnItemC
 
         Bundle bundle = getIntent().getExtras();
         idEmpresa = bundle.getString(Configuracion.COLUMNA_EMPRESA_ID);
+        departamentoNombre = bundle.getString(Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE);
+
+        setTitle("GPS de "+departamentoNombre);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

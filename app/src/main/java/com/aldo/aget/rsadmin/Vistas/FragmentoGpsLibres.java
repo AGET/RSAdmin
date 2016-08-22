@@ -57,7 +57,7 @@ public class FragmentoGpsLibres extends Fragment implements AdapterView.OnItemCl
         // Required empty public constructor
         peticionlistar = Configuracion.PETICION_GPS_LISTAR_LIBRES;
         tabla = "gps";
-        columnas = new String[]{"gps_id","imei", "numero"};
+        columnas = new String[]{"gps_id", "imei", "numero"};
     }
 
 
@@ -108,7 +108,6 @@ public class FragmentoGpsLibres extends Fragment implements AdapterView.OnItemCl
                     Log.v("AGET-POSICION", "DOWN");
                 }
             }
-
         };
 
         lista.setOnScrollListener(new ManejadorScroll(lista, 8, desplazamiento));
@@ -185,7 +184,7 @@ public class FragmentoGpsLibres extends Fragment implements AdapterView.OnItemCl
         for (int i = 0; i < datos.size() - 1; i++) {
             Log.v("AGET-include:", "" + i);
             Log.v("AGET-valor:", "" + (String) ((ArrayList) datos.get(i)).get(0));
-            nombres.add((String) ((ArrayList) datos.get(i)).get(1));
+            nombres.add((String) ((ArrayList) datos.get(i)).get(1) + " " + ((ArrayList) datos.get(i)).get(2));
         }
 
         adaptador = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, nombres);
@@ -195,6 +194,7 @@ public class FragmentoGpsLibres extends Fragment implements AdapterView.OnItemCl
 
         //adaptador.insert(grupo, 0);
         adaptador.notifyDataSetChanged();
+
     }
 
 
@@ -203,7 +203,7 @@ public class FragmentoGpsLibres extends Fragment implements AdapterView.OnItemCl
     }
 
     public static void actividadGps(String imei) {
-        Intent actividad = new Intent(Configuracion.context, Gps.class);
+        Intent actividad = new Intent(Configuracion.context, GestionGps.class);
         actividad.putExtra(Configuracion.COLUMNA_GPS_ID, imei);
         Configuracion.context.startActivity(actividad);
     }

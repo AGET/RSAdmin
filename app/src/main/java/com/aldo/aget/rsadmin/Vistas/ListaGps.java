@@ -111,7 +111,7 @@ public class ListaGps extends AppCompatActivity implements OnItemClickListener{
     }
 
     void actividadGps(String imei){
-        Intent actividad = new Intent(this, Gps.class);
+        Intent actividad = new Intent(this, GestionGps.class);
         actividad.putExtra(Configuracion.COLUMNA_GPS_IMEI, imei);
         startActivity(actividad);
     }

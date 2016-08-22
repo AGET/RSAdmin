@@ -61,14 +61,14 @@ public class MainActivity extends AppCompatActivity {
         fabmain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, " OBR", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-//                obtener();
-//                test();
                 switch ((String) adaptadorViewPager.getPageTitle(viewPager.getCurrentItem())) {
                     case "Empresas Habilitadas":
                         FragmentoEmpresaHabilitada.actividadEmpresa(null);
                         break;
-                    case "Gps Disponibles":
+                    case "Empresas Deshabilitadas":
+                        FragmentoEmpresaHabilitada.actividadEmpresa(null);
+                        break;
+                    case "Gps":
                         Toast.makeText(MainActivity.this, "tres", Toast.LENGTH_SHORT).show();
                         FragmentoGpsLibres.actividadGps(null);
                         break;
@@ -120,17 +120,21 @@ public class MainActivity extends AppCompatActivity {
                         Log.v("AGET-CargadoEmpHab",""+FragmentoEmpresaHabilitada.cargadoHab);
                         if(!FragmentoEmpresaHabilitada.cargadoHab)
                             //FragmentoEmpresaHabilitada.cargar();
+                            FragmentoEmpresaHabilitada.cargar();
+                        FragmentoEmpresaHabilitada.cargar();
 
                         break;
                     case "Empresas Deshabilitadas":
                         Log.v("AGET-CargadoEmpDes",""+ FragmentoEmpresaDeshabilitada.cargadoED);
                         if(!FragmentoEmpresaDeshabilitada.cargadoED)
                             FragmentoEmpresaDeshabilitada.cargar();
+                        FragmentoEmpresaDeshabilitada.cargar();
                         break;
                     case "Gps":
                         Log.v("AGET-CargadoGps",""+FragmentoGpsLibres.cargadoGPS);
                         if(!FragmentoGpsLibres.cargadoGPS)
                             FragmentoGpsLibres.cargar();
+                        FragmentoGpsLibres.cargar();
                         break;
                 }
 
@@ -182,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void speak() {
         if (tts != null && ttsIsInit) {
-            tts.speak("i, ", TextToSpeech.QUEUE_ADD, null);
+            tts.speak("Bienvenido administrador, ", TextToSpeech.QUEUE_ADD, null);
         } else {
             Log.v("AGET-SPEAK", "error");
         }
@@ -196,6 +200,12 @@ public class MainActivity extends AppCompatActivity {
             tts.shutdown();
         }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        FragmentoEmpresaHabilitada.cargar();
     }
 
 

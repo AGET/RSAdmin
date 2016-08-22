@@ -116,7 +116,7 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
 
                 Log.v("AGET-PARSEADO", str);
 
-                enviarBroadcast(true, "Parseado", datos);
+                enviarBroadcast(true, "Datos cargados", datos);
             } catch (JSONException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
