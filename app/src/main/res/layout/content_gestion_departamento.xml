@@ -98,7 +98,7 @@
         android:id="@+id/icono_direccion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icono_correo"
+        android:src="@drawable/icono_gps"
         android:layout_alignBottom="@+id/mcr_edt_direccion_departamento"
         android:layout_marginBottom="10dp"
         />

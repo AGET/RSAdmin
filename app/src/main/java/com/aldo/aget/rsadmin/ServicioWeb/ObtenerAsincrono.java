@@ -75,6 +75,8 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
         }else{
             intent=receptor;
         }
+
+        intent = receptor;
     }
 
     @Override
@@ -83,6 +85,7 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
     }
 
     protected String doInBackground(String... urls) {
+        Log.v("AGET-PETICION",urls[0]);
         return POST(urls[0]);
     }
 
@@ -115,8 +118,14 @@ public class ObtenerAsincrono extends AsyncTask<String, Void, String> {
                 }
 
                 Log.v("AGET-PARSEADO", str);
+                if(datos.size()>1){
+                    Log.v("AGET-DATOS", datos.size()+"");
+                    enviarBroadcast(true, "Datos cargados", datos);
+                }else{
+                    Log.v("AGET-DATOS", datos.size()+"");
+                    enviarBroadcast(false, "No hay datos", datos);
+                }
 
-                enviarBroadcast(true, "Datos cargados", datos);
             } catch (JSONException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

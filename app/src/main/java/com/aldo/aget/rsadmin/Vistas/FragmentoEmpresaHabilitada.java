@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -113,7 +114,9 @@ public class FragmentoEmpresaHabilitada extends Fragment implements AdapterView.
         };
 
         lista.setOnScrollListener(new ManejadorScroll(lista, 8, desplazamiento));
-        lista.setNestedScrollingEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            lista.setNestedScrollingEnabled(true);
+        }
         lista.setOnItemClickListener(this);
 
 //        if (adaptadorEH != null)
@@ -144,8 +147,11 @@ public class FragmentoEmpresaHabilitada extends Fragment implements AdapterView.
                 if (restado) {
                     actualizar(intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST));
                 }
-                Snackbar.make(getView().findViewById(R.id.fragmento_ehxml),
-                        mensaje, Snackbar.LENGTH_SHORT).show();
+                if(!mensaje.equalsIgnoreCase("Datos cargados")){
+                    Snackbar.make(getView().findViewById(R.id.fragmento_ehxml),
+                            mensaje, Snackbar.LENGTH_SHORT).show();
+                }
+
             }
         };
         // Registrar receptor
@@ -171,8 +177,8 @@ public class FragmentoEmpresaHabilitada extends Fragment implements AdapterView.
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String marcado = (String) lista.getItemAtPosition(position);
-        Snackbar.make(view, "Ha marcado el item " + position + " " + marcado, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+//        Snackbar.make(view, "Ha marcado el item " + position + " " + marcado, Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show();
         marcado = (String) ((ArrayList) datos.get(position)).get(0);
         Log.v("AGET-Enviado", marcado);
         actividadEmpresa(marcado);

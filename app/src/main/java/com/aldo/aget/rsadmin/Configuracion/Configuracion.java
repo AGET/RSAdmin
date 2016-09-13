@@ -14,7 +14,7 @@ public class Configuracion extends Activity {
     //https://materialdesignicons.com/icon/account-plus
 
     public static MainActivity context = null;
-    public static final String SERVIDOR = "http://192.168.0.100";
+    public static final String SERVIDOR = "http://rastreosatelital.esy.es";
     //public static final String SERVIDOR = "http://192.168.2.140";
     //public static final String SERVIDOR = " http://aldogamaliel.byethost16.com";
     //http://aldogamaliel.byethost16.com/api.rs.com/v1/gps/listarVarios
@@ -27,6 +27,10 @@ public class Configuracion extends Activity {
     public static final String PETICION_GPS_LISTAR_UNO = SERVIDOR + "/api.rs.com/v1/gps/listarUno_Id";
     public static final String PETICION_GPS_LISTAR_DEPARTAMENTO = SERVIDOR + "/api.rs.com/v1/gps/listarGpsDeDepartamento";
     public static final String PETICION_GPS_LISTAR_DIASPONIBLES_A_ENLAZAR = SERVIDOR + "/api.rs.com/v1/gps/listarGpsDeDepartamentoDisponiblesAEnlace";
+    public static final String PETICION_GPS_ASIGNAR_DEPARTAMENTO = SERVIDOR + "/api.rs.com/v1/gps/asignarDepartamento";
+    public static final String PETICION_GPS_DESVINCULAR = SERVIDOR + "/api.rs.com/v1/enlace/desvinculacion";
+    public static final String PETICION_GPS_ESTABLECER_AUTORRASTREO = SERVIDOR + "/api.rs.com/v1/gps/establecerAutorastreo";
+
 
 
     public static final String PETICION_GPS_LISTAR_DISPONOBLES_EMPRESA = SERVIDOR + "/api.rs.com/v1/gps/listarGpsDeDeparamentoDisponiblesParaEnlace";
@@ -60,6 +64,7 @@ public class Configuracion extends Activity {
     public static final String PETICION_USUARIO_LISTAR_GPS = SERVIDOR + "/api.rs.com/v1/usuarios/listarGpsDeUsuario";//gps enlazados de un usuario
     public static final String PETICION_USUARIO_LISTAR_USUARIO_DEPARTAMENTO = SERVIDOR + "/api.rs.com/v1/usuarios/listarUsuariosDeDepartamento";
     public static final String PETICION_USUARIO_MODIFICAR_ELIMINAR = SERVIDOR + "/api.rs.com/v1/usuarios/";
+    public static final String PETICION_ENLACE_LISTAR_TELEFONOS_USUARIO = SERVIDOR + "/api.rs.com/v1/enlace/listarTelefonosUsuario";
 
 
     //PETICION ENLACE
@@ -67,6 +72,7 @@ public class Configuracion extends Activity {
     public static final String PETICION_ENLACE_REGISTRO = SERVIDOR + "/api.rs.com/v1/enlace/registro";
     public static final String PETICION_ENLACE_LISTAR_TELEFONOS = SERVIDOR + "/api.rs.com/v1/enlace/listarTelefonos";
     public static final String PETICION_ENLACE_MODIFICAR_ELIMINAR = SERVIDOR + "/api.rs.com/v1/enlace/";
+
 
 
     //PETICION
@@ -144,12 +150,14 @@ public class Configuracion extends Activity {
     public static final String INTENT_GESTION_USUARIO_REGISTRO_ENLACE = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Registro.Enlace";
     public static final String INTENT_GESTION_USUARIO_LISTA_GPS_DISPONIBLE = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Lista.GestionGps.Disponible";
     public static final String INTENT_GESTION_USUARIO_DESVINICULAR_UN_GPS = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Lista.GestionGps.Desvincular.Un.Gps";
+    public static final String INTENT_USUARIO_ENLACE_TELEFONOS_ENLAZADOS = "com.aldo.aget.rsadmin.Vistas.Usuario.TelefonosEnlazados";
 
 
     //RECEPTORES GPS
     public static final String INTENT_GPS= "com.aldo.aget.rsadmin.Vistas.GestionGps";
 
     public static final String INTENT_GPS_DEPARTAMENTO = "com.aldo.aget.rsadmin.Vistas.GpsDepartamento";
+    public static final String INTENT_GPS_LIBRES = "com.aldo.aget.rsadmin.Vistas.GpsLibres";
     public static final String INTENT_GPS_EMPRESA_AGREGADOS = "com.aldo.aget.rsadmin.Vistas.GpsEmpresa_Agregados";
 
     public static Boolean cambio = false;

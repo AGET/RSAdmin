@@ -71,8 +71,8 @@ public class ListaDepartamento extends AppCompatActivity implements AdapterView.
         fab_nuevo_departamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
                 mostrarGestionDepartamento(null, null);
             }
         });
@@ -134,9 +134,14 @@ public class ListaDepartamento extends AppCompatActivity implements AdapterView.
                 if (reultado) {
                     actualizar(intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST));
                 }
+                if(mensaje.equalsIgnoreCase("cargado")){
 
-                Snackbar.make(findViewById(R.id.xml_lista_departamento),
-                        mensaje, Snackbar.LENGTH_SHORT).show();
+                }else{
+                    Snackbar.make(findViewById(R.id.xml_lista_departamento),
+                            mensaje, Snackbar.LENGTH_SHORT).show();
+                }
+
+
             }
         };
     }
@@ -152,8 +157,13 @@ public class ListaDepartamento extends AppCompatActivity implements AdapterView.
         if (Configuracion.cambio) {
             mostrarProgreso(true);
             Configuracion.cambio = false;
-            new ObtenerAsincrono(ListaDepartamento.this, Configuracion.INTENT_LISTA_DEPARTAMENTO, tabla, columnas)
-                    .execute(peticionlistarDepartamento);
+
+//            new ObtenerAsincrono(ListaDepartamento.this, Configuracion.INTENT_LISTA_DEPARTAMENTO, tabla, columnas)
+//                    .execute(peticionlistarDepartamento);
+
+            String[] valorFiltro = {idEmpresa};
+            resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_LISTA_DEPARTAMENTO, columnasFiltro, valorFiltro, tabla, columnas, true);
+            resultado.execute(Configuracion.PETICION_DEPARTAMENTO_LISTAR_DE_EMPRESA, tipoPeticion);
         }
     }
 
@@ -168,8 +178,8 @@ public class ListaDepartamento extends AppCompatActivity implements AdapterView.
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String marcado = (String) lista.getItemAtPosition(position);
         String nombre;
-        Snackbar.make(view, "Ha marcado el item " + position + " " + marcado, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+//        Snackbar.make(view, "Ha marcado el item " + position + " " + marcado, Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show();
         marcado = (String) ((ArrayList) datos.get(position)).get(0);
         nombre = (String) ((ArrayList) datos.get(position)).get(1);
         Log.v("AGET-Enviado", marcado + "+" + nombre);

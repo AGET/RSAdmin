@@ -72,8 +72,8 @@ public class ListaUsuarios extends AppCompatActivity implements AdapterView.OnIt
         fab_nuevo_usuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
                 mostrarGestionUsuario(null, null);
             }
         });
@@ -132,9 +132,12 @@ public class ListaUsuarios extends AppCompatActivity implements AdapterView.OnIt
                 if (reultado) {
                     actualizar(intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST));
                 }
-
-                Snackbar.make(findViewById(R.id.xml_lista_usuario),
-                        mensaje, Snackbar.LENGTH_SHORT).show();
+                if(mensaje.equalsIgnoreCase("Cargado")){
+                    return;
+                }else{
+                    Snackbar.make(findViewById(R.id.xml_lista_usuario),
+                            mensaje, Snackbar.LENGTH_SHORT).show();
+                }
             }
         };
     }
@@ -149,8 +152,14 @@ public class ListaUsuarios extends AppCompatActivity implements AdapterView.OnIt
         if (Configuracion.cambio) {
             mostrarProgreso(true);
             Configuracion.cambio = false;
-            new ObtenerAsincrono(ListaUsuarios.this, Configuracion.INTENT_LISTA_USUARIOS, tabla, columnas)
-                    .execute(Configuracion.PETICION_USUARIO_LISTAR_VARIOS);
+
+//            new ObtenerAsincrono(ListaUsuarios.this, Configuracion.INTENT_LISTA_USUARIOS, tabla, columnas)
+//                    .execute(Configuracion.PETICION_USUARIO_LISTAR_USUARIO_DEPARTAMENTO);
+
+
+            String[] valorFiltro = {departamentoId};
+            resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_LISTA_USUARIOS, columnasFiltro, valorFiltro, tabla, columnas, true);
+            resultado.execute(Configuracion.PETICION_USUARIO_LISTAR_USUARIO_DEPARTAMENTO, tipoPeticion);
         }
     }
 
@@ -165,8 +174,8 @@ public class ListaUsuarios extends AppCompatActivity implements AdapterView.OnIt
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String marcado = (String) lista.getItemAtPosition(position);
         String nombre;
-        Snackbar.make(view, "Ha marcado el item " + position + " " + marcado, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+//        Snackbar.make(view, "Ha marcado el item " + position + " " + marcado, Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show();
         marcado = (String) ((ArrayList) datos.get(position)).get(0);
         nombre = (String) ((ArrayList) datos.get(position)).get(1);
         Log.v("AGET-Enviado", marcado + "+" + nombre);

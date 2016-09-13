@@ -44,23 +44,38 @@ String titulo, mensaje,aceptar,cancelar;
     public AlertDialog createSimpleDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle(titulo)
-                .setMessage(mensaje)
-                .setPositiveButton(aceptar,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                listener.onPossitiveButtonClick();
-                            }
-                        })
-                .setNegativeButton(cancelar,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                listener.onNegativeButtonClick();
-                            }
-                        });
+        if(cancelar != null || cancelar != "") {
 
+            builder.setTitle(titulo)
+                    .setMessage(mensaje)
+                    .setPositiveButton(aceptar,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    listener.onPossitiveButtonClick();
+                                }
+                            })
+                    .setNegativeButton(cancelar,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    listener.onNegativeButtonClick();
+                                }
+                            });
+
+        }else{
+
+            builder.setTitle(titulo)
+                    .setMessage(mensaje)
+                    .setPositiveButton(aceptar,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    listener.onPossitiveButtonClick();
+                                }
+                            });
+
+        }
         return builder.create();
     }
 

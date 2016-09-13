@@ -3,8 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity2">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/cambiar_datos"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/txt_accion_cambiar_datos"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/acerca_de"
+        android:orderInCategory="100"
+        android:title="@string/txt_accion_acerca_de"
         app:showAsAction="never" />
 </menu>

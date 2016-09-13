@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/azul500</item>
         <item name="colorPrimaryDark">@color/azul700</item>
-        <item name="colorAccent">@color/rosa500</item>
+        <item name="colorAccent">@color/azul100</item>
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -29,7 +29,7 @@
     <style name="AppThemeNoBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/azul500</item>
         <item name="colorPrimaryDark">@color/azul700</item>
-        <item name="colorAccent">@color/rosa500</item>
+        <item name="colorAccent">@color/azul100</item>
     </style>
 
     <style name="AppThemeNoBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

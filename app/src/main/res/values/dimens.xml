@@ -13,6 +13,6 @@
     <dimen name="padding_superior_item_lista">8dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="height">56dp</dimen>
+    <dimen name="height">50dp</dimen>
     <dimen name="height_double">112dp</dimen>
 </resources>

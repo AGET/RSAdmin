@@ -58,7 +58,7 @@
             android:label="@string/title_activity_activity_empresa_cliente"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".Vistas.GpsEmpresa"
+            android:name=".Vistas.GpsDepartamento"
             android:label="@string/title_activity_activity_gpsempresa"
             android:theme="@style/AppTheme" />
         <activity
@@ -66,7 +66,7 @@
             android:label="@string/title_activity_clientes_empresa"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".Vistas.GpsEmpresaDetalle"
+            android:name=".Vistas.GpsDepartamentoDetalle"
             android:label="@string/title_activity_gps_empresa_detalle"
             android:theme="@style/AppTheme" />
         <activity

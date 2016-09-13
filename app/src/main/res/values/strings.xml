@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">RSAdmin</string>
     <string name="action_settings">Settings</string>
+    <string name="txt_accion_cambiar_datos">Editar administrador</string>
+    <string name="txt_accion_acerca_de">Acerca de</string>
 
 
     <!-- Titulos actividades -->
@@ -11,6 +13,7 @@
     <string name="titulo_actividad_lista_empresa">Empresas disponibles</string>
     <string name="titulo_actividad_lista_departamento">Departamentos</string>
     <string name="titulo_actividad_agregar_departamento">Nuevo Departamento</string>
+    <string name="titulo_actividad_agregar_usuario">Nuevo Usuario</string>
     <string name="titulo_actividad_lista_usuarios">Usuarios</string>
 
     <string name="titulo_actividad_principal">Bienvenido administrador</string>
@@ -28,6 +31,7 @@
     <string name="accion_editar">Editar</string>
     <string name="accion_guardar">Guardar</string>
     <string name="accion_descartar">Descartar</string>
+    <string name="accion_desvincular">Quitar Gps del departamento</string>
 
     <!-- Cuenta Sync Adapter -->
     <string name="tipo_cuenta">com.aldo.aget.rsadmin.cuenta</string>
@@ -47,19 +51,19 @@
     <string name="title_activity_obtener">Obtener</string>
     <string name="title_activity_enviar">Enviar</string>
     <string name="title_activity_test">Test</string>
-    <string name="title_activity_lista_empresa">ListaEmpresa</string>
-    <string name="title_activity_lista_gps">ListaGps</string>
-    <string name="title_activity_activity_gps">ActivityGps</string>
-    <string name="title_activity_activity_empresa_cliente">ActivityEmpresaCliente</string>
-    <string name="title_activity_activity_empresa">ActivityEmpresa</string>
+    <string name="title_activity_lista_empresa">Lista empresa</string>
+    <string name="title_activity_lista_gps">Lista Gps</string>
+    <string name="title_activity_activity_gps">Gps</string>
+    <string name="title_activity_activity_empresa_cliente">Empresa cliente</string>
+    <string name="title_activity_activity_empresa">Empresa</string>
     <string name="title_activity_borrar">Borrar</string>
-    <string name="title_activity_activity_gpsempresa">ActivityGPSEmpresa</string>
-    <string name="title_activity_clientes_empresa">ClientesEmpresa</string>
-    <string name="title_activity_gps_empresa_detalle">GpsEmpresaDetalle</string>
-    <string name="title_activity_usuarios_empresa">UsuariosEmpresa</string>
-    <string name="title_activity_gestion_departamento">GestionDepartamento</string>
-    <string name="title_activity_lista_departamento">ListaDepartamento</string>
-    <string name="title_activity_lista_usuarios">ListaUsuarios</string>
+    <string name="title_activity_activity_gpsempresa">GPS de empresa</string>
+    <string name="title_activity_clientes_empresa">Clientes empresa</string>
+    <string name="title_activity_gps_empresa_detalle">Gps empresa detalle</string>
+    <string name="title_activity_usuarios_empresa">Usuarios empresa</string>
+    <string name="title_activity_gestion_departamento">Gestion departamento</string>
+    <string name="title_activity_lista_departamento">Lista departamento</string>
+    <string name="title_activity_lista_usuarios">Lista usuarios</string>
 
     <!--gps-->
     <string name="txt_title_rastreo">Rastreo Automatico</string>

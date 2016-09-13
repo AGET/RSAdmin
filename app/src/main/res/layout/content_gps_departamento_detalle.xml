@@ -9,8 +9,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.aldo.aget.rsadmin.Vistas.GpsEmpresaDetalle"
-    tools:showIn="@layout/activity_gps_empresa_detalle">
+    tools:context=".Vistas.GpsDepartamentoDetalle"
+    tools:showIn="@layout/activity_gps_departamento_detalle">
 
 
 
@@ -96,11 +96,104 @@
             />
     </android.support.design.widget.TextInputLayout>
 
-    <ListView
+    <!--<ListView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@+id/mcr_edt_descripcion_gps"-->
+        <!--android:layout_marginTop="20dp">-->
+    <!--</ListView>-->
+
+
+    <TextView
+        android:id="@+id/textAutotrack"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/mcr_edt_descripcion_gps"
-        android:layout_marginTop="20dp">
-    </ListView>
+        android:layout_marginTop="20dp"
+        android:text="@string/txt_title_rastreo"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead" />
+
+    <CheckBox
+        android:id="@+id/cbx_rastreo_auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textAutotrack"
+        android:layout_marginStart="26dp"
+        android:layout_toEndOf="@+id/textAutotrack"
+        android:text="Activado" />
+
+    <TextView
+        android:id="@+id/textTipoTiempo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textAutotrack"
+        android:gravity="left"
+        android:text="Tiempo"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <Spinner
+        android:id="@+id/spinnerTiempo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textAutotrack"
+        android:layout_alignTop="@+id/textTipoTiempo"
+        android:layout_toRightOf="@+id/textTipoTiempo"
+        android:paddingLeft="10dp" />
+
+
+    <TextView
+        android:id="@+id/textTiempo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinnerTiempo"
+        android:layout_marginTop="8dp"
+        android:text="@string/txt_rango_time" />
+
+    <!--android:layout_alignParentRight="true"
+android:layout_marginRight="90dp"-->
+    <SeekBar
+        android:id="@+id/seekBarTiempo"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textTiempo"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/textResultadoSeekBarTiempo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/seekBarTiempo"
+        android:layout_marginStart="4dp"
+        android:layout_toEndOf="@+id/seekBarTiempo"
+        />
+
+
+    <TextView
+        android:id="@+id/textCantidad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBarTiempo"
+        android:text="@string/txt_cantida_msn" />
+
+    <SeekBar
+        android:id="@+id/seekBarCantidad"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textCantidad"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/textResultadoSeekBarCantidad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/seekBarCantidad"
+        android:layout_marginStart="4dp"
+        android:layout_toEndOf="@+id/seekBarCantidad"
+        />
 
 </RelativeLayout>

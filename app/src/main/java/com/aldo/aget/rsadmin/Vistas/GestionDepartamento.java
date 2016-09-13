@@ -20,6 +20,7 @@ import android.view.View;
 
 import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.Configuracion.Utilidades;
+import com.aldo.aget.rsadmin.Control.Mensajes;
 import com.aldo.aget.rsadmin.R;
 import com.aldo.aget.rsadmin.ServicioWeb.ObtencionDeResultadoBcst;
 
@@ -48,13 +49,15 @@ public class GestionDepartamento extends AppCompatActivity {
 
     String tabla = Configuracion.TABLA_DEPARTAMENTO;
 
-    BroadcastReceiver receptorMensaje;
+    BroadcastReceiver receptorMensaje,receptorTelefonos;
 
     ArrayList data;
 
     MenuItem menuOk, menuEditar, menuEliminar;
 
     String ID = "";
+
+    String[][] telefonos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +81,8 @@ public class GestionDepartamento extends AppCompatActivity {
         fab_usuarios.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
                 lanzaUsuarios();
             }
         });
@@ -87,8 +90,8 @@ public class GestionDepartamento extends AppCompatActivity {
         fab_gps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
                 lanzarGpss();
             }
         });
@@ -184,6 +187,68 @@ public class GestionDepartamento extends AppCompatActivity {
         };
 
 
+        receptorTelefonos = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.v("AGET-BROAD RECIBIDO", "GestionArrendatarioCliente Numeros");
+                mostrarProgreso(false);
+                String mensaje = intent.getStringExtra(Utilidades.EXTRA_MENSAJE);
+                Boolean resultado = intent.getBooleanExtra(Utilidades.EXTRA_RESULTADO, false);
+                if (resultado) {
+                    ArrayList listNumerosEnlazados = intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST);
+
+                    telefonos = new String[listNumerosEnlazados.size()-1][((ArrayList) listNumerosEnlazados).size()-1];
+//                    telefonos = new String[listNumerosEnlazados.size()][((ArrayList) listNumerosEnlazados).size()];
+                    ArrayList nombres = new ArrayList();
+                    String telUsuario = "",telGps = "";
+
+                    Log.v("tam",""+listNumerosEnlazados.size());
+                    Log.v("tam",""+((ArrayList) listNumerosEnlazados).size());
+                    Log.v("tam",""+telefonos.length);
+//                    for (int i = 0; i < listNumerosEnlazados.size() - 1; i++) {
+                    for (int i = 0; i < listNumerosEnlazados.size()-1; i++) {
+//                        for (int j = 0; j < ((ArrayList) listNumerosEnlazados).size()-1; j++){
+                        Log.v("pasa i ",""+i);
+                        for (int j = 0; j < ((ArrayList) listNumerosEnlazados).size()-2; j++){
+                            Log.v("pasa j ",""+j);
+                            //nombres.add((String) ((ArrayList) datosLista.get(i)).get(0) + " - " + ((ArrayList) datosLista.get(i)).get(1));
+                            telUsuario = (String) ((ArrayList) listNumerosEnlazados.get(i)).get(j);
+                            if (telUsuario != null)
+                                telefonos[i][j] = (String) ((ArrayList) listNumerosEnlazados.get(i)).get(j);
+                        }
+                    }
+                    for (int i = 0; i < telefonos.length; i++) {
+                        Log.v("AGET-NUMEROUSUARIO", "msj: " + telefonos[i][0]+" num: "+telefonos[i][1]);
+                    }
+                    desvincular(telefonos);
+                }
+                eliminar(true);
+                mostrarProgreso(false);
+            }
+        };
+
+}
+
+    private void desvincular(String[][]telefonos){
+        Mensajes sms = new Mensajes(this,telefonos.length);
+
+        for(int i = 0 ; i < telefonos.length ; i++){
+            sms.enviarSMSDesvincularUsuario(telefonos[i][0],telefonos[i][1]);
+        }
+
+    }
+
+
+    public  void eliminar(boolean smsEnviados){
+        if(smsEnviados)
+            Log.v("AGET-ELIMINADO","SI Eliminado");
+        else
+            Log.v("AGET-ELIMINADO","NO Eliminado");
+
+//NOTA: LAS DOS LINEAS COMENTADAS DEBEN DE EJECUTARCE DEPUES DE MANDAS EL MENSAJE A LOS NUMEROS
+         new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GESTION_DEPARTAMENTO, null, null, tabla, null, false)
+                 .execute(Configuracion.PETICION_DEPARTAMENTO_MODIFICAR_ELIMINAR + ID, "delete");
     }
 
     @Override
@@ -193,6 +258,10 @@ public class GestionDepartamento extends AppCompatActivity {
         IntentFilter filtro = new IntentFilter(Configuracion.INTENT_GESTION_DEPARTAMENTO);
         LocalBroadcastManager.getInstance(this).registerReceiver(receptorMensaje, filtro);
 
+        IntentFilter filtroTelefonos = new IntentFilter(Configuracion.INTENT_DEPARTAMENTO_ENLACE_TELEFONOS_ENLAZADOS);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receptorTelefonos, filtroTelefonos);
+
+
         //IntentFilter filtroTelefonos = new IntentFilter(Configuracion.INTENT_EMPRESA_CLIENTE_ENLACE_TELEFONOS_ENLAZADOS);
     }
 
@@ -201,6 +270,7 @@ public class GestionDepartamento extends AppCompatActivity {
         super.onPause();
         // Desregistrar receptor
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorMensaje);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorTelefonos);
     }
 
     @Override
@@ -344,7 +414,7 @@ public class GestionDepartamento extends AppCompatActivity {
     }
 
     void lanzarGpss() {
-        Intent inten = new Intent(this, GpsEmpresa.class);
+        Intent inten = new Intent(this, GpsDepartamento.class);
         inten.putExtra(Configuracion.COLUMNA_EMPRESA_ID, idEmpresa);
         inten.putExtra(Configuracion.COLUMNA_EMPRESA_NOMBRE, empresaNombre);
         inten.putExtra(Configuracion.COLUMNA_DEPARTAMENTO_ID, idDepartamento);

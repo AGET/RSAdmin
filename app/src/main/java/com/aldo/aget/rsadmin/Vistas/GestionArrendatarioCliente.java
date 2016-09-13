@@ -28,7 +28,6 @@ import com.aldo.aget.rsadmin.R;
 import com.aldo.aget.rsadmin.ServicioWeb.ObtencionDeResultadoBcst;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import android.support.v7.widget.AppCompatSpinner;
 
@@ -74,8 +73,6 @@ public class GestionArrendatarioCliente extends AppCompatActivity {
         fab_departamentos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 mostrarListaDepartamentos();
             }
         });
@@ -376,15 +373,15 @@ public class GestionArrendatarioCliente extends AppCompatActivity {
 
     }
 
-    public static void eliminar(boolean smsEnviados){
+    public  void eliminar(boolean smsEnviados){
         if(smsEnviados)
         Log.v("AGET-ELIMINADO","SI Eliminado");
         else
             Log.v("AGET-ELIMINADO","NO Eliminado");
 
 //NOTA: LAS DOS LINEAS COMENTADAS DEBEN DE EJECUTARCE DEPUES DE MANDAS EL MENSAJE A LOS NUMEROS
-        // resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_EMPRESA_CLIENTE, null, null, tabla, null, false);
-        //resultado.execute(Configuracion.PETICION_EMPRESA_MODIFICAR_ELIMINAR + ID, tipoPeticion);
+         resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_EMPRESA_CLIENTE, null, null, tabla, null, false);
+        resultado.execute(Configuracion.PETICION_EMPRESA_MODIFICAR_ELIMINAR + ID, tipoPeticion);
     }
 
     private void cargarViews(ArrayList data) {
@@ -454,7 +451,7 @@ public class GestionArrendatarioCliente extends AppCompatActivity {
     }
 
     void lanzarGpss() {
-        Intent inten = new Intent(this, GpsEmpresa.class);
+        Intent inten = new Intent(this, GpsDepartamento.class);
         inten.putExtra(Configuracion.COLUMNA_EMPRESA_ID, idEmpresa);
         startActivity(inten);
     }

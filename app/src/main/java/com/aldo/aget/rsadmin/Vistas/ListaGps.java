@@ -50,8 +50,8 @@ public class ListaGps extends AppCompatActivity implements OnItemClickListener{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
         lista = (ListView)findViewById(R.id.listagps);
@@ -101,8 +101,8 @@ public class ListaGps extends AppCompatActivity implements OnItemClickListener{
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String marcado = (String) lista.getItemAtPosition(position);
-        Snackbar.make(view,  "Ha marcado el item " + position + " " + marcado, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+//        Snackbar.make(view,  "Ha marcado el item " + position + " " + marcado, Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show();
 
         marcado = (String) ((ArrayList) datos.get(position)).get(0);
         Log.v("AGET-Enviado", marcado);

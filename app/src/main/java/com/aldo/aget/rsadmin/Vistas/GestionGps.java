@@ -23,7 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import org.json.JSONObject;
 
@@ -59,17 +59,17 @@ public class GestionGps extends AppCompatActivity {
     ArrayList data;
 
     //Autotrack
-    CheckBox cbx_Deshabilitado;
-    Spinner spinnerTiempo;
-    SeekBar seekBarTiempo;
-    TextView textResultadoSeekBarTiempo;
-    SeekBar seekBarCantidad;
-    TextView textResultadoSeekBarCantidad;
-    SpinnerAdapter adaptadorSpinner;
-    int tiempoMaximo = 0;
-    String tipoTiempo = "";
-    String autorrastreoBD = "";
-    String rastreoAnulado = "nofix";
+//    CheckBox cbx_Deshabilitado;
+//    Spinner spinnerTiempo;
+//    SeekBar seekBarTiempo;
+//    TextView textResultadoSeekBarTiempo;
+//    SeekBar seekBarCantidad;
+//    TextView textResultadoSeekBarCantidad;
+//    SpinnerAdapter adaptadorSpinner;
+//    int tiempoMaximo = 0;
+//    String tipoTiempo = "";
+//    String autorrastreoBD = "";
+//    String rastreoAnulado = "nofix";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,7 @@ public class GestionGps extends AppCompatActivity {
         agregarToolbar();
         Bundle bundle = getIntent().getExtras();
         idGps = bundle.getString(Configuracion.COLUMNA_GPS_ID);
-
+/*
         cbx_Deshabilitado = (CheckBox) findViewById(R.id.cbx_rastreo_auto);
         spinnerTiempo = (Spinner) findViewById(R.id.spinnerTiempo);
         seekBarTiempo = (SeekBar) findViewById(R.id.seekBarTiempo);
@@ -98,7 +98,7 @@ public class GestionGps extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (spinnerTiempo.getSelectedItem() == "Elija") {
                 } else {
-                    Toast.makeText(GestionGps.this, spinnerTiempo.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(GestionGps.this, spinnerTiempo.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
                     if (adaptadorSpinner.getCount() == position) {
                     } else {
                         //realizar
@@ -177,18 +177,19 @@ public class GestionGps extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+        */
 
         //Fin autotrack
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         edtImei = (EditText) findViewById(R.id.edt_gps_imei);
         edtNumero = (EditText) findViewById(R.id.edt_gps_numero);
@@ -217,10 +218,10 @@ public class GestionGps extends AppCompatActivity {
         } else {
             setTitle(R.string.titulo_actividad_agregar_gps);
             edtEmpresaPerteneciente.setEnabled(false);
-            seekBarCantidad.setEnabled(false);
-            seekBarTiempo.setEnabled(false);
-            spinnerTiempo.setEnabled(false);
-            cbx_Deshabilitado.setEnabled(false);
+//            seekBarCantidad.setEnabled(true);
+//            seekBarTiempo.setEnabled(true);
+//            spinnerTiempo.setEnabled(true);
+//            cbx_Deshabilitado.setEnabled(true);
         }
 
         Log.v("AGET", columnasArecuperar[columnasArecuperar.length - 1]);
@@ -356,11 +357,11 @@ public class GestionGps extends AppCompatActivity {
         String telefono = edtNumero.getText().toString();
         String descripcion = edtDescripcion.getText().toString();
         String empresaPerteneciente = edtEmpresaPerteneciente.getText().toString();
-        String autorrastreo;
-        if (cbx_Deshabilitado.isChecked())
-            autorrastreo = "nofix";
-        else
-            autorrastreo = "calcule";
+        String autorrastreo ="notn";
+//        if (cbx_Deshabilitado.isChecked())
+//            autorrastreo = "nofix";
+//        else
+//            autorrastreo = "calcule";
 
         // Validaciones
         if (!esNombreValido(telefono)) {
@@ -369,8 +370,8 @@ public class GestionGps extends AppCompatActivity {
         } else {
             mostrarProgreso(true);
             String[] columnasFiltro = {Configuracion.COLUMNA_GPS_IMEI, Configuracion.COLUMNA_GPS_NUMERO
-                    , Configuracion.COLUMNA_GPS_DESCRIPCION, Configuracion.COLUMNA_GPS_AUTORASTREO, Configuracion.COLUMNA_GPS_DEPARTAMENTO};
-            String[] valorFiltro = {imei, telefono, descripcion,autorrastreo, empresaPerteneciente};
+                    , Configuracion.COLUMNA_GPS_DESCRIPCION};
+            String[] valorFiltro = {imei, telefono, descripcion};
             resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GPS, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, null, false);
             if (ID.isEmpty()) {
                 resultado.execute(Configuracion.PETICION_GPS_REGISTRO, tipoPeticion);
@@ -413,7 +414,7 @@ public class GestionGps extends AppCompatActivity {
 
 //NOTA: LAS DOS LINEAS COMENTADAS DEBEN DE EJECUTARCE DEPUES DE MANDAS EL MENSAJE A LOS NUMEROS
         resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GPS, null, null, Configuracion.TABLA_GPS, null, false);
-        resultado.execute(Configuracion.PETICION_EMPRESA_MODIFICAR_ELIMINAR + ID, tipoPeticion);
+        resultado.execute(Configuracion.PETICION_GPS_MODIFICAR_ELIMINAR + ID, tipoPeticion);
     }
     //CHECAR ||
 
@@ -433,7 +434,7 @@ public class GestionGps extends AppCompatActivity {
                 edtImei.setText(String.valueOf(data.get(0)));
                 edtNumero.setText(String.valueOf(data.get(1)));
                 edtDescripcion.setText(String.valueOf(data.get(2)));
-                autorrastreoBD = String.valueOf(data.get(3));
+//                autorrastreoBD = String.valueOf(data.get(3));
                 edtEmpresaPerteneciente.setText(String.valueOf(data.get(4)));
             }
 
@@ -459,7 +460,7 @@ public class GestionGps extends AppCompatActivity {
         edtImei.setText(String.valueOf(data.get(0)));
         edtNumero.setText(String.valueOf(data.get(1)));
         edtDescripcion.setText(String.valueOf(data.get(2)));
-        autorrastreoBD = String.valueOf(data.get(3));
+//        autorrastreoBD = String.valueOf(data.get(3));
         if (String.valueOf(data.get(4)).equalsIgnoreCase("null"))
             edtEmpresaPerteneciente.setText("No ha sido asignado");
 //        if (String.valueOf(data.get(3)).equalsIgnoreCase("0")) {
@@ -483,15 +484,15 @@ public class GestionGps extends AppCompatActivity {
         edtNumero.setEnabled(habilitado);
         edtDescripcion.setEnabled(habilitado);
 
-        cbx_Deshabilitado.setEnabled(false);
+//        cbx_Deshabilitado.setEnabled(false);
         edtEmpresaPerteneciente.setEnabled(false);
 
-        if (autorrastreoBD.equalsIgnoreCase(rastreoAnulado)){
-            cbx_Deshabilitado.setChecked(true);
-            spinnerTiempo.setEnabled(false);
-            seekBarCantidad.setEnabled(false);
-            seekBarTiempo.setEnabled(false);
-        }
+//        if (autorrastreoBD.equalsIgnoreCase(rastreoAnulado)){
+//            cbx_Deshabilitado.setChecked(true);
+//            spinnerTiempo.setEnabled(false);
+//            seekBarCantidad.setEnabled(false);
+//            seekBarTiempo.setEnabled(false);
+//        }
     }
 
 

@@ -38,7 +38,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="43dp"
         app:hintTextAppearance="@style/Hint"
-        android:layout_below="@+id/txtIdEmpresa"
         android:layout_marginLeft="60dp">
         <EditText
             android:id="@+id/edt_nombre_empresa"

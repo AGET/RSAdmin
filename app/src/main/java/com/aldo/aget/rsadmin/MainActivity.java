@@ -13,12 +13,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.Control.AdaptadorFragmentos;
+import com.aldo.aget.rsadmin.Vistas.DialogoConfirmacion;
 import com.aldo.aget.rsadmin.Vistas.FragmentoEmpresaDeshabilitada;
 import com.aldo.aget.rsadmin.Vistas.FragmentoEmpresaHabilitada;
 import com.aldo.aget.rsadmin.Vistas.FragmentoGpsLibres;
@@ -30,8 +33,11 @@ import java.util.Locale;
 
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements DialogoConfirmacion.OnConfirmacionDialogListener {
     Button btnDispositivos, btnEmpresas, btnReconocerVoz;
+
+    MenuItem menuCambiarDatos, menuAcercaDe;
 
     //Sistetizador
     private static int TTS_DATA_CHECK = 1;
@@ -69,11 +75,11 @@ public class MainActivity extends AppCompatActivity {
                         FragmentoEmpresaHabilitada.actividadEmpresa(null);
                         break;
                     case "Gps":
-                        Toast.makeText(MainActivity.this, "tres", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "tres", Toast.LENGTH_SHORT).show();
                         FragmentoGpsLibres.actividadGps(null);
                         break;
                     case "Tab Cuatro":
-                        Toast.makeText(MainActivity.this, "Cuatro", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "Cuatro", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
@@ -173,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
                             tts.setSpeechRate(1.9f);
                             speak();
                         }
+
                     }
                 });
             }
@@ -225,5 +232,50 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menuCambiarDatos = menu.findItem(R.id.cambiar_datos);
+        this.menuAcercaDe = menu.findItem(R.id.acerca_de);
+
+        // Verificación de visibilidad
+
+
+        menuAcercaDe.setVisible(true);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.cambiar_datos:
+
+                break;
+            case R.id.acerca_de:
+                new DialogoConfirmacion("Información","  Tecnológico Nacional de México\n" +
+                        "Instituto Tecnológico de Chilpancingo\n\n" +
+                        "Sistema de residencia profecional\n" +
+                        "Realizado por:\n\n" +
+                        "Alumno: \n" +
+                        "Aldo Gamaliel Estrada Tepec\n\n" +
+                        "Con asesoria de: \n" +
+                        "M.C. Jose Mario Martinez Castro","Cerrar","").show(getSupportFragmentManager(), "SimpleDialog");
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onPossitiveButtonClick() {
+        Log.v("AGET-DIALOGO","ACEPTAR");
+
+    }
+
+    @Override
+    public void onNegativeButtonClick() {
+        Log.v("AGET-DIALOGO","CANCELAR");
     }
 }

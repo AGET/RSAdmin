@@ -124,97 +124,97 @@
             android:inputType="textPersonName" />
     </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:id="@+id/textAutotrack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/mcr_edt_gps_empresa"
-        android:layout_marginTop="20dp"
-        android:text="@string/txt_title_rastreo"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead" />
+    <!--<TextView-->
+        <!--android:id="@+id/textAutotrack"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/mcr_edt_gps_empresa"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:text="@string/txt_title_rastreo"-->
+        <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead" />-->
 
-    <CheckBox
-        android:id="@+id/cbx_rastreo_auto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textAutotrack"
-        android:layout_marginStart="26dp"
-        android:layout_toEndOf="@+id/textAutotrack"
-        android:text="Deshabilitado" />
+    <!--<CheckBox-->
+        <!--android:id="@+id/cbx_rastreo_auto"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBaseline="@+id/textAutotrack"-->
+        <!--android:layout_marginStart="26dp"-->
+        <!--android:layout_toEndOf="@+id/textAutotrack"-->
+        <!--android:text="Deshabilitado" />-->
 
-    <TextView
-        android:id="@+id/textTipoTiempo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textAutotrack"
-        android:gravity="left"
-        android:text="Tiempo"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+    <!--<TextView-->
+        <!--android:id="@+id/textTipoTiempo"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_below="@+id/textAutotrack"-->
+        <!--android:gravity="left"-->
+        <!--android:text="Tiempo"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall" />-->
 
-    <Spinner
-        android:id="@+id/spinnerTiempo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textAutotrack"
-        android:layout_alignTop="@+id/textTipoTiempo"
-        android:layout_toRightOf="@+id/textTipoTiempo"
-        android:paddingLeft="10dp" />
-
-
-    <TextView
-        android:id="@+id/textTiempo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/spinnerTiempo"
-        android:layout_marginTop="8dp"
-        android:text="@string/txt_rango_time" />
-
-    <!--android:layout_alignParentRight="true"
-android:layout_marginRight="90dp"-->
-    <SeekBar
-        android:id="@+id/seekBarTiempo"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textTiempo"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="10dp" />
-
-    <TextView
-        android:id="@+id/textResultadoSeekBarTiempo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/seekBarTiempo"
-        android:layout_marginStart="4dp"
-        android:layout_toEndOf="@+id/seekBarTiempo"
-        />
+    <!--<Spinner-->
+        <!--android:id="@+id/spinnerTiempo"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/textAutotrack"-->
+        <!--android:layout_alignTop="@+id/textTipoTiempo"-->
+        <!--android:layout_toRightOf="@+id/textTipoTiempo"-->
+        <!--android:paddingLeft="10dp" />-->
 
 
-    <TextView
-        android:id="@+id/textCantidad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/seekBarTiempo"
-        android:text="@string/txt_cantida_msn" />
+    <!--<TextView-->
+        <!--android:id="@+id/textTiempo"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/spinnerTiempo"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="@string/txt_rango_time" />-->
 
-    <SeekBar
-        android:id="@+id/seekBarCantidad"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textCantidad"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="10dp" />
+    <!--&lt;!&ndash;android:layout_alignParentRight="true"-->
+<!--android:layout_marginRight="90dp"&ndash;&gt;-->
+    <!--<SeekBar-->
+        <!--android:id="@+id/seekBarTiempo"-->
+        <!--android:layout_width="250dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_below="@+id/textTiempo"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_marginTop="10dp" />-->
 
-    <TextView
-        android:id="@+id/textResultadoSeekBarCantidad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/seekBarCantidad"
-        android:layout_marginStart="4dp"
-        android:layout_toEndOf="@+id/seekBarCantidad"
-        />
+    <!--<TextView-->
+        <!--android:id="@+id/textResultadoSeekBarTiempo"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBottom="@+id/seekBarTiempo"-->
+        <!--android:layout_marginStart="4dp"-->
+        <!--android:layout_toEndOf="@+id/seekBarTiempo"-->
+        <!--/>-->
+
+
+    <!--<TextView-->
+        <!--android:id="@+id/textCantidad"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/seekBarTiempo"-->
+        <!--android:text="@string/txt_cantida_msn" />-->
+
+    <!--<SeekBar-->
+        <!--android:id="@+id/seekBarCantidad"-->
+        <!--android:layout_width="250dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_below="@+id/textCantidad"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_marginTop="10dp" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textResultadoSeekBarCantidad"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBottom="@+id/seekBarCantidad"-->
+        <!--android:layout_marginStart="4dp"-->
+        <!--android:layout_toEndOf="@+id/seekBarCantidad"-->
+        <!--/>-->
 
 
 </RelativeLayout>
