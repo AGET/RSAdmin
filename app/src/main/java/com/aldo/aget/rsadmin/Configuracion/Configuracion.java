@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.aldo.aget.rsadmin.MainActivity;
+
 /**
  * Created by Work on 22/05/16.
  */
@@ -29,8 +30,14 @@ public class Configuracion extends Activity {
     public static final String PETICION_GPS_LISTAR_DIASPONIBLES_A_ENLAZAR = SERVIDOR + "/api.rs.com/v1/gps/listarGpsDeDepartamentoDisponiblesAEnlace";
     public static final String PETICION_GPS_ASIGNAR_DEPARTAMENTO = SERVIDOR + "/api.rs.com/v1/gps/asignarDepartamento";
     public static final String PETICION_GPS_DESVINCULAR = SERVIDOR + "/api.rs.com/v1/enlace/desvinculacion";
-    public static final String PETICION_GPS_ESTABLECER_AUTORRASTREO = SERVIDOR + "/api.rs.com/v1/gps/establecerAutorastreo";
 
+    /**
+     * menasjes:
+     * exito: "Autorrastreo establecido correctamente"
+     * Error desconocido: "No asignado");
+     * Error: "Error probablemente no se recibio el dato"
+     */
+    public static final String PETICION_GPS_ESTABLECER_AUTORRASTREO = SERVIDOR + "/api.rs.com/v1/gps/establecerAutorastreo";
 
 
     public static final String PETICION_GPS_LISTAR_DISPONOBLES_EMPRESA = SERVIDOR + "/api.rs.com/v1/gps/listarGpsDeDeparamentoDisponiblesParaEnlace";
@@ -67,16 +74,23 @@ public class Configuracion extends Activity {
     public static final String PETICION_ENLACE_LISTAR_TELEFONOS_USUARIO = SERVIDOR + "/api.rs.com/v1/enlace/listarTelefonosUsuario";
 
 
+    //PETICION ADMINISTRADOR
+    public static final String PETICION_ADMINISTRADOR_MODIFICAR_ELIMINAR = SERVIDOR + "/api.rs.com/v1/administrador/";
+    public static final String PETICION_ADMINISTRADOR_LISTAR_UNO = SERVIDOR + "/api.rs.com/v1/administrador/listarUno_Id";
+
+
     //PETICION ENLACE
 
     public static final String PETICION_ENLACE_REGISTRO = SERVIDOR + "/api.rs.com/v1/enlace/registro";
-    public static final String PETICION_ENLACE_LISTAR_TELEFONOS = SERVIDOR + "/api.rs.com/v1/enlace/listarTelefonos";
+    public static final String PETICION_ENLACE_LISTAR_TELEFONOS = SERVIDOR + "/api.rs.com/v1/enlace/listarTelefonosDepartamento";
     public static final String PETICION_ENLACE_MODIFICAR_ELIMINAR = SERVIDOR + "/api.rs.com/v1/enlace/";
+
+    public static final String PETICION_ENLACE_LISTAR_BASE_GPS = SERVIDOR + "/api.rs.com/v1/enlace/listarEnlacesBaseGps";
+    public static final String PETICION_ENLACE_LISTAR_NUMEROS_A_ELIMINAR = SERVIDOR + "/api.rs.com/v1/enlace/listarTelefonosenlazadosAGps";
 
 
 
     //PETICION
-
 
 
     //    Tablas
@@ -85,6 +99,7 @@ public class Configuracion extends Activity {
     public static final String TABLA_ENLACE = "enlace";
     public static final String TABLA_DEPARTAMENTO = "departamento";
     public static final String TABLA_USUARIOS = "usuarios";
+    public static final String TABLA_ADMINISTRADOR = "administrador_sistema";
 
     //    Columnas
 //GPS
@@ -92,7 +107,7 @@ public class Configuracion extends Activity {
     public static final String COLUMNA_GPS_IMEI = "imei";
     public static final String COLUMNA_GPS_NUMERO = "numero";
     public static final String COLUMNA_GPS_DESCRIPCION = "descripcion";
-    public static final String COLUMNA_GPS_AUTORASTREO= "autorastreo";
+    public static final String COLUMNA_GPS_AUTORASTREO = "autorastreo";
     public static final String COLUMNA_GPS_DEPARTAMENTO = "departamento_id";
 
 
@@ -118,14 +133,27 @@ public class Configuracion extends Activity {
     public static final String COLUMNA_USUARIO_AP_MATERNO = "ap_materno";
     public static final String COLUMNA_USUARIO_TELEFONO = "telefono";
     public static final String COLUMNA_USUARIO_CORREO = "correo";
-    public static final String COLUMNA_USUARIO_USUARIO = "usuario";
     public static final String COLUMNA_USUARIO_CONTRASE_NA = "contrase_na";
     public static final String COLUMNA_USUARIO_DEPARTAMENTO_ID = "departamento_id";
+
+    //ADMINISTRADOR
+
+    public static final String COLUMNA_ADMINISTRADOR_ID = "administrador_id";
+    public static final String COLUMNA_ADMINISTRADOR_NOMBRE = "nombre";
+    public static final String COLUMNA_ADMINISTRADOR_AP_PATERNO = "ap_paterno";
+    public static final String COLUMNA_ADMINISTRADOR_AP_MATERNO = "ap_materno";
+    public static final String COLUMNA_ADMINISTRADOR_TELEFONO = "telefono";
+    public static final String COLUMNA_ADMINISTRADOR_CORREO = "correo";
+    public static final String COLUMNA_ADMINISTRADOR_CONTRASE_NA = "contrase_na";
 
     //ENLACE
     public static final String COLUMNA_ENLACE_ID = "enlace_id";
     public static final String COLUMNA_ENLACE_USUARIO = "usuario_id";
     public static final String COLUMNA_ENLACE_GPS = "gps_id";
+
+    public static final String COLUMNA_ENLACE_AUX_TELEFONO_USUARIO = "telefono_usuario";
+    public static final String COLUMNA_ENLACE_AUX_TELEFONO_GPS = "telefono_gps";
+
 
     //Broadcast
     public static final String INTENT_LISTA_EMPRESA = "com.aldo.aget.rsadmin.Vistas.ListaEmpresa";
@@ -152,10 +180,13 @@ public class Configuracion extends Activity {
     public static final String INTENT_GESTION_USUARIO_DESVINICULAR_UN_GPS = "com.aldo.aget.rsadmin.Vistas.GestionUsuario.Lista.GestionGps.Desvincular.Un.Gps";
     public static final String INTENT_USUARIO_ENLACE_TELEFONOS_ENLAZADOS = "com.aldo.aget.rsadmin.Vistas.Usuario.TelefonosEnlazados";
 
+    public static final String INTENT_GESTION_ADMINISTRADOR = "com.aldo.aget.rsadmin.Vistas.GestionAdministrador";
+
 
     //RECEPTORES GPS
-    public static final String INTENT_GPS= "com.aldo.aget.rsadmin.Vistas.GestionGps";
-
+    public static final String INTENT_GPS = "com.aldo.aget.rsadmin.Vistas.GestionGps";
+    public static final String INTENT_ENLACE = "com.aldo.aget.rsadmin.Vistas.Enlace";
+    public static final String INTENT_ENLACE_ELIMINAR_TELEFONOS_ENLAZADOS= "com.aldo.aget.rsadmin.Vistas.Enlace.EliminarTelefonosEnlazados";
     public static final String INTENT_GPS_DEPARTAMENTO = "com.aldo.aget.rsadmin.Vistas.GpsDepartamento";
     public static final String INTENT_GPS_LIBRES = "com.aldo.aget.rsadmin.Vistas.GpsLibres";
     public static final String INTENT_GPS_EMPRESA_AGREGADOS = "com.aldo.aget.rsadmin.Vistas.GpsEmpresa_Agregados";

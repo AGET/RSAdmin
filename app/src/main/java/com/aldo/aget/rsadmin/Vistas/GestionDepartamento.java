@@ -417,8 +417,10 @@ public class GestionDepartamento extends AppCompatActivity {
         Intent inten = new Intent(this, GpsDepartamento.class);
         inten.putExtra(Configuracion.COLUMNA_EMPRESA_ID, idEmpresa);
         inten.putExtra(Configuracion.COLUMNA_EMPRESA_NOMBRE, empresaNombre);
+        inten.putExtra(Configuracion.COLUMNA_EMPRESA_STATUS,empresaStatus);
         inten.putExtra(Configuracion.COLUMNA_DEPARTAMENTO_ID, idDepartamento);
-        inten.putExtra(Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE, departamentoNombre);
+        inten.putExtra(Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE, edtNombre.getText().toString());
+
         startActivity(inten);
     }
 

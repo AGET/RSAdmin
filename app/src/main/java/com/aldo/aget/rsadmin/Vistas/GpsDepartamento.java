@@ -1,9 +1,16 @@
 package com.aldo.aget.rsadmin.Vistas;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
@@ -25,18 +32,23 @@ import com.aldo.aget.rsadmin.ServicioWeb.ObtenerAsincrono;
 
 import java.util.ArrayList;
 
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
-public class GpsDepartamento extends AppCompatActivity implements AdapterView.OnItemClickListener {
+
+public class GpsDepartamento extends AppCompatActivity implements AdapterView.OnItemClickListener, DialogoAgregarGpsDep.DialogListener {
 
     AppCompatSpinner spinner;
     SpinnerAdapter adaptadorSpinner;
     ListView lista;
     ArrayAdapter adaptadorLista;
+    Dialog dialogo;
 
     BroadcastReceiver receptorMensajeGpsSpinner, receptorMensajeGpsLista;
     private ProgressBar progressBar;
 
-    String idDepartamento, idEmpresa, departamentoNombre, tipoPeticion = "post";
+    String idDepartamento, idEmpresa, empresaNombre, empresaStatus, departamentoNombre, tipoPeticion = "post";
 
     ArrayList datosLista, datosSpinner;
 
@@ -45,6 +57,13 @@ public class GpsDepartamento extends AppCompatActivity implements AdapterView.On
 
     boolean datosRecibidos = false;
     String ID_Spinner = "";
+    String textDescripcion = null;
+
+    Activity activity;
+    Context contex;
+    View testingView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,32 +76,27 @@ public class GpsDepartamento extends AppCompatActivity implements AdapterView.On
         lista = (ListView) findViewById(R.id.lista_gps_de_empresa);
         lista.setOnItemClickListener(this);
 
+        activity = this;
+        contex = this;
+
         Bundle bundle = getIntent().getExtras();
         idEmpresa = bundle.getString(Configuracion.COLUMNA_EMPRESA_ID);
+        empresaNombre = bundle.getString(Configuracion.COLUMNA_EMPRESA_NOMBRE);
+        empresaStatus = bundle.getString(Configuracion.COLUMNA_EMPRESA_STATUS);
         idDepartamento = bundle.getString(Configuracion.COLUMNA_DEPARTAMENTO_ID);
         departamentoNombre = bundle.getString(Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE);
 
         setTitle("GPS de " + departamentoNombre);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String marcado = "";
-
                 String imei = "";
                 String numero = "";
                 String descripcion = "";
 
-                if (spinner.getSelectedItem() == "Estado de la empresa") {
+                if (spinner.getSelectedItem() == "Elige un Gps a agregar") {
                 } else {
 //                    Toast.makeText(GpsDepartamento.this, spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
                     Log.v("AGET-SPINNER-GPSS", "" + ((ArrayList) datosSpinner).size());
@@ -104,6 +118,37 @@ public class GpsDepartamento extends AppCompatActivity implements AdapterView.On
                         Log.v("AGET-NUMERO", numero);
                         Log.v("AGET-DESCRIPCION", descripcion);
 
+//                        dialogo =  crearDialogo();
+//                        dialogo.show();
+//                        dialogo.get
+
+                        DialogoAgregarGpsDep dialog = new DialogoAgregarGpsDep(contex, activity);
+                        testingView = dialog.inflar();
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                      dialog.onCreateDialogo(bn).show(ft,"");
+                        dialog.show(ft, "");
+
+//                        if (textDescripcion != null) {
+//                            if (textDescripcion != "") {
+//                                mostrarProgreso(true);
+//                                //String[] columnasFiltro = {Configuracion.COLUMNA_GPS_NUMERO, Configuracion.COLUMNA_GPS_DESCRIPCION, Configuracion.COLUMNA_GPS_DEPARTAMENTO};
+//
+//                                String[] columnasFiltro = {Configuracion.COLUMNA_GPS_ID, Configuracion.COLUMNA_DEPARTAMENTO_ID};
+//                                String[] valorFiltro = {ID_Spinner, idDepartamento};
+//                                tipoPeticion = "post";
+//                                new ObtencionDeResultadoBcst(GpsDepartamento.this, Configuracion.INTENT_GPS_LIBRES, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, null, false)
+//                                        .execute(Configuracion.PETICION_GPS_MODIFICAR_ELIMINAR+ID_Spinner, tipoPeticion);
+//
+//                                Snackbar.make(view, descripcion, Snackbar.LENGTH_INDEFINITE).show();
+//                                spinner.setSelection(adaptadorSpinner.getCount());
+//                            } else {
+//                                Toast.makeText(GpsDepartamento.this, "la descripcion no dee ser vacia", Toast.LENGTH_SHORT).show();
+//                            }
+//                        } else {
+//                            Toast.makeText(GpsDepartamento.this, "Elija una descripcion", Toast.LENGTH_SHORT).show();
+//                        }
+
+                        /*
                         mostrarProgreso(true);
                         //String[] columnasFiltro = {Configuracion.COLUMNA_GPS_NUMERO, Configuracion.COLUMNA_GPS_DESCRIPCION, Configuracion.COLUMNA_GPS_DEPARTAMENTO};
                         String[] columnasFiltro = {Configuracion.COLUMNA_GPS_ID, Configuracion.COLUMNA_DEPARTAMENTO_ID};
@@ -111,8 +156,9 @@ public class GpsDepartamento extends AppCompatActivity implements AdapterView.On
                         tipoPeticion = "post";
                         new ObtencionDeResultadoBcst(GpsDepartamento.this, Configuracion.INTENT_GPS_LIBRES, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, null, false)
                                 .execute(Configuracion.PETICION_GPS_ASIGNAR_DEPARTAMENTO, tipoPeticion);
-
+*/
                         spinner.setSelection(adaptadorSpinner.getCount());
+
                     }
                 }
             }
@@ -128,7 +174,6 @@ public class GpsDepartamento extends AppCompatActivity implements AdapterView.On
         peticionGPSEnlazados();
 
         receptorMensajeGpsSpinner = new BroadcastReceiver() {
-
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.v("AGET", "BROAD RECIBIDO GPS LIBRES");
@@ -151,6 +196,11 @@ public class GpsDepartamento extends AppCompatActivity implements AdapterView.On
                     peticionGPSEnlazados();
                     mensajesSak("GPS Enlazado");
                 }
+                if(mensaje.equalsIgnoreCase("Registro actualizado correctamente")){
+                    Snackbar.make(findViewById(R.id.xml_activity_gps_empresa), "Se ha agregado la descripcion", Snackbar.LENGTH_SHORT).show();
+//                    mostrarProgreso(false);
+                }
+
                 Log.v("AGET-spinner", mensaje);
             }
         };
@@ -223,14 +273,14 @@ public class GpsDepartamento extends AppCompatActivity implements AdapterView.On
     }
 
 
-
     protected void actualizarSpinner(ArrayList datosMultiples) {
         this.datosSpinner = datosMultiples;
         ArrayList descripciones = new ArrayList();
 
         for (int i = 0; i < datosSpinner.size() - 1; i++) {
             Log.v("AGET-valor:", "" + (String) ((ArrayList) datosSpinner.get(i)).get(0));
-            descripciones.add((String) ((ArrayList) datosSpinner.get(i)).get(2) + "   " + (String) ((ArrayList) datosSpinner.get(i)).get(3));
+//            descripciones.add((String) ((ArrayList) datosSpinner.get(i)).get(2) + "   " + (String) ((ArrayList) datosSpinner.get(i)).get(3));
+            descripciones.add("Numero: " + (String) ((ArrayList) datosSpinner.get(i)).get(2));
         }
 
         adaptadorSpinner = new SpinnerAdapter(GpsDepartamento.this, android.R.layout.simple_list_item_1);
@@ -297,7 +347,20 @@ public class GpsDepartamento extends AppCompatActivity implements AdapterView.On
         marcado = (String) ((ArrayList) datosLista.get(position)).get(0) + " - " + ((ArrayList) datosLista.get(position)).get(1);
         Log.v("AGET-Enviado", marcado);
         //actividadEmpresa(marcado);
+
+
+        mostrarGpsDepartamentoDetalle(position);
+    }
+
+    private void mostrarGpsDepartamentoDetalle(int position) {
+
         Intent actividad = new Intent(GpsDepartamento.this, GpsDepartamentoDetalle.class);
+        actividad.putExtra(Configuracion.COLUMNA_EMPRESA_ID, idEmpresa);
+        actividad.putExtra(Configuracion.COLUMNA_EMPRESA_NOMBRE, empresaNombre);
+        actividad.putExtra(Configuracion.COLUMNA_EMPRESA_STATUS, empresaStatus);
+        actividad.putExtra(Configuracion.COLUMNA_DEPARTAMENTO_ID, idDepartamento);
+        actividad.putExtra(Configuracion.COLUMNA_DEPARTAMENTO_NOMBRE, departamentoNombre);
+        Log.v("YYY","GpsDepDet: "+ empresaNombre);
         actividad.putExtra(Configuracion.COLUMNA_GPS_ID, (String) ((ArrayList) datosLista.get(position)).get(0));
         actividad.putExtra(Configuracion.COLUMNA_GPS_IMEI, (String) ((ArrayList) datosLista.get(position)).get(1));
         actividad.putExtra(Configuracion.COLUMNA_GPS_NUMERO, (String) ((ArrayList) datosLista.get(position)).get(2));
@@ -305,6 +368,7 @@ public class GpsDepartamento extends AppCompatActivity implements AdapterView.On
         actividad.putExtra(Configuracion.COLUMNA_GPS_AUTORASTREO, (String) ((ArrayList) datosLista.get(position)).get(4));
         actividad.putExtra(Configuracion.COLUMNA_GPS_DEPARTAMENTO, (String) ((ArrayList) datosLista.get(position)).get(5));
         startActivity(actividad);
+
     }
 
     public void mensajesSak(String mensaje) {
@@ -334,5 +398,86 @@ public class GpsDepartamento extends AppCompatActivity implements AdapterView.On
         Log.v("AGET-ID_DEPARTAMENTO", "" + idDepartamento);
         new ObtencionDeResultadoBcst(GpsDepartamento.this, Configuracion.INTENT_GPS_DEPARTAMENTO, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, columnasArecuperar, true)
                 .execute(Configuracion.PETICION_GPS_LISTAR_DEPARTAMENTO, tipoPeticion);
+    }
+
+    private Dialog crearDialogo() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+
+//        <ImageView
+//        android:src="@drawable/ic_description_white_24dp"
+//        android:layout_width="match_parent"
+//        android:layout_height="64dp"
+//        android:scaleType="center"
+//        android:background="#2196F3"
+//        android:contentDescription="@string/app_name" />
+
+        final ImageView img = new ImageView(this);
+        img.setImageResource(R.drawable.ic_description_white_24dp);
+
+        final String[] descripcion = {""};
+        String desc = "";
+
+        final EditText textoBusqueda = new EditText(this);
+        builder.setTitle(R.string.desc_gps_dep);   // Título
+        builder.setView(textoBusqueda);
+        builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Log.i("texto", textoBusqueda.getText().toString());
+                descripcion[0] = (String) textoBusqueda.getText().toString();
+            }
+        });
+        builder.setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                descripcion[0] = (String) textoBusqueda.getText().toString();
+            }
+        });
+        desc = descripcion[0];
+
+        builder.create();
+        builder.show();
+        return builder.create();
+//        return desc;
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        EditText edtDescripcion = (EditText) testingView.findViewById(R.id.descripcion_gps);
+        textDescripcion = edtDescripcion.getText().toString();
+
+
+        if (textDescripcion != null) {
+            if (textDescripcion != "") {
+                mostrarProgreso(true);
+                //String[] columnasFiltro = {Configuracion.COLUMNA_GPS_NUMERO, Configuracion.COLUMNA_GPS_DESCRIPCION, Configuracion.COLUMNA_GPS_DEPARTAMENTO};
+
+                String[] columnasFiltro = {Configuracion.COLUMNA_GPS_DESCRIPCION};
+                String[] valorFiltro = {textDescripcion};
+                tipoPeticion = "put";
+                new ObtencionDeResultadoBcst(GpsDepartamento.this, Configuracion.INTENT_GPS_LIBRES, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, null, false)
+                        .execute(Configuracion.PETICION_GPS_MODIFICAR_ELIMINAR + ID_Spinner, tipoPeticion);
+
+
+                Snackbar.make(findViewById(R.id.xml_activity_gps_empresa), textDescripcion + " ID: " + ID_Spinner, Snackbar.LENGTH_INDEFINITE).show();
+                spinner.setSelection(adaptadorSpinner.getCount());
+//
+                String[] columnasFiltroAsignar = {Configuracion.COLUMNA_GPS_ID, Configuracion.COLUMNA_DEPARTAMENTO_ID};
+                String[] valorFiltroAsignar = {ID_Spinner, idDepartamento};
+                tipoPeticion = "post";
+                new ObtencionDeResultadoBcst(GpsDepartamento.this, Configuracion.INTENT_GPS_LIBRES,
+                        columnasFiltroAsignar , valorFiltroAsignar , Configuracion.TABLA_GPS, null, false)
+                        .execute(Configuracion.PETICION_GPS_ASIGNAR_DEPARTAMENTO, tipoPeticion);
+            } else {
+                Toast.makeText(GpsDepartamento.this, "la descripcion no dee ser vacia", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(GpsDepartamento.this, "Elija una descripcion", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        dialog.dismiss();
     }
 }

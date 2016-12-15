@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.aldo.aget.rsadmin.Vistas.GestionAdministrador"
+    tools:showIn="@layout/activity_gestion_administrador">
+
+    <ImageView
+        android:id="@+id/icono_nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icono_cuenta"
+        android:layout_alignBottom="@+id/mcr_edt_nombre_administrador"
+        android:layout_marginBottom="10dp"
+        />
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/mcr_edt_nombre_administrador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        app:hintTextAppearance="@style/Hint"
+        android:layout_marginLeft="40dp">
+        <EditText
+            android:id="@+id/edt_nombre_administrador"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="12"
+            android:hint="Nombre"
+            android:inputType="textPersonName"
+            android:layout_centerHorizontal="true" />
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/icono_ap_p"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icono_cuenta"
+        android:layout_alignBottom="@+id/mcr_edt_apellido_paterno"
+        android:layout_marginBottom="10dp"
+        />
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/mcr_edt_apellido_paterno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:hintTextAppearance="@style/Hint"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@+id/mcr_edt_nombre_administrador"
+        >
+        <EditText
+            android:id="@+id/edt_apellido_paterno_administrador"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="12"
+            android:hint="Apellido paterno"
+            android:inputType="textPersonName"
+            android:layout_centerHorizontal="true" />
+    </android.support.design.widget.TextInputLayout>
+
+
+
+
+
+    <ImageView
+        android:id="@+id/icono_ap_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icono_cuenta"
+        android:layout_alignBottom="@+id/mcr_edt_apellido_materno"
+        android:layout_marginBottom="10dp"
+        />
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/mcr_edt_apellido_materno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/mcr_edt_apellido_paterno"
+        android:layout_marginLeft="40dp"
+        app:hintTextAppearance="@style/Hint"
+        >
+        <EditText
+            android:id="@+id/edt_apellido_materno_administrador"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="12"
+            android:hint="Apellido materno"
+            android:inputType="textPersonName"
+            android:layout_centerHorizontal="true" />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <ImageView
+        android:id="@+id/icono_telefono"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icono_telefono"
+        android:layout_alignBottom="@+id/mcr_edt_telefono_administrador"
+        android:layout_marginBottom="10dp"
+        />
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/mcr_edt_telefono_administrador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/mcr_edt_apellido_materno"
+        app:hintTextAppearance="@style/Hint"
+        android:layout_marginLeft="40dp">
+        <EditText
+            android:id="@+id/edt_telefono_administrador"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="12"
+            android:hint="Telefono"
+            android:inputType="phone"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/icono_correo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icono_correo"
+        android:layout_alignBottom="@+id/mcr_edt_correo_administrador"
+        android:layout_marginBottom="10dp"
+        />
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/mcr_edt_correo_administrador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/mcr_edt_telefono_administrador"
+        app:hintTextAppearance="@style/Hint"
+        android:layout_marginLeft="40dp">
+        <EditText
+            android:id="@+id/edt_correo_administrador"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="12"
+            android:hint="Correo"
+            android:inputType="textEmailAddress"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+
+
+    <ImageView
+        android:id="@+id/icono_pass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_secure"
+        android:layout_alignBottom="@+id/mcr_edt_pass_administrador"
+        android:layout_marginBottom="10dp"
+        />
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/mcr_edt_pass_administrador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/mcr_edt_correo_administrador"
+        app:hintTextAppearance="@style/Hint"
+        android:layout_marginLeft="40dp">
+        <EditText
+            android:id="@+id/edt_pass_administrador"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="12"
+            android:hint="Clave"
+            android:inputType="textPassword"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+</RelativeLayout>

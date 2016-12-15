@@ -47,7 +47,20 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
 
     boolean sonTablas,obtener = true;
 
-    public ObtencionDeResultadoBcst(Context context, String receptor, String[] nombresColumnasFiltro, String[] datosColumnasFiltro, String tabla, String[] columnas_a_recuperar, boolean sonTabla) {
+    /**
+     *
+     * @param context
+     * @param receptor
+     * @param nombresColumnasFiltro
+     * @param datosColumnasFiltro
+     * @param tabla
+     * @param columnas_a_recuperar
+     * @param sonTabla (se recuperaran varias entidades de datos?)
+     */
+    public ObtencionDeResultadoBcst(Context context, String receptor, String[] nombresColumnasFiltro,
+                                    String[] datosColumnasFiltro, String tabla, String[] columnas_a_recuperar,
+                                    boolean sonTabla) {
+
         this.columnasFiltro = nombresColumnasFiltro;
         this.valorFiltro = datosColumnasFiltro;
         this.tabla = tabla;
@@ -120,6 +133,9 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
             stringEntity.setContentType((Header) new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             httppost.setEntity(stringEntity);
             Log.v("AGET-ver",stringEntity.toString());
+
+
+            Log.v("AGET-convertir",new Convertidor().inputStreamToString(stringEntity.getContent()).toString());
             //ejecuta
             response = httpclient.execute(httppost);
         }
@@ -133,6 +149,7 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
             }
             stringEntity = new StringEntity(jsonObject.toString());
             stringEntity.setContentType((Header) new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            Log.v("AGET-convertir",new Convertidor().inputStreamToString(stringEntity.getContent()).toString());
             httpput.setEntity(stringEntity);
             response = httpclient.execute(httpput);
         }
@@ -144,7 +161,6 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
 
         //obtiene la respuesta y transorma a objeto JSON
         String jsonResult = new Convertidor().inputStreamToString(response.getEntity().getContent()).toString();
-        Log.v("AGET-CHECAR",jsonResult);
         JSONObject object = new JSONObject(jsonResult);
         Log.i("AGET-JSONResult", jsonResult);
         return object;
@@ -195,7 +211,6 @@ public class ObtencionDeResultadoBcst extends AsyncTask<String, Void, JSONObject
         intentLocal.putExtra(Utilidades.EXTRA_MENSAJE, mensaje);
         intentLocal.putExtra(Utilidades.EXTRA_DATOS_ALIST, datos);
         LocalBroadcastManager.getInstance(Configuracion.context).sendBroadcast(intentLocal);
-
         Log.v("AGET", "BROAD ENVIADO");
     }
 }

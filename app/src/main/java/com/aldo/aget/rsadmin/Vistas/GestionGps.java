@@ -30,10 +30,12 @@ import org.json.JSONObject;
 import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.Configuracion.Utilidades;
 import com.aldo.aget.rsadmin.Control.ControlGps;
+import com.aldo.aget.rsadmin.Control.Mensajes;
 import com.aldo.aget.rsadmin.R;
 import com.aldo.aget.rsadmin.ServicioWeb.ObtencionDeResultadoBcst;
 
 import java.util.ArrayList;
+
 import android.widget.CheckBox;
 
 public class GestionGps extends AppCompatActivity {
@@ -46,7 +48,7 @@ public class GestionGps extends AppCompatActivity {
 
     ObtencionDeResultadoBcst resultado;
 
-    BroadcastReceiver receptorMensaje;
+    BroadcastReceiver receptorMensaje, receptorEnlaceTelefonosEnlazados;
 
     MenuItem menuOk, menuEditar, menuEliminar;
 
@@ -245,6 +247,7 @@ public class GestionGps extends AppCompatActivity {
                     menuEditar.setVisible(true);
                     menuEliminar.setVisible(true);
                     habilitarComponentes(false);
+                    vincular();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
@@ -263,6 +266,8 @@ public class GestionGps extends AppCompatActivity {
                 } else if (mensaje.equalsIgnoreCase("El GPS al que intentas acceder no existe")) {
                     mensaje = "Revise los datos, puede no haber modificacion";
                 } else if (mensaje.equalsIgnoreCase("Registro eliminado correctamente")) {
+                    Mensajes sms = new Mensajes(context,1);
+                    sms.enviarRestaurarGps(edtNumero.getText().toString());
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
@@ -280,6 +285,24 @@ public class GestionGps extends AppCompatActivity {
                 mostrarProgreso(false);
             }
         };
+
+//        receptorEnlaceTelefonosEnlazados = new BroadcastReceiver() {
+//
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                boolean MostrarMensaje = true;
+//                Log.v("AGET", "RECEPTOR ENLACE");
+//                String mensaje = intent.getStringExtra(Utilidades.EXTRA_MENSAJE);
+//                Boolean resultado = intent.getBooleanExtra(Utilidades.EXTRA_RESULTADO, false);
+//                if (resultado) {
+//                    procesarNumObtenidos(intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST));
+//                } else {
+//                    mostrarProgreso(false);
+//                }
+//
+//                Snackbar.make(findViewById(R.id.actividadgps), mensaje, Snackbar.LENGTH_SHORT).show();
+//            }
+//        };
     }
 
 
@@ -289,6 +312,10 @@ public class GestionGps extends AppCompatActivity {
         // Registrar receptor
         IntentFilter filtro = new IntentFilter(Configuracion.INTENT_GPS);
         LocalBroadcastManager.getInstance(this).registerReceiver(receptorMensaje, filtro);
+
+        IntentFilter filtro2 = new IntentFilter(Configuracion.INTENT_ENLACE_ELIMINAR_TELEFONOS_ENLAZADOS);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receptorEnlaceTelefonosEnlazados, filtro2);
+
     }
 
     @Override
@@ -296,6 +323,7 @@ public class GestionGps extends AppCompatActivity {
         super.onPause();
         // Desregistrar receptor
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorMensaje);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorEnlaceTelefonosEnlazados);
     }
 
 
@@ -331,7 +359,8 @@ public class GestionGps extends AppCompatActivity {
                 break;
             case R.id.accion_eliminar:
                 tipoPeticion = "delete";
-                prparaEliminacion();
+//                preparaEliminacion();
+                eliminar();
                 break;
             case R.id.accion_editar:
                 tipoPeticion = "put";
@@ -357,7 +386,7 @@ public class GestionGps extends AppCompatActivity {
         String telefono = edtNumero.getText().toString();
         String descripcion = edtDescripcion.getText().toString();
         String empresaPerteneciente = edtEmpresaPerteneciente.getText().toString();
-        String autorrastreo ="notn";
+        String autorrastreo = "notn";
 //        if (cbx_Deshabilitado.isChecked())
 //            autorrastreo = "nofix";
 //        else
@@ -371,6 +400,11 @@ public class GestionGps extends AppCompatActivity {
             mostrarProgreso(true);
             String[] columnasFiltro = {Configuracion.COLUMNA_GPS_IMEI, Configuracion.COLUMNA_GPS_NUMERO
                     , Configuracion.COLUMNA_GPS_DESCRIPCION};
+            telefono = telefono.replaceAll("\\s", "");
+            telefono = telefono.replaceAll("-", "");
+            if (telefono.substring(0, 1).equalsIgnoreCase("+")) {
+                telefono = telefono.substring(3);
+            }
             String[] valorFiltro = {imei, telefono, descripcion};
             resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GPS, columnasFiltro, valorFiltro, Configuracion.TABLA_GPS, null, false);
             if (ID.isEmpty()) {
@@ -386,7 +420,7 @@ public class GestionGps extends AppCompatActivity {
     }
 
     // || CHECAR
-    private void prparaEliminacion() {
+//    private void preparaEliminacion() {
 //        if (idGps != null) {
 //            //Datos de busqueda
 //            String[] columnasFiltro = {Configuracion.COLUMNA_GPS_ID};
@@ -394,50 +428,87 @@ public class GestionGps extends AppCompatActivity {
 //
 //            //Datos a mostrar
 //            String[] columnasArecuperar = {
-//                    Configuracion.COLUMNA_USUARIO_TELEFONO,
-//                    Configuracion.COLUMNA_GPS_NUMERO
+//                    Configuracion.COLUMNA_ENLACE_AUX_TELEFONO_USUARIO,
+//                    Configuracion.COLUMNA_ENLACE_AUX_TELEFONO_GPS
 //            };
 //
 //            mostrarProgreso(true);
-//            resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_EMPRESA_CLIENTE_ENLACE_TELEFONOS_ENLAZADOS, columnasFiltro, valorFiltro, Configuracion.TABLA_ENLACE, columnasArecuperar, true);
-//            resultado.execute(Configuracion.PETICION_ENLACE_LISTAR_TELEFONOS, "post");
+//            resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_ENLACE_ELIMINAR_TELEFONOS_ENLAZADOS, columnasFiltro, valorFiltro, Configuracion.TABLA_ENLACE, columnasArecuperar, true);
+//            resultado.execute(Configuracion.PETICION_ENLACE_LISTAR_NUMEROS_A_ELIMINAR, "post");
 //        }
-        eliminar(true);
-    }
+////        eliminar(true);
+//    }
+
+//    private void procesarNumObtenidos(ArrayList datos) {
+//        int x = (int) datos.size();
+//        int y = ((ArrayList) datos).size();
+//        String[][] matrizTelefonos = new String[x][y];
+//        if (datos.size() > 0) {
+//            for (int i = 0; i < datos.size() - 1; i++) {
+////            datosEnLista.add((String) ((ArrayList) datos.get(i)).get(1));
+//
+//                for (int j = 0; i < ((ArrayList) datos).size(); j++) {
+//                    matrizTelefonos[i][j] = (String) ((ArrayList) datos.get(i)).get(j);
+//                }
+//            }
+//            desvincular(matrizTelefonos);
+//        }
+//    }
 
 
-    public void eliminar(boolean smsEnviados) {
-        if (smsEnviados)
-            Log.v("AGET-ELIMINADO", "SI Eliminado");
-        else
-            Log.v("AGET-ELIMINADO", "NO Eliminado");
-
-//NOTA: LAS DOS LINEAS COMENTADAS DEBEN DE EJECUTARCE DEPUES DE MANDAS EL MENSAJE A LOS NUMEROS
-        resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GPS, null, null, Configuracion.TABLA_GPS, null, false);
-        resultado.execute(Configuracion.PETICION_GPS_MODIFICAR_ELIMINAR + ID, tipoPeticion);
-    }
-    //CHECAR ||
-
+    //||
 //    private void desvincular(String[][] telefonos) {
 //        Mensajes sms = new Mensajes(this, telefonos.length);
 //
 //        for (int i = 0; i < telefonos.length; i++) {
-//            sms.enviarSMSDesvincularUsuario(telefonos[i][0], telefonos[i][1]);
+////            sms.enviarSMSDesvincularUsuario(telefonos[i][0], telefonos[i][1]);
+//            Log.v(Utilidades.TAGLOG,telefonos[i][0] + " - " + telefonos[i][1]);
 //        }
-//
 //    }
+
+//    public void eliminar(boolean smsEnviados) {
+//        if (smsEnviados)
+//            Log.v("AGET-ELIMINADO", "SI Eliminado");
+//        else
+//            Log.v("AGET-ELIMINADO", "NO Eliminado");
+//
+////NOTA: LAS DOS LINEAS COMENTADAS DEBEN DE EJECUTARCE DEPUES DE MANDAS EL MENSAJE A LOS NUMEROS
+//        resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GPS, null, null, Configuracion.TABLA_GPS, null, false);
+//        resultado.execute(Configuracion.PETICION_GPS_MODIFICAR_ELIMINAR + ID, tipoPeticion);
+//    }
+
+    //||
+    public void eliminar() {
+        Mensajes sms = new Mensajes(this, 1);
+        resultado = new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GPS, null, null, Configuracion.TABLA_GPS, null, false);
+        resultado.execute(Configuracion.PETICION_GPS_MODIFICAR_ELIMINAR + ID, tipoPeticion);
+    }
+
+
+    //||
+    public void vincular() {
+        String telefono = edtNumero.getText().toString();
+        telefono = telefono.replaceAll("\\s", "");
+        telefono = telefono.replaceAll("-", "");
+        if (telefono.substring(0, 1).equalsIgnoreCase("+")) {
+            telefono = telefono.substring(3);
+        }
+
+        new Mensajes(this, 1).enviarSMSAgregarNuevoGPS("7471212313", telefono);
+
+
+    }
 
 
     void regresar() {
         if (idGps != null) {
-            if(data != null) {
+            if (data != null) {
                 edtImei.setText(String.valueOf(data.get(0)));
                 edtNumero.setText(String.valueOf(data.get(1)));
                 edtDescripcion.setText(String.valueOf(data.get(2)));
 //                autorrastreoBD = String.valueOf(data.get(3));
                 edtEmpresaPerteneciente.setText(String.valueOf(data.get(4)));
             }
-
 
 
             habilitarComponentes(false);

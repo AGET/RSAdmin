@@ -17,4 +17,5 @@ public class Utilidades extends Activity {
     public static final String EXTRA_RESULTADO = "extra.resultado";
     public static final String EXTRA_MENSAJE = "extra.mensaje";
     public static final String EXTRA_DATOS_ALIST = "extra.datosalist";
+    public static final String TAGLOG = "AGET";
 }

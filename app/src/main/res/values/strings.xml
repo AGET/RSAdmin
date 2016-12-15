@@ -69,4 +69,21 @@
     <string name="txt_title_rastreo">Rastreo Automatico</string>
     <string name="txt_rango_time">Rango de tiempo</string>
     <string name="txt_cantida_msn">Cantidad de mensajes</string>
+    <string name="title_activity_gestion_administrador">GestionAdministrador</string>
+    <string name="descripcion_del_gps">Descripcion del GPS</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+
+    <string name="desc_gps_dep">Agrege una descripcion al GPS</string>
+
+    <!--Testos testing-->
+    <string name="fire">Fire</string>
+    <string name="cancel">Cancel</string>
+    <string name="neutral">Otro</string>
+    <string name="dialog_fire_missiles">Fire missiles?</string>
+    <string name="titulo_dialogo">Brillo</string>
+    <string name="dialogo_mensaje">Mensaje</string>
+    <string name="pick_color">pick_color</string>
+    <string name="pick_toppings">pick toppings</string>
+
 </resources>

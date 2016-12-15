@@ -123,4 +123,18 @@
         android:layout_marginRight="@dimen/fab_margin"
         android:src="@drawable/agregar" />
 
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabtesting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|start"
+        android:layout_marginBottom="26dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:src="@android:drawable/ic_menu_delete" />
+
 </android.support.design.widget.CoordinatorLayout>

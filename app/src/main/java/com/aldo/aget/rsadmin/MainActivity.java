@@ -1,6 +1,8 @@
 package com.aldo.aget.rsadmin;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -9,10 +11,12 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,17 +25,22 @@ import android.widget.ImageView;
 
 import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.Control.AdaptadorFragmentos;
+import com.aldo.aget.rsadmin.Modelo.ManagerDB;
+import com.aldo.aget.rsadmin.Vistas.DialogoAgregarGpsDep;
 import com.aldo.aget.rsadmin.Vistas.DialogoConfirmacion;
 import com.aldo.aget.rsadmin.Vistas.FragmentoEmpresaDeshabilitada;
 import com.aldo.aget.rsadmin.Vistas.FragmentoEmpresaHabilitada;
 import com.aldo.aget.rsadmin.Vistas.FragmentoGpsLibres;
+import com.aldo.aget.rsadmin.Vistas.GestionAdministrador;
 import com.aldo.aget.rsadmin.Vistas.ListaEmpresa;
 import com.aldo.aget.rsadmin.Vistas.ListaGps;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Locale;
 
 import android.widget.Toast;
+import android.widget.EditText;
 
 
 public class MainActivity extends AppCompatActivity implements DialogoConfirmacion.OnConfirmacionDialogListener {
@@ -51,8 +60,10 @@ public class MainActivity extends AppCompatActivity implements DialogoConfirmaci
 
     private CollapsingToolbarLayout ctlLayout;
 
-    public static FloatingActionButton fabmain;
+    public static FloatingActionButton fabmain, fabtesting;
     ImageView imgBar;
+
+    View testingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +74,15 @@ public class MainActivity extends AppCompatActivity implements DialogoConfirmaci
         setTitle("");
 
         imgBar = (ImageView) findViewById(R.id.imgToolbar);
+
+        fabtesting = (FloatingActionButton) findViewById(R.id.fabtesting);
+        fabtesting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lanzarTesting();
+            }
+        });
+
         fabmain = (FloatingActionButton) findViewById(R.id.fabmain);
         fabmain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,25 +140,25 @@ public class MainActivity extends AppCompatActivity implements DialogoConfirmaci
                 else
                     imgBar.setImageResource(R.drawable.img_mapa);
 
-                switch ( (String) adaptadorViewPager.getPageTitle(position)){
+                switch ((String) adaptadorViewPager.getPageTitle(position)) {
 
                     case "Empresas Habilitadas":
-                        Log.v("AGET-CargadoEmpHab",""+FragmentoEmpresaHabilitada.cargadoHab);
-                        if(!FragmentoEmpresaHabilitada.cargadoHab)
+                        Log.v("AGET-CargadoEmpHab", "" + FragmentoEmpresaHabilitada.cargadoHab);
+                        if (!FragmentoEmpresaHabilitada.cargadoHab)
                             //FragmentoEmpresaHabilitada.cargar();
                             FragmentoEmpresaHabilitada.cargar();
                         FragmentoEmpresaHabilitada.cargar();
 
                         break;
                     case "Empresas Deshabilitadas":
-                        Log.v("AGET-CargadoEmpDes",""+ FragmentoEmpresaDeshabilitada.cargadoED);
-                        if(!FragmentoEmpresaDeshabilitada.cargadoED)
+                        Log.v("AGET-CargadoEmpDes", "" + FragmentoEmpresaDeshabilitada.cargadoED);
+                        if (!FragmentoEmpresaDeshabilitada.cargadoED)
                             FragmentoEmpresaDeshabilitada.cargar();
                         FragmentoEmpresaDeshabilitada.cargar();
                         break;
                     case "Gps":
-                        Log.v("AGET-CargadoGps",""+FragmentoGpsLibres.cargadoGPS);
-                        if(!FragmentoGpsLibres.cargadoGPS)
+                        Log.v("AGET-CargadoGps", "" + FragmentoGpsLibres.cargadoGPS);
+                        if (!FragmentoGpsLibres.cargadoGPS)
                             FragmentoGpsLibres.cargar();
                         FragmentoGpsLibres.cargar();
                         break;
@@ -226,6 +246,23 @@ public class MainActivity extends AppCompatActivity implements DialogoConfirmaci
         startActivity(actividad);
     }
 
+    private void lanzarTesting() {
+        Intent intent = new Intent();
+        intent.putExtra("msn", "nada");
+        Bundle bn = intent.getExtras();
+//        new TestingDialogos().onCreateDialog(bn,this).show();
+//        new TestingDialogos().onCreateDialog2(bn,this).show();
+//        new TestingDialogos().onCreateDialog3(bn,this).show();
+//        new TestingDialogos().onCreateDialog7(bn,this,this).show();
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        DialogoAgregarGpsDep dialog = new DialogoAgregarGpsDep(this, this);
+        testingView = dialog.inflar();
+//        dialog.onCreateDialogo(bn).show(ft,"");
+        dialog.show(ft,"");
+    }
+
+
     private void agregarToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
@@ -241,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements DialogoConfirmaci
         this.menuAcercaDe = menu.findItem(R.id.acerca_de);
 
         // Verificación de visibilidad
-
+        menuCambiarDatos.setVisible(true);
 
         menuAcercaDe.setVisible(true);
 
@@ -253,29 +290,31 @@ public class MainActivity extends AppCompatActivity implements DialogoConfirmaci
         int id = item.getItemId();
         switch (id) {
             case R.id.cambiar_datos:
-
+                Intent actividad = new Intent(this, GestionAdministrador.class);
+                startActivity(actividad);
                 break;
             case R.id.acerca_de:
-                new DialogoConfirmacion("Información","  Tecnológico Nacional de México\n" +
+                new DialogoConfirmacion("Información", "  Tecnológico Nacional de México\n" +
                         "Instituto Tecnológico de Chilpancingo\n\n" +
                         "Sistema de residencia profecional\n" +
                         "Realizado por:\n\n" +
                         "Alumno: \n" +
                         "Aldo Gamaliel Estrada Tepec\n\n" +
                         "Con asesoria de: \n" +
-                        "M.C. Jose Mario Martinez Castro","Cerrar","").show(getSupportFragmentManager(), "SimpleDialog");
+                        "M.C. Jose Mario Martinez Castro", "Cerrar", "").show(getSupportFragmentManager(), "SimpleDialog");
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onPossitiveButtonClick() {
-        Log.v("AGET-DIALOGO","ACEPTAR");
+        Log.v("AGET-DIALOGO", "ACEPTAR");
 
     }
 
     @Override
     public void onNegativeButtonClick() {
-        Log.v("AGET-DIALOGO","CANCELAR");
+        Log.v("AGET-DIALOGO", "CANCELAR");
     }
 }
