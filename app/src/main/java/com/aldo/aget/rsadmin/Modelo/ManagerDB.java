@@ -26,7 +26,6 @@ public class ManagerDB {
     }
 
     /**
-     *
      * @param tabla
      * @param campos
      * @param where
@@ -55,10 +54,32 @@ public class ManagerDB {
         return datosCursor;
     }
 
+    public String[][] obtenerConInner(String numero) {
+        abrirEscrituraBD();
+        String datos[][];
+        Cursor c;
+        final String QUERY = "SELECT e.enlace_id, e.gps_id,e.usuario_id, e.nombre FROM " + SQLHelper.TABLA_ENLACE + " e INNER JOIN "
+                + SQLHelper.TABLA_GPS + " g ON e." + SQLHelper.COLUMNA_ENLACE_GPS_ID + "=g."
+                + SQLHelper.COLUMNA_GPS_ID_REMOTO + " WHERE g." + SQLHelper.COLUMNA_GPS_TELEFONO + "=?";
+
+        c = db.rawQuery(QUERY, new String[]{String.valueOf(numero)});
+        if (c.moveToFirst()) {
+            datos = new String[c.getCount()][c.getColumnCount()];
+            int row = 0;
+            do {
+                for (int i = 0; i < c.getColumnCount(); i++) {
+                    datos[row][i] = c.getString(i);
+                }
+                row++;
+            } while (c.moveToNext());
+        } else
+            return null;
+        return datos;
+    }
+
     //se comprueba que se ahia inseado != -1
 
     /**
-     *
      * @param tabla
      * @param columna
      * @param datosColumnas
@@ -76,7 +97,6 @@ public class ManagerDB {
     }
 
     /**
-     *
      * @param tabla
      * @param columna
      * @param dato
@@ -93,22 +113,38 @@ public class ManagerDB {
     }
 
     /**
-     *
+     * @param tabla
+     * @param columnas
+     * @param datos
+     * @param condicion
+     * @param valorCondicion
+     * @return the number of rows affected
+     */
+    public int actualizarDatos(String tabla, String[] columnas, String[] datos, String condicion, String valorCondicion) {
+        abrirEscrituraBD();
+        ContentValues valores = new ContentValues();
+        for (int i = 0; i < columnas.length; i++) {
+            valores.put(columnas[i], datos[i]);
+        }
+        int num = db.update(tabla, valores, condicion + "=" + valorCondicion, null);
+        return num;
+    }
+
+    /**
      * @param tabla
      * @param columna
      * @param dato
      * @return the number of rows affected if a whereClause is passed in, 0 otherwise. To remove all rows and get a count pass "1" as the whereClause.
      */
-    public boolean eliminarItem(String tabla, String columna, String dato) {
+    public int eliminarItem(String tabla, String columna, String dato) {
         abrirEscrituraBD();
-        db.delete(tabla, columna + "=" + dato, null);
-        return true;
+        int num = db.delete(tabla, columna + "=" + dato, null);
+        return num;
     }
 
     //se comprueba que se ahia eliminado 1 o no lo ahia hecho != 1
 
     /**
-     *
      * @param tabla
      * @return numero de filas afectadas
      */
@@ -121,7 +157,6 @@ public class ManagerDB {
     }
 
     /**
-     *
      * @param tabla
      * @param columna
      * @param dato
@@ -138,7 +173,6 @@ public class ManagerDB {
     }
 
     /**
-     *
      * @return true si se inserto, false en caso contrario
      */
 //    public boolean autotrakEstablecido() {
@@ -148,7 +182,6 @@ public class ManagerDB {
 
 //        return c.getCount() > 0 ;
 //    }
-
     public void abrirEscrituraBD() {
         db = sqlhelper.getWritableDatabase();
     }

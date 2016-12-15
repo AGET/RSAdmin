@@ -33,6 +33,8 @@ import android.widget.ImageView;
 import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.Configuracion.Utilidades;
 import com.aldo.aget.rsadmin.Control.Mensajes;
+import com.aldo.aget.rsadmin.Control.SQLHelper;
+import com.aldo.aget.rsadmin.Modelo.ManagerDB;
 import com.aldo.aget.rsadmin.R;
 import com.aldo.aget.rsadmin.ServicioWeb.ObtencionDeResultadoBcst;
 
@@ -54,7 +56,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
 
     String tabla = Configuracion.TABLA_USUARIOS;
 
-    BroadcastReceiver receptorMensaje, receptorTelefonos;
+    BroadcastReceiver receptorMensaje, receptorTelefonos, receptorEnlazado;
 
     ArrayList data;
 
@@ -67,6 +69,10 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
     EditText edtNombre, edtApPaterno, edtApMaterno, edtTelefono, edtCorreo, edtClave;
 
     String idUsuario, nombreUsuario, departamentoId, departamentoNombre, numeroGpsSpinner;
+
+    String enlaceSelect = "";
+
+    String idGpsAEnlazar = "";
 
     //Datos de lista
     final static String tablaLista = Configuracion.TABLA_USUARIOS;
@@ -212,6 +218,8 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
                         idGps = (String) ((ArrayList) datosSpinner.get(position)).get(0);
                         numeroGpsSpinner = (String) ((ArrayList) datosSpinner.get(position)).get(2);
                         descripcion = (String) ((ArrayList) datosSpinner.get(position)).get(3);
+
+                        idGpsAEnlazar = idGps;
 
                         Log.v("AGET-Enviado", marcado);
                         Log.v("AGET-NUMERO", numeroGpsSpinner);
@@ -393,6 +401,8 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
 
                     peticionSpinner();
                     peticionLista();
+
+                    peticionEnlaceGuardado();
                 }
                 if (mensaje.equalsIgnoreCase("Ya existe el registro")) {
                     Snackbar.make(findViewById(R.id.xml_gestion_usuarios),
@@ -413,15 +423,15 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
                 if (resultado) {
                     ArrayList listNumerosEnlazados = intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST);
 
-                    telefonos = new String[listNumerosEnlazados.size()-1][((ArrayList) listNumerosEnlazados).size()-1];
+                    telefonos = new String[listNumerosEnlazados.size() - 1][((ArrayList) listNumerosEnlazados).size() - 1];
                     ArrayList nombres = new ArrayList();
-                    String telUsuario = "",telGps = "";
+                    String telUsuario = "", telGps = "";
 
-                    Log.v("tam",""+listNumerosEnlazados.size());
-                    Log.v("tam",""+((ArrayList) listNumerosEnlazados).size());
-                    Log.v("tam",""+telefonos.length);
+                    Log.v("tam", "" + listNumerosEnlazados.size());
+                    Log.v("tam", "" + ((ArrayList) listNumerosEnlazados).size());
+                    Log.v("tam", "" + telefonos.length);
                     for (int i = 0; i < listNumerosEnlazados.size() - 1; i++) {
-                        for (int j = 0; j < ((ArrayList) listNumerosEnlazados).size()-1; j++){
+                        for (int j = 0; j < ((ArrayList) listNumerosEnlazados).size() - 1; j++) {
                             //nombres.add((String) ((ArrayList) datosLista.get(i)).get(0) + " - " + ((ArrayList) datosLista.get(i)).get(1));
                             telUsuario = (String) ((ArrayList) listNumerosEnlazados.get(i)).get(j);
                             if (telUsuario != null)
@@ -429,7 +439,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
                         }
                     }
                     for (int i = 0; i < telefonos.length; i++) {
-                        Log.v("AGET-NUMEROUSUARIO", "msj: " + telefonos[i][0]+" num: "+telefonos[i][1]);
+                        Log.v("AGET-NUMEROUSUARIO", "msj: " + telefonos[i][0] + " num: " + telefonos[i][1]);
                     }
                     desvincular(telefonos);
                 }
@@ -438,23 +448,64 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
             }
         };
 
+        receptorEnlazado = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.v("AGET-RECEPTOR", "ENLAZADO ");
+                mostrarProgreso(false);
+                String mensaje = intent.getStringExtra(Utilidades.EXTRA_MENSAJE);
+                Boolean resultado = intent.getBooleanExtra(Utilidades.EXTRA_RESULTADO, false);
+                if (resultado) {
+                    ArrayList datos = intent.getStringArrayListExtra(Utilidades.EXTRA_DATOS_ALIST);
+                    String id = "";
+                    String usuario_id = "";
+                    String gps_id = "";
+                    String nombre = "";
+                    String ap_paterno = "";
+                    String ap_materno = "";
+                    for (int i = 0; i < datos.size() - 1; i++) {
+                        id = (String) ((ArrayList) datos.get(i)).get(0);
+                        usuario_id = (String) ((ArrayList) datos.get(i)).get(1);
+                        gps_id = (String) ((ArrayList) datos.get(i)).get(2);
+                        nombre = (String) ((ArrayList) datos.get(i)).get(3);
+                        ap_paterno = (String) ((ArrayList) datos.get(i)).get(4);
+                        ap_materno = (String) ((ArrayList) datos.get(i)).get(5);
+                    }
+
+                    long val = new ManagerDB(context).insercionMultiple(SQLHelper.TABLA_ENLACE,
+                            new String[]{SQLHelper.COLUMNA_ENLACE_ID_REMOTO,SQLHelper.COLUMNA_ENLACE_USUARIO_ID,
+                                    SQLHelper.COLUMNA_ENLACE_GPS_ID,SQLHelper.COLUMNA_ENLACE_USUARIO_NOMBRE,
+                                    SQLHelper.COLUMNA_ENLACE_USUARIO_AP_PATERNO,SQLHelper.COLUMNA_ENLACE_USUARIO_AP_MATERNO},
+                            new String[]{id, usuario_id, gps_id, nombre, ap_paterno, ap_materno });
+                    if(val != -1){
+                        Toast.makeText(context, "Guardado", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(context, "Problema al guardar el enlace", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }
+        };
+
     }
 
-    private void desvincular(String[][]telefonos){
-        Mensajes sms = new Mensajes(this,telefonos.length);
 
-        for(int i = 0 ; i < telefonos.length ; i++){
-            sms.enviarSMSDesvincularUsuario(telefonos[i][0],telefonos[i][1]);
+    private void desvincular(String[][] telefonos) {
+        Mensajes sms = new Mensajes(this, telefonos.length);
+
+        for (int i = 0; i < telefonos.length; i++) {
+            sms.enviarSMSDesvincularUsuario(telefonos[i][0], telefonos[i][1]);
         }
 
     }
 
 
-    public  void eliminar(boolean smsEnviados){
-        if(smsEnviados)
-            Log.v("AGET-ELIMINADO","SI Eliminado");
+    public void eliminar(boolean smsEnviados) {
+        if (smsEnviados)
+            Log.v("AGET-ELIMINADO", "SI Eliminado");
         else
-            Log.v("AGET-ELIMINADO","NO Eliminado");
+            Log.v("AGET-ELIMINADO", "NO Eliminado");
 
 //NOTA: LAS DOS LINEAS COMENTADAS DEBEN DE EJECUTARCE DEPUES DE MANDAS EL MENSAJE A LOS NUMEROS
         new ObtencionDeResultadoBcst(this, Configuracion.INTENT_GESTION_USUARIO, null, null, tabla, null, false)
@@ -487,6 +538,9 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         IntentFilter filtroTelefonos = new IntentFilter(Configuracion.INTENT_USUARIO_ENLACE_TELEFONOS_ENLAZADOS);
         LocalBroadcastManager.getInstance(this).registerReceiver(receptorTelefonos, filtroTelefonos);
 
+        IntentFilter filtroEnlazado = new IntentFilter(Configuracion.INTENT_ENLACE_BASE_GPS_USUARIO);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receptorEnlazado, filtroEnlazado);
+
         if (Configuracion.cambio) {
             mostrarProgreso(true);
             Configuracion.cambio = false;
@@ -509,6 +563,9 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorListaGpsDesvinculado);
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorTelefonos);
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receptorEnlazado);
+
     }
 
     @Override
@@ -601,6 +658,9 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         new Mensajes(this, 1).enviarSMSVincularUsuario(edtTelefono.getText().toString(), numeroGpsSpinner);
         new ObtencionDeResultadoBcst(GestionUsuarios.this, Configuracion.INTENT_GESTION_USUARIO_REGISTRO_ENLACE, columnasFiltro, valorFiltro, Configuracion.TABLA_ENLACE, null, false)
                 .execute(Configuracion.PETICION_ENLACE_REGISTRO, tipoPeticion);
+
+
+//        db.insercionMultiple(SQLHelper.TABLA_ENLACE,new String[]{SQLHelper.COLUMNA_ENLACE_ID_REMOTO,SQLHelper.COLUMNA_ENLACE_});
     }
 
     private void insertar() {
@@ -747,6 +807,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         desvincularDispositivo[0] = (String) ((ArrayList) datos.get(position)).get(0);
         desvincularDispositivo[1] = (String) ((ArrayList) datos.get(position)).get(5);
 
+
         // En algún lugar de tu actividad
         new DialogoConfirmacion("Desvincular", "Desea quitar este dispositivo a el usuario?", "Desvincular", "Cancelar").show(getSupportFragmentManager(), "SimpleDialog");
     }
@@ -787,6 +848,20 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         new Mensajes(this, 1).enviarSMSDesvincularUsuario(edtTelefono.getText().toString(), desvincularDispositivo[1]);
     }
 
+    private void peticionEnlaceGuardado() {
+
+        String[] columnasFiltro = {SQLHelper.COLUMNA_ENLACE_USUARIO_ID, SQLHelper.COLUMNA_ENLACE_GPS_ID};
+        String[] valorFiltro = {idUsuario, idGpsAEnlazar};
+
+        String[] columnasARecuperar = {SQLHelper.COLUMNA_ENLACE_ID_REMOTO, SQLHelper.COLUMNA_ENLACE_USUARIO_ID,
+                SQLHelper.COLUMNA_ENLACE_GPS_ID, SQLHelper.COLUMNA_ENLACE_USUARIO_NOMBRE, SQLHelper.COLUMNA_ENLACE_USUARIO_AP_PATERNO,
+                SQLHelper.COLUMNA_ENLACE_USUARIO_AP_MATERNO};
+        //Lista
+        new ObtencionDeResultadoBcst(this, Configuracion.INTENT_ENLACE_BASE_GPS_USUARIO, columnasFiltro, valorFiltro, SQLHelper.TABLA_ENLACE, columnasARecuperar, true)
+                .execute(Configuracion.PETICION_ENLACE_LISTAR_BASE_GPS_Y_USUARIO, tipoPeticion);
+
+    }
+
     void regresar() {
         if (idUsuario != null) {
             edtNombre.setText(String.valueOf(data.get(0)));
@@ -795,10 +870,7 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
             edtTelefono.setText(String.valueOf(data.get(3)));
             edtCorreo.setText(String.valueOf(data.get(4)));
             edtClave.setText(String.valueOf(data.get(5)));
-
-
             habilitarComponentes(false);
-
             setTitle(String.valueOf(data.get(0)));
             menuOk.setVisible(false);
 
@@ -820,6 +892,12 @@ public class GestionUsuarios extends AppCompatActivity implements AdapterView.On
         Log.v("AGET-DIALOGO", "ACEPTAR");
         smsPreDesvinculacion();
         peticionDesvincularGps();
+
+        Log.v(Utilidades.TAGLOG, "PROBABLEID::" + desvincularDispositivo[0]);
+        ManagerDB db = new ManagerDB(this);
+
+        int num = db.eliminarItem(SQLHelper.TABLA_ENLACE, SQLHelper.COLUMNA_ENLACE_ID_REMOTO, desvincularDispositivo[0]);
+        Log.v(Utilidades.TAGLOG, "Datos eliminados: " + num);
     }
 
     @Override

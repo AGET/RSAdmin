@@ -31,6 +31,7 @@ public class Configuracion extends Activity {
     public static final String PETICION_GPS_ASIGNAR_DEPARTAMENTO = SERVIDOR + "/api.rs.com/v1/gps/asignarDepartamento";
     public static final String PETICION_GPS_DESVINCULAR = SERVIDOR + "/api.rs.com/v1/enlace/desvinculacion";
 
+
     /**
      * menasjes:
      * exito: "Autorrastreo establecido correctamente"
@@ -86,9 +87,16 @@ public class Configuracion extends Activity {
     public static final String PETICION_ENLACE_MODIFICAR_ELIMINAR = SERVIDOR + "/api.rs.com/v1/enlace/";
 
     public static final String PETICION_ENLACE_LISTAR_BASE_GPS = SERVIDOR + "/api.rs.com/v1/enlace/listarEnlacesBaseGps";
+    public static final String PETICION_ENLACE_LISTAR_BASE_GPS_Y_USUARIO = SERVIDOR + "/api.rs.com/v1/enlace/listarEnlaceBaseGpsYUsuario";
+
     public static final String PETICION_ENLACE_LISTAR_NUMEROS_A_ELIMINAR = SERVIDOR + "/api.rs.com/v1/enlace/listarTelefonosenlazadosAGps";
 
 
+    public static final String COLUMNA_COORDENADA_LONGITUD = "longitud";
+    public static final String COLUMNA_COORDENADA_LATITUD = "latitud";
+
+//    Peticion coordenadas
+    public static final String PETICION_COORDENADAS_REGISTRO = SERVIDOR + "/api.rs.com/v1/coordenadas/registro";
 
     //PETICION
 
@@ -190,6 +198,12 @@ public class Configuracion extends Activity {
     public static final String INTENT_GPS_DEPARTAMENTO = "com.aldo.aget.rsadmin.Vistas.GpsDepartamento";
     public static final String INTENT_GPS_LIBRES = "com.aldo.aget.rsadmin.Vistas.GpsLibres";
     public static final String INTENT_GPS_EMPRESA_AGREGADOS = "com.aldo.aget.rsadmin.Vistas.GpsEmpresa_Agregados";
+    public static final String INTENT_ENLACE_BASE_GPS_USUARIO = "com.aldo.aget.rsadmin.Enlace";
+
+
+
+    //Receptor coordenadas
+    public static final String INTENT_ADMIN_ENVIAR_COORDENADAS = "com.aldo.aget.rsadmin.Receiver.SMSReceiver";
 
     public static Boolean cambio = false;
 }

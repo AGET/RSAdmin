@@ -12,6 +12,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,9 +59,9 @@ public class GpsDepartamentoDetalle extends AppCompatActivity {
     CheckBox cbx_habilitado;
     Spinner spinnerTiempo;
     SeekBar seekBarTiempo;
-    TextView textResultadoSeekBarTiempo;
+    EditText textResultadoSeekBarTiempo;
     SeekBar seekBarCantidad;
-    TextView textResultadoSeekBarCantidad;
+    EditText textResultadoSeekBarCantidad;
     SpinnerAdapter adaptadorSpinner;
     int tiempoMaximo = 0;
     String tipoTiempo = "";
@@ -105,21 +106,54 @@ public class GpsDepartamentoDetalle extends AppCompatActivity {
         spinnerTiempo = (Spinner) findViewById(R.id.spinnerTiempo);
 
         seekBarTiempo = (SeekBar) findViewById(R.id.seekBarTiempo);
-        textResultadoSeekBarTiempo = (TextView) findViewById(R.id.textResultadoSeekBarTiempo);
+        textResultadoSeekBarTiempo = (EditText) findViewById(R.id.textResultadoSeekBarTiempo);
 
 
         seekBarCantidad = (SeekBar) findViewById(R.id.seekBarCantidad);
-        textResultadoSeekBarCantidad = (TextView) findViewById(R.id.textResultadoSeekBarCantidad);
+        textResultadoSeekBarCantidad = (EditText) findViewById(R.id.textResultadoSeekBarCantidad);
 
         seekBarCantidad.setEnabled(false);
         seekBarTiempo.setEnabled(false);
 
         mostrarAutotrack();
 
-        if(cbx_habilitado.isChecked()){
+
+        textResultadoSeekBarCantidad.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                String txt = textResultadoSeekBarCantidad.getText().toString();
+                try {
+                    if (txt != "")
+                        seekBarCantidad.setProgress(Integer.parseInt(textResultadoSeekBarCantidad.getText().toString()));
+                } catch (NumberFormatException e) {
+
+                }
+                return false;
+            }
+        });
+
+        textResultadoSeekBarTiempo.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                String txt = textResultadoSeekBarTiempo.getText().toString();
+                try {
+                    if (txt != "")
+                        seekBarTiempo.setProgress(Integer.parseInt(txt));
+                } catch (NumberFormatException e) {
+
+                }
+                return false;
+            }
+        });
+
+        if (cbx_habilitado.isChecked()) {
             spinnerTiempo.setEnabled(false);
-        }else{
+            textResultadoSeekBarCantidad.setEnabled(false);
+            textResultadoSeekBarTiempo.setEnabled(false);
+        } else {
             spinnerTiempo.setEnabled(true);
+            textResultadoSeekBarCantidad.setEnabled(true);
+            textResultadoSeekBarTiempo.setEnabled(true);
         }
 
         final String[] seleccionado = {""};
@@ -141,6 +175,8 @@ public class GpsDepartamentoDetalle extends AppCompatActivity {
                         establecer(parent.getItemAtPosition(position).toString());
                         seekBarTiempo.setEnabled(true);
                         seekBarCantidad.setEnabled(true);
+                        textResultadoSeekBarCantidad.setEnabled(true);
+                        textResultadoSeekBarTiempo.setEnabled(true);
                     }
                 }
             }
@@ -225,6 +261,8 @@ public class GpsDepartamentoDetalle extends AppCompatActivity {
                         spinnerTiempo.setEnabled(false);
                         seekBarTiempo.setEnabled(false);
                         seekBarCantidad.setEnabled(false);
+                        textResultadoSeekBarTiempo.setEnabled(false);
+                        textResultadoSeekBarCantidad.setEnabled(false);
 
                         spinnerTiempo.setEnabled(false);
 
@@ -445,6 +483,11 @@ public class GpsDepartamentoDetalle extends AppCompatActivity {
         if (!db.existeDato(SQLHelper.TABLA_GPS, SQLHelper.COLUMNA_GPS_ID_REMOTO, id)) {
             db.insercionMultiple(SQLHelper.TABLA_GPS, new String[]{SQLHelper.COLUMNA_GPS_ID_REMOTO, SQLHelper.COLUMNA_GPS_IMEI, SQLHelper.COLUMNA_GPS_TELEFONO, SQLHelper.COLUMNA_GPS_DESCRIPCION,
                     SQLHelper.COLUMNA_GPS_AUTORASTREO, SQLHelper.COLUMNA_GPS_DEPARTAMENTO_ID}, new String[]{id, imei, telefono, descripcion, autorastreo, departamento_id});
+        } else {
+            int num = db.actualizarDatos(SQLHelper.TABLA_GPS, new String[]{SQLHelper.COLUMNA_GPS_ID_REMOTO, SQLHelper.COLUMNA_GPS_IMEI, SQLHelper.COLUMNA_GPS_TELEFONO, SQLHelper.COLUMNA_GPS_DESCRIPCION,
+                            SQLHelper.COLUMNA_GPS_AUTORASTREO, SQLHelper.COLUMNA_GPS_DEPARTAMENTO_ID}, new String[]{id, imei, telefono, descripcion, autorastreo, departamento_id},
+                    SQLHelper.COLUMNA_GPS_ID_REMOTO, id);
+            Log.v(Utilidades.TAGLOG, "modificado: " + num);
         }
 
         if (datos.size() > 0) {
@@ -462,7 +505,7 @@ public class GpsDepartamentoDetalle extends AppCompatActivity {
                     db.insercionMultiple(SQLHelper.TABLA_ENLACE, new String[]{SQLHelper.COLUMNA_ENLACE_ID_REMOTO, SQLHelper.COLUMNA_ENLACE_USUARIO_ID,
                             SQLHelper.COLUMNA_ENLACE_GPS_ID, SQLHelper.COLUMNA_ENLACE_USUARIO_NOMBRE, SQLHelper.COLUMNA_ENLACE_USUARIO_AP_PATERNO,
                             SQLHelper.COLUMNA_ENLACE_USUARIO_AP_MATERNO}, new String[]{
-                            enlace_id, usuario_id, gps_id, nombre, ap_paterno, ap_paterno
+                            enlace_id, usuario_id, gps_id, nombre, ap_paterno, ap_materno
                     });
 
                     //todo configurado y datos guardados ...
@@ -574,14 +617,14 @@ public class GpsDepartamentoDetalle extends AppCompatActivity {
         } else {
             cbx_habilitado.setChecked(true);
             String tiempo = "", cantidad = "", tipoTiempo = "";
-            tiempo = autorastreo.substring(3, 5);
-            tipoTiempo = autorastreo.substring(5, 6);
-            cantidad = autorastreo.substring(7, 9);
+            tiempo = autorastreo.substring(4, 6);
+            tipoTiempo = autorastreo.substring(6, 7);
+            cantidad = autorastreo.substring(8, 10);
 
             Log.v("AGET-AUTOTRACK", "tiempo: " + tiempo);
             Log.v("AGET-AUTOTRACK", "cantidad: " + cantidad);
             Log.v("AGET-AUTOTRACK", "tipoTiempo: " + tipoTiempo);
-            if (tipoTiempo.equalsIgnoreCase("h")) {
+            if (tipoTiempo.equalsIgnoreCase("s")) {
                 seekBarTiempo.setMax(59);
             } else if (tipoTiempo.equalsIgnoreCase("m")) {
                 seekBarTiempo.setMax(59);

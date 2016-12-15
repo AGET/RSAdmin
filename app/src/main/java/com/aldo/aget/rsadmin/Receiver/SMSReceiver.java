@@ -12,12 +12,14 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.aldo.aget.rsadmin.Configuracion.Configuracion;
 import com.aldo.aget.rsadmin.Configuracion.Utilidades;
 import com.aldo.aget.rsadmin.Control.SQLHelper;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 import com.aldo.aget.rsadmin.Modelo.ManagerDB;
+import com.aldo.aget.rsadmin.ServicioWeb.ObtencionDeResultadoBcst;
 
 import java.util.ArrayList;
 
@@ -39,9 +41,9 @@ public class SMSReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(TAGLOG, "Deteccion de receptor SMS");
 
-        ManagerDB db = new ManagerDB(contexto);
-
         contexto = context;
+
+        ManagerDB db = new ManagerDB(contexto);
 
         // Obtenemos el contenido del mensaje SMS
         Bundle bundle = intent.getExtras();
@@ -99,15 +101,26 @@ public class SMSReceiver extends BroadcastReceiver {
             if ((lat != 0 || lat != 0.0) && lon != 0 || lon != 0.0) {
                 if(comporbarStatus()){
                     ManagerDB db = new ManagerDB(contexto);
-                    ArrayList<String> datos = new ArrayList<String>();
-                    datos = db.obtenerDatos(SQLHelper.TABLA_ENLACE,new String[]{SQLHelper.COLUMNA_ENLACE_ID_REMOTO,
-                            SQLHelper.COLUMNA_ENLACE_GPS_ID,
-                            SQLHelper.COLUMNA_ENLACE_USUARIO_ID},SQLHelper.COLUMNA_ENLACE_GPS_ID,new String[]{numero});
+                    String[][] datos;
+//                    datos = db.obtenerDatos(SQLHelper.TABLA_ENLACE,new String[]{SQLHelper.COLUMNA_ENLACE_ID_REMOTO,
+//                            SQLHelper.COLUMNA_ENLACE_USUARIO_ID,SQLHelper.COLUMNA_ENLACE_GPS_ID,
+//                            SQLHelper.COLUMNA_ENLACE_USUARIO_NOMBRE},SQLHelper.COLUMNA_GPS_TELEFONO
+//                            ,new String[]{numero});
+                    datos = db.obtenerConInner(numero);
 
-                    for (String item: datos) {
-                        Log.v(Utilidades.TAGLOG,item);
+                    for (int i = 0; i < datos.length ;i++) {
+//                        for(int j = 0 ; j < datos[i].length ; j ++){
+//                            Log.v(Utilidades.TAGLOG,""+datos[i][j]);
+//                        }
+                        String enlace_id = datos[i][0];
+                        String usuario_id = datos[i][1];
+                        String gps_id = datos[i][2];
+
+
+                        peticionRegistroCoordenadas(enlace_id,lon,lat);
+
+                        Log.v(Utilidades.TAGLOG,"****");
                     }
-
                 }
             }
 
@@ -231,4 +244,19 @@ public class SMSReceiver extends BroadcastReceiver {
         builder.setVibrate(pattern);
         nm.notify(ID_NOTIFICACION_CREAR, builder.build());
     }
+
+
+    public void peticionRegistroCoordenadas(String enlace, double longitud, double latitud) {
+
+        final String columnasFiltroLista[] = {Configuracion.COLUMNA_ENLACE_ID,
+                Configuracion.COLUMNA_COORDENADA_LONGITUD,Configuracion.COLUMNA_COORDENADA_LATITUD};
+
+
+        String[] valorFiltroRemoto = {enlace, String.valueOf(longitud), String.valueOf(latitud)};
+
+        new ObtencionDeResultadoBcst(contexto, Configuracion.INTENT_ADMIN_ENVIAR_COORDENADAS, columnasFiltroLista,
+                valorFiltroRemoto, Configuracion.TABLA_USUARIOS, null, false)
+                .execute(Configuracion.PETICION_COORDENADAS_REGISTRO, "post");
+    }
+
 }
